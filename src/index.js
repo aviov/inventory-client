@@ -6,11 +6,11 @@ import AppSyncConfig from './aws-exports';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const url = AppSyncConfig.graphqlEndpoint;
-const region = AppSyncConfig.region;
+const url = AppSyncConfig.aws_appsync_graphqlEndpoint;
+const region = AppSyncConfig.aws_appsync_region;
 const auth = {
-  type: AppSyncConfig.authenticationType,
-  apiKey: AppSyncConfig.apiKey
+  type: AppSyncConfig.aws_appsync_authenticationType,
+  apiKey: AppSyncConfig.aws_appsync_apiKey
 };
 const link = ApolloLink.from([
    createAuthLink({ url, region, auth }), 
