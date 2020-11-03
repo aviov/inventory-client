@@ -1,13 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import { createAuthLink } from 'aws-appsync-auth-link';
+import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink, ApolloProvider } from '@apollo/client';
+import AppSyncConfig from './aws-exports';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const url = AppSyncConfig.graphqlEndpoint;
+const region = AppSyncConfig.region;
+const auth = {
+  type: AppSyncConfig.authenticationType,
+  apiKey: AppSyncConfig.apiKey
+};
+const link = ApolloLink.from([
+   createAuthLink({ url, region, auth }), 
+   createHttpLink({ uri: url })
+]);
+const client = new ApolloClient({
+  link,
+  cache: new InMemoryCache()
+});
+
 ReactDOM.render(
-  <React.StrictMode>
+  <ApolloProvider client={client}>
+    <React.StrictMode>
     <App />
-  </React.StrictMode>,
+    </React.StrictMode>
+  </ApolloProvider>,
   document.getElementById('root')
 );
 
