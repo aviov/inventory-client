@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { createAuthLink } from 'aws-appsync-auth-link';
 import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink, ApolloProvider } from '@apollo/client';
 import AppSyncConfig from './aws-exports';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
 
 const url = AppSyncConfig.aws_appsync_graphqlEndpoint;
 const region = AppSyncConfig.aws_appsync_region;
@@ -22,11 +24,13 @@ const client = new ApolloClient({
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <React.StrictMode>
-    <App />
-    </React.StrictMode>
-  </ApolloProvider>,
+  <Router>
+    <ApolloProvider client={client}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </ApolloProvider>
+  </Router>,
   document.getElementById('root')
 );
 

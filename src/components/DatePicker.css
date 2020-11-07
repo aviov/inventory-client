@@ -1,0 +1,9 @@
+.react-datepicker-wrapper {
+  display: block;
+  /* this is for react-datepicker */
+}
+
+.date-picker > div {
+  border: none;
+  /* this is for react-date-picker unused*/
+}

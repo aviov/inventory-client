@@ -1,0 +1,17 @@
+.Items .ListItem {
+  display: flex;
+  justify-items: space-between;
+}
+
+.Items .AddItemButton {
+  margin: 10px;
+}
+
+.Items .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.Items .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}

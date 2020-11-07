@@ -35,9 +35,6 @@ export const MUTATION_deleteItem = gql`
   ) {
     deleteItem(
       itemId: $itemId
-    ) {
-      itemId
-    }
+    )
   }
-  ${FRAGMENT_ItemFields}
 `
