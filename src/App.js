@@ -13,16 +13,10 @@ function App() {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    onLoad();
-  }, []);
-
   async function onLoad() {
-
-    setIsAuthenticated(true);
     try {
-      // await Auth.currentSession();
-      // setIsAuthenticated(true);
+      await Auth.currentSession();
+      setIsAuthenticated(true);
     } catch (error) {
       if (error !== 'No current user') {
         onError(error);
@@ -30,6 +24,10 @@ function App() {
     }
     setIsAuthenticating(false);
   };
+  
+  useEffect(() => {
+    onLoad();
+  }, []);
 
   async function handleLogout () {
     await Auth.signOut();

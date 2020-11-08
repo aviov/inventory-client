@@ -1,5 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import AuthenticatedRoute from './components/AuthenticatedRoute';
+import UnauthenticatedRoute from './components/UnauthenticatedRoute';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Items from './components/Items';
@@ -13,21 +15,21 @@ export default function Routes() {
       <Route exact path='/'>
         <Items />
       </Route>
-      <Route exact path='/login'>
+      <UnauthenticatedRoute exact path="/login">
         <Login />
-      </Route>
-      <Route exact path='/signup'>
+      </UnauthenticatedRoute>
+      <UnauthenticatedRoute exact path="/signup">
         <Signup />
-      </Route>
+      </UnauthenticatedRoute>
       <Route exact path='/items'>
         <Items />
       </Route>
-      <Route exact path='/items/new'>
+      <AuthenticatedRoute exact path='/items/new'>
         <ItemForm />
-      </Route>
-      <Route exact path='/items/:id'>
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path='/items/:id'>
         <ItemInfo />
-      </Route>
+      </AuthenticatedRoute>
       <Route>
         <NotFound />
       </Route>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
@@ -14,19 +14,45 @@ import "./Items.css";
 import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
+import { onError } from "../libs/errorLib";
 registerLocale('en-gb', enGb);
 
 export default function Items() {
   const history = useHistory();
   // const [items, setItems] = useState([]);
-  // const { isAuthenticated } = useAppContext();
+  const { isAuthenticated } = useAppContext();
   const [isSearching, setIsSearching] = useState(false);
   const [modelNumber, setModelNumber] = useState('LG 34BN770-B');
   const [serialNumber, setSerialNumber] = useState('');
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
   const { loading, error, data } = useQuery(QUERY_listItems);
-  if (loading) {
+  
+  // function loadItems() {
+  //   return API.get('items', '/items');
+  // }
+  useEffect(() => {
+    async function onLoad() {
+      // console.log(isAuthenticated)
+      if (!isAuthenticated) {
+        return null;
+      }
+      // try {
+      //   const items = await loadItems();
+      //   setItems(items);
+      // } catch (error) {
+      //   onError(error);
+      // }
+      // setIsLoading(false);
+    }
+    onLoad();
+  }, [isAuthenticated]);
+
+  if (error) {
+    console.log(error);
+  }
+
+  if (isAuthenticated && loading && !error) {
     return(
       <div
         className='Loading'
@@ -37,27 +63,9 @@ export default function Items() {
       </div>
     )
   }
-  const items = data && data.listItems;
-  console.log(data);
 
-  // function loadItems() {
-  //   return API.get('items', '/items');
-  // }
-  // useEffect(() => {
-  //   async function onLoad() {
-  //     if (!isAuthenticated) {
-  //       return;
-  //     }
-  //     try {
-  //       const items = await loadItems();
-  //       setItems(items);
-  //     } catch (error) {
-  //       onError(error);
-  //     }
-  //     setIsLoading(false);
-  //   }
-  //   onLoad();
-  // }, [isAuthenticated]);
+  const items = data && data.listItems;
+  // console.log(data);
   function renderItemsList(items) {
     return items.map((item) =>
       (
@@ -87,14 +95,14 @@ export default function Items() {
       )
     );
   };
-  // function renderLander() {
-  //   return(
-  //     <div className="lander">
-  //       <h1>{'Scratch'}</h1>
-  //       <p>{'A simple item taking app'}</p>
-  //     </div>
-  //   );
-  // };
+  function renderLander() {
+    return(
+      <div className="lander">
+        <h1>{'Hardware management service'}</h1>
+        <p>{'Keep your hardware up to date'}</p>
+      </div>
+    );
+  };
   function renderItems() {
     return(
       <div
@@ -205,19 +213,20 @@ export default function Items() {
     <div
       className='Items'
     >
-      <Button
-        className='AddItemButton'
-        variant='outline-primary'
-        title='Add Item'
-        onClick={() => history.push('/items/new')}
-      >
-        Add Item
-      </Button>
-      {renderItems()}
-      {/*isAuthenticated ?
-        renderItems() :
+      {isAuthenticated ?
+        <div>
+          <Button
+            className='AddItemButton'
+            variant='outline-primary'
+            title='Add Item'
+            onClick={() => history.push('/items/new')}
+          >
+            Add Item
+          </Button>
+          {renderItems()}
+        </div> :
         renderLander()
-      */}
+      }
     </div>
   );
 };
