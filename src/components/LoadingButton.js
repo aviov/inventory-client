@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { ImSpinner2 } from 'react-icons/im';
 import './LoadingButton.css';
 
