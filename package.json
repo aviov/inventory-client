@@ -10,6 +10,7 @@
     "aws-amplify": "^3.3.7",
     "aws-appsync-auth-link": "^3.0.2",
     "bootstrap": "^4.5.3",
+    "dotenv": "^8.2.0",
     "graphql": "^15.4.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",

@@ -5,7 +5,6 @@ import { Amplify, Auth } from 'aws-amplify';
 import { createAuthLink } from 'aws-appsync-auth-link';
 import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink, ApolloProvider } from '@apollo/client';
 import config from './config';
-import AppSyncConfig from './aws-exports';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
@@ -18,37 +17,18 @@ Amplify.configure({
     identityPoolId: config.cognito.IDENTITY_POOL_ID,
     userPoolWebClientId: config.cognito.APP_CLIENT_ID
   },
-  // Storage: {
-  //   region: config.s3.REGION,
-  //   bucket: config.s3.BUCKET,
-  //   identityPoolId: config.cognito.IDENTITY_POOL_ID
-  // },
-  // API: {
-  //   endpoints: [
-  //     {
-  //       name: "notes",
-  //       endpoint: config.apiGateway.URL,
-  //       region: config.apiGateway.REGION
-  //     },
-  //   ]
-  // }
 });
 
-const url = AppSyncConfig.aws_appsync_graphqlEndpoint;
-const region = AppSyncConfig.aws_appsync_region;
+const url = config.appSyncConfig.aws_appsync_graphqlEndpoint;
+const region = config.appSyncConfig.aws_appsync_region;
 const auth = {
-  type: AppSyncConfig.aws_appsync_authenticationType,
-  // apiKey: AppSyncConfig.aws_appsync_apiKey,
+  type: config.appSyncConfig.aws_appsync_authenticationType,
   credentials: () => Auth.currentCredentials(),
   jwtToken: async () => (await Auth.currentSession()).getAccessToken().getJwtToken(),
   complexObjectsCredentials: () => Auth.currentCredentials()
 };
 
-const awsLink = createAuthLink({
-  url,
-  region,
-  auth
-})
+const awsLink = createAuthLink({ url, region, auth })
 
 const link = ApolloLink.from([
    awsLink,
