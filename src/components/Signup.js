@@ -71,7 +71,6 @@ export default function Signup() {
   function renderSignupForm() {
     return(
       <Form
-        className='form'
         onSubmit={handleSubmitSignup}
       >
         <Form.Group>
@@ -125,7 +124,6 @@ export default function Signup() {
   function renderConfirmationForm() {
     return(
       <Form
-        className='form'
         onSubmit={handleSubmitConfirmation}
       >
         <Form.Group>

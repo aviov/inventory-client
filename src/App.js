@@ -38,44 +38,53 @@ function App() {
   return (
     !isAuthenticating &&
     <div className='App container'>
-      <Navbar collapseOnSelect expand="lg" variant="light">
-          <Navbar.Brand as={Link} to='/'>
-            HardiT
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-          <Navbar.Collapse id="responsive-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link as={Link} to='/items'>
-                Items
-              </Nav.Link>
-              <Nav.Link as={Link} to='/'>
-                My organisation
-              </Nav.Link>
-              <Nav.Link as={Link} to='/'>
-                Hardware users
-              </Nav.Link>
-            </Nav>
-            <Nav>
-              {isAuthenticated
-                ?
-                (<Button
+      <Navbar collapseOnSelect expand="lg" bg='light' variant="light">
+        <Navbar.Brand href='#home' as={Link} to='/'>
+          Hardware
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link href='#items' as={Link} to='/items'>
+              Items
+            </Nav.Link>
+          </Nav>
+          <Nav>
+            {isAuthenticated
+              ?
+              (<Nav.Link href='#logout'>
+                <Button
+                  className='button'
                   variant='outline-primary'
                   onClick={handleLogout}
                 >
                   Logout
-                </Button>)
-                :
-                (<>
-                  <Nav.Link as={Link} to='/signup'>
-                    <Button variant='outline-primary'>Signup</Button>
-                  </Nav.Link>
-                  <Nav.Link as={Link} to='/login'>
-                    <Button variant='outline-primary'>Login</Button>
-                  </Nav.Link>
-                </>)
-              }
-            </Nav>
-          </Navbar.Collapse>
+                </Button>
+              </Nav.Link>)
+              :
+              (<>
+                <Nav.Link href='#signup'>
+                  <Button
+                    className='button'
+                    variant='outline-primary'
+                    onClick={() => history.push('/signup')}
+                  >
+                    Signup
+                  </Button>
+                </Nav.Link>
+                <Nav.Link href='#login'>
+                  <Button
+                    className='button'
+                    variant='outline-primary'
+                    onClick={() => history.push('/login')}
+                  >
+                    Login
+                  </Button>
+                </Nav.Link>
+              </>)
+            }
+          </Nav>
+        </Navbar.Collapse>
       </Navbar>
       <AppContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
         <Routes />
