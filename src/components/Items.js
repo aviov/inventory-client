@@ -98,8 +98,8 @@ export default function Items() {
   function renderLander() {
     return(
       <div className="lander">
-        <h1>{'Hardware management service'}</h1>
-        <p>{'Keep your hardware up to date'}</p>
+        <h1>{'Inventory management service'}</h1>
+        <p>{'Keep your inventory up to date'}</p>
       </div>
     );
   };

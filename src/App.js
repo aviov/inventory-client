@@ -40,7 +40,7 @@ function App() {
     <div className='App container'>
       <Navbar collapseOnSelect expand="lg" bg='light' variant="light">
         <Navbar.Brand href='#home' as={Link} to='/'>
-          Hardware
+          Inventory
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
