@@ -1,5 +1,5 @@
 {
-  "name": "items-reseller-client",
+  "name": "inventory-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
