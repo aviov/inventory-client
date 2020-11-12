@@ -109,6 +109,7 @@ export default function Items() {
         className='Items'
       >
         <Table
+          striped
           style={{ width: 100+'%' }}
           responsive
         >
@@ -215,6 +216,7 @@ export default function Items() {
     >
       {isAuthenticated ?
         <div>
+          {renderItems()}
           <Button
             className='AddItemButton'
             variant='outline-primary'
@@ -223,7 +225,6 @@ export default function Items() {
           >
             Add Item
           </Button>
-          {renderItems()}
         </div> :
         renderLander()
       }

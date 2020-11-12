@@ -8,31 +8,36 @@ import Items from './components/Items';
 import ItemForm from './components/ItemForm';
 import ItemInfo from './components/ItemInfo';
 import NotFound from './components/NotFound';
+import './Routes.css';
 
 export default function Routes() {
   return (
-    <Switch>
-      <Route exact path='/'>
-        <Items />
-      </Route>
-      <UnauthenticatedRoute exact path="/login">
-        <Login />
-      </UnauthenticatedRoute>
-      <UnauthenticatedRoute exact path="/signup">
-        <Signup />
-      </UnauthenticatedRoute>
-      <Route exact path='/items'>
-        <Items />
-      </Route>
-      <AuthenticatedRoute exact path='/items/new'>
-        <ItemForm />
-      </AuthenticatedRoute>
-      <AuthenticatedRoute exact path='/items/:id'>
-        <ItemInfo />
-      </AuthenticatedRoute>
-      <Route>
-        <NotFound />
-      </Route>
-    </Switch>
+    <div
+      className='Routes'
+    >
+      <Switch>
+        <Route exact path='/'>
+          <Items />
+        </Route>
+        <UnauthenticatedRoute exact path="/login">
+          <Login />
+        </UnauthenticatedRoute>
+        <UnauthenticatedRoute exact path="/signup">
+          <Signup />
+        </UnauthenticatedRoute>
+        <Route exact path='/items'>
+          <Items />
+        </Route>
+        <AuthenticatedRoute exact path='/items/new'>
+          <ItemForm />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path='/items/:id'>
+          <ItemInfo />
+        </AuthenticatedRoute>
+        <Route>
+          <NotFound />
+        </Route>
+      </Switch>
+    </div>
   )
 }
