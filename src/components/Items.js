@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { useAppContext } from "../libs/contextLib";
-import { useQuery } from '@apollo/client'
+import { useLazyQuery } from '@apollo/client'
 import { QUERY_listItems } from '../api/queries'
 import { ImSpinner2 } from 'react-icons/im';
 import { ImSearch } from 'react-icons/im';
@@ -14,45 +14,33 @@ import "./Items.css";
 import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
-// import { onError } from "../libs/errorLib";
+import { onError } from "../libs/errorLib";
 registerLocale('en-gb', enGb);
 
 export default function Items() {
   const history = useHistory();
-  // const [items, setItems] = useState([]);
+  const [items, setItems] = useState([]);
   const { isAuthenticated } = useAppContext();
   const [isSearching, setIsSearching] = useState(false);
-  const [modelNumber, setModelNumber] = useState('LG 34BN770-B');
+  const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
-  const { loading, error, data } = useQuery(QUERY_listItems);
-  
-  // function loadItems() {
-  //   return API.get('items', '/items');
-  // }
+  const [listItems, { loading, data }] = useLazyQuery(QUERY_listItems);
+
   useEffect(() => {
-    async function onLoad() {
-      // console.log(isAuthenticated)
-      if (!isAuthenticated) {
-        return null;
-      }
-      // try {
-      //   const items = await loadItems();
-      //   setItems(items);
-      // } catch (error) {
-      //   onError(error);
-      // }
-      // setIsLoading(false);
+    if (!isAuthenticated) {
+      return null;
     }
-    onLoad();
-  }, [isAuthenticated]);
+    try {
+      listItems();
+      setItems(data ? data.listItems : []);
+    } catch (error) {
+      onError(error);
+    }
+  },[isAuthenticated, loading, listItems, data]);
 
-  if (error) {
-    console.log(error);
-  }
-
-  if (isAuthenticated && loading && !error) {
+  function renderLoading() {
     return(
       <div
         className='Loading'
@@ -63,10 +51,8 @@ export default function Items() {
       </div>
     )
   }
-
-  const items = data && data.listItems;
-  // console.log(data);
-  function renderItemsList(items) {
+  
+  function renderItemsList(items=[]) {
     return items.map((item) =>
       (
         <tr
@@ -128,7 +114,6 @@ export default function Items() {
                   <Form.Control
                     className='SearchInput'
                     type='text'
-                    placeholder='Model Number'
                     value={modelNumber}
                     onChange={(event) => setModelNumber(event.target.value)}
                   />
@@ -140,7 +125,6 @@ export default function Items() {
                   <Form.Control
                     className='SearchInput'
                     type='text'
-                    placeholder='Serial Number'
                     value={serialNumber}
                     onChange={(event) => setSerialNumber(event.target.value)}
                   />
@@ -207,6 +191,9 @@ export default function Items() {
             }
           </tbody>
         </Table>
+        {loading &&
+          renderLoading()
+        }
       </div>
     )
   };
@@ -217,14 +204,16 @@ export default function Items() {
       {isAuthenticated ?
         <div>
           {renderItems()}
-          <Button
-            className='AddItemButton'
-            variant='outline-primary'
-            title='Add Item'
-            onClick={() => history.push('/items/new')}
-          >
-            Add Item
-          </Button>
+          {!loading &&
+            <Button
+              className='AddItemButton'
+              variant='outline-primary'
+              title='Add Item'
+              onClick={() => history.push('/items/new')}
+            >
+              Add Item
+            </Button>
+          }
         </div> :
         renderLander()
       }

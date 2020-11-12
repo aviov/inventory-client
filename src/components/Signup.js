@@ -24,7 +24,7 @@ export default function Signup() {
     confirmationCode
   } = fields;
   const [newUser, setNewUser] = useState(null);
-  const { isAuthenticated } = useAppContext();
+  const { setIsAuthenticated } = useAppContext();
 
   function validateSignupForm() {
     return (
@@ -60,7 +60,7 @@ export default function Signup() {
     try {
       await Auth.confirmSignUp(email, confirmationCode);
       await Auth.signIn(email, password);
-      isAuthenticated(true);
+      await setIsAuthenticated(true);
       history.push('/');
     } catch (error) {
       onError(error);

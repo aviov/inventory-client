@@ -27,7 +27,7 @@ export default function Login() {
     setIsLoading(true);
     try {
       await Auth.signIn(email, password);
-      setIsAuthenticated(true);
+      await setIsAuthenticated(true);
       history.push('/');
     } catch (error) {
       onError(error);

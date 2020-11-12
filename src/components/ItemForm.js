@@ -16,7 +16,7 @@ registerLocale('en-gb', enGb);
 
 function ItemForm() {
   const history = useHistory();
-  const [modelNumber, setModelNumber] = useState('LG 34BN770-B');
+  const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { Navbar, Nav, Button } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
+import Navbar from 'react-bootstrap/Navbar';
+import Nav from 'react-bootstrap/Nav';
+import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
 import { AppContext } from './libs/contextLib';
 import { onError } from './libs/errorLib';
 import Routes from './Routes';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'
+import './App.css';
 
 function App() {
   const history = useHistory();
@@ -38,51 +40,38 @@ function App() {
   return (
     !isAuthenticating &&
     <div className='App container'>
-      <Navbar collapseOnSelect expand="lg" bg='light' variant="light">
-        <Navbar.Brand href='#home' as={Link} to='/'>
-          Inventory
-        </Navbar.Brand>
-        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="mr-auto">
-            <Nav.Link href='#items' as={Link} to='/items'>
-              Items
-            </Nav.Link>
-          </Nav>
-          <Nav>
-            {isAuthenticated
-              ?
-              (<Nav.Link href='#logout'>
-                <Button
-                  className='button'
-                  variant='outline-primary'
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Button>
-              </Nav.Link>)
-              :
-              (<>
-                <Nav.Link href='#signup'>
-                  <Button
-                    className='button'
-                    variant='outline-primary'
-                    onClick={() => history.push('/signup')}
-                  >
-                    Signup
-                  </Button>
+      <Navbar collapseOnSelect expand="lg" bg='light' className='mb-3'>
+        <LinkContainer to='/'>
+          <Navbar.Brand>
+            Hardware
+          </Navbar.Brand>
+        </LinkContainer>
+        <Navbar.Toggle />
+        <Navbar.Collapse className='justify-content-space-between'>
+          <Nav className="mr-auto" activeKey={window.location.pathname}>
+            {isAuthenticated &&
+              <LinkContainer to='/items'>
+                <Nav.Link>
+                  Items
                 </Nav.Link>
-                <Nav.Link href='#login'>
-                  <Button
-                    className='button'
-                    variant='outline-primary'
-                    onClick={() => history.push('/login')}
-                  >
-                    Login
-                  </Button>
-                </Nav.Link>
-              </>)
+              </LinkContainer>
             }
+          </Nav>
+          <Nav activeKey={window.location.pathname}>
+            {isAuthenticated ? (
+              <>
+                <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
+              </>
+            ) : (
+              <>
+                <LinkContainer to="/signup">
+                  <Nav.Link>Signup</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/login">
+                  <Nav.Link>Login</Nav.Link>
+                </LinkContainer>
+              </>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Navbar>
