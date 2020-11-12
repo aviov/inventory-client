@@ -14,7 +14,7 @@ import "./Items.css";
 import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
-import { onError } from "../libs/errorLib";
+// import { onError } from "../libs/errorLib";
 registerLocale('en-gb', enGb);
 
 export default function Items() {

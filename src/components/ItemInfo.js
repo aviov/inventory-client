@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from '@apollo/client';
 import { QUERY_getItemById, QUERY_listItems } from '../api/queries';
@@ -17,7 +17,7 @@ function ItemInfo() {
   const { id } = useParams();
   const history = useHistory();
   const [isDeleting, setIsDeleting] = useState(false);
-  const { loading, error, data } = useQuery(QUERY_getItemById, {
+  const { loading, data } = useQuery(QUERY_getItemById, {
     variables: { itemId: id }
   });
   const [deleteItem] = useMutation(MUTATION_deleteItem, {
