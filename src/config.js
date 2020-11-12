@@ -16,8 +16,8 @@ const dev = {
 // const prod = {
 // };
 
-const config = dev; // process.env.REACT_APP_STAGE === 'prod' ? prod : dev;
-
-export default {
-  ...config
+const stageConfig = dev; // process.env.REACT_APP_STAGE === 'prod' ? prod : dev;
+const config = {
+  ...stageConfig
 };
+export default config;
