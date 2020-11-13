@@ -5,6 +5,7 @@ import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
 import { AppContext } from './libs/contextLib';
+import { useApolloClient } from '@apollo/client';
 import { onError } from './libs/errorLib';
 import Routes from './Routes';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -14,6 +15,7 @@ function App() {
   const history = useHistory();
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const client = useApolloClient();
 
   async function onLoad() {
     try {
@@ -34,6 +36,7 @@ function App() {
   async function handleLogout () {
     await Auth.signOut();
     setIsAuthenticated(false);
+    await client.clearStore();
     history.push('/login');
   };
 
