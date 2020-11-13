@@ -43,7 +43,7 @@ function App() {
       <Navbar collapseOnSelect expand="lg" bg='light' className='mb-3'>
         <LinkContainer to='/'>
           <Navbar.Brand>
-            Hardware
+            Inventory
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle />

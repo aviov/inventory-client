@@ -6,7 +6,7 @@ import LoadingButton from './LoadingButton';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Image from 'react-bootstrap/Image';
+// import Image from 'react-bootstrap/Image';
 import { ImSpinner2 } from 'react-icons/im';
 import { FcApproval } from 'react-icons/fc';
 import { MdError } from 'react-icons/md';
@@ -98,13 +98,13 @@ function ItemInfo() {
               </a>
             </div>
           </Col>
-          <Col lg='7'>
+          {/* <Col lg='7'>
             <Image
               className='justify-content-md-center'
               fluid
               src='https://www.lg.com/global/images/business/md07516653/gallery/desktop-03.jpg'
             />
-          </Col>
+          </Col> */}
         </Row>
         <Row>
           <Col>
