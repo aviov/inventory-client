@@ -4,7 +4,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
-import { AppContext } from './libs/contextLib';
+import { AuthContext, UserContext } from './libs/contextLib';
 import { useApolloClient } from '@apollo/client';
 import { onError } from './libs/errorLib';
 import Routes from './Routes';
@@ -15,11 +15,13 @@ function App() {
   const history = useHistory();
   const [isAuthenticating, setIsAuthenticating] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUserName, setCurrentUserName] = useState(null);
   const client = useApolloClient();
 
   async function onLoad() {
     try {
-      await Auth.currentSession();
+      const currentSession = await Auth.currentSession();
+      setCurrentUserName(currentSession.idToken.payload.email);
       setIsAuthenticated(true);
     } catch (error) {
       if (error !== 'No current user') {
@@ -36,6 +38,7 @@ function App() {
   async function handleLogout () {
     await Auth.signOut();
     setIsAuthenticated(false);
+    setCurrentUserName(null);
     await client.clearStore();
     history.push('/login');
   };
@@ -63,6 +66,7 @@ function App() {
           <Nav activeKey={window.location.pathname}>
             {isAuthenticated ? (
               <>
+                <Nav.Link>{currentUserName}</Nav.Link>
                 <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
               </>
             ) : (
@@ -78,9 +82,11 @@ function App() {
           </Nav>
         </Navbar.Collapse>
       </Navbar>
-      <AppContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
-        <Routes />
-      </AppContext.Provider>
+      <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+        <UserContext.Provider value={{ currentUserName, setCurrentUserName }}>
+          <Routes />
+        </UserContext.Provider>
+      </AuthContext.Provider>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import DatePicker, { registerLocale } from 'react-datepicker';
-import { useAppContext } from "../libs/contextLib";
+import { useAuthContext } from "../libs/contextLib";
 import { useLazyQuery } from '@apollo/client'
 import { QUERY_listItems } from '../api/queries'
 import { ImSpinner2 } from 'react-icons/im';
@@ -20,7 +20,7 @@ registerLocale('en-gb', enGb);
 export default function Items() {
   const history = useHistory();
   const [items, setItems] = useState([]);
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
   const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');

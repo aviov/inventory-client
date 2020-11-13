@@ -3,14 +3,15 @@ import { useHistory } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import './Login.css';
 import { Auth } from 'aws-amplify';
-import { useAppContext } from '../libs/contextLib';
+import { useAuthContext, useUserContext } from '../libs/contextLib';
 import LoadingButton from './LoadingButton';
 import { useFormFields } from '../libs/hooksLib';
 import { onError } from '../libs/errorLib';
 
 export default function Login() {
   const history = useHistory();
-  const { setIsAuthenticated } = useAppContext();
+  const { setIsAuthenticated } = useAuthContext();
+  const { setCurrentUserName } = useUserContext();
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: '',
@@ -27,7 +28,8 @@ export default function Login() {
     setIsLoading(true);
     try {
       await Auth.signIn(email, password);
-      await setIsAuthenticated(true);
+      setCurrentUserName(email);
+      setIsAuthenticated(true);
       history.push('/');
     } catch (error) {
       onError(error);

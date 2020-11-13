@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import { Auth } from 'aws-amplify';
-import { useAppContext } from '../libs/contextLib';
+import { useAuthContext, useUserContext } from '../libs/contextLib';
 import LoadingButton from './LoadingButton';
 import { useFormFields } from '../libs/hooksLib';
 import { onError } from '../libs/errorLib';
@@ -24,7 +24,8 @@ export default function Signup() {
     confirmationCode
   } = fields;
   const [newUser, setNewUser] = useState(null);
-  const { setIsAuthenticated } = useAppContext();
+  const { setIsAuthenticated } = useAuthContext();
+  const { setCurrentUserName } = useUserContext();
 
   function validateSignupForm() {
     return (
@@ -60,7 +61,8 @@ export default function Signup() {
     try {
       await Auth.confirmSignUp(email, confirmationCode);
       await Auth.signIn(email, password);
-      await setIsAuthenticated(true);
+      setCurrentUserName(email);
+      setIsAuthenticated(true);
       history.push('/');
     } catch (error) {
       onError(error);

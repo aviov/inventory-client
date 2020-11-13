@@ -90,13 +90,13 @@ function ItemInfo() {
             >
               {item.modelNumber}
             </div>
-            <div
+            {/* <div
               className='justify-content-md-center'
             >
               <a target='_blank' rel='noopener noreferrer' href='https://www.lg.com/global/business/monitors/lg-34bn770'>
                 Manufacturer info
               </a>
-            </div>
+            </div> */}
           </Col>
           {/* <Col lg='7'>
             <Image
