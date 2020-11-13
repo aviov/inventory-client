@@ -8,7 +8,7 @@ import { useAppContext } from "../libs/contextLib";
 import { useLazyQuery } from '@apollo/client'
 import { QUERY_listItems } from '../api/queries'
 import { ImSpinner2 } from 'react-icons/im';
-import { ImSearch } from 'react-icons/im';
+// import { ImSearch } from 'react-icons/im';
 import { ImCancelCircle } from 'react-icons/im';
 import "./Items.css";
 import "react-datepicker/dist/react-datepicker.css";
@@ -170,11 +170,11 @@ export default function Items() {
               </th>
               <th>
                 <div>
-                  {!isSearching &&
+                  {/* {!isSearching &&
                     <ImSearch
                       onClick={() => setIsSearching(!isSearching)}
                     />
-                  }
+                  } */}
                   {isSearching &&
                     <ImCancelCircle
                       className='CloseSearchIcon'
