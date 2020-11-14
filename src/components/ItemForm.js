@@ -121,6 +121,10 @@ function ItemForm() {
             locale='en-gb'
             // todayButton='Today'
             selected={dateWarrantyBegins}
+            onFocus={(event) => {
+              console.log(event)
+              event.stopPropagation();
+            }}
             onSelect={(date) => {
               if (!date) {
                 setDateWarrantyBegins('');
