@@ -82,7 +82,10 @@ function ItemForm() {
   };
   
   return(
-    <AutoScroll showOption={false}>
+    <AutoScroll
+      showOption={false}
+      height={1500}
+    >
     <div
       className='ItemForm'
     >
@@ -121,10 +124,6 @@ function ItemForm() {
             locale='en-gb'
             // todayButton='Today'
             selected={dateWarrantyBegins}
-            onFocus={(event) => {
-              console.log(event)
-              event.stopPropagation();
-            }}
             onSelect={(date) => {
               if (!date) {
                 setDateWarrantyBegins('');
