@@ -114,6 +114,7 @@ function ItemForm() {
           </Form.Label>
           <Form.Control as={DatePicker}
             className="date-picker"
+            popperPlacement='top-end'
             dateFormat='dd.MM.yyyy'
             placeholderText='Select date'
             locale='en-gb'
@@ -136,6 +137,7 @@ function ItemForm() {
           </Form.Label>
           <Form.Control as={DatePicker}
             className='date-picker'
+            popperPlacement='top-end'
             dateFormat='dd.MM.yyyy'
             placeholderText='Select date'
             locale='en-gb'

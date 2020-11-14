@@ -135,6 +135,7 @@ export default function Items() {
                 {isSearching &&
                   <Form.Control as={DatePicker}
                     className='SearchInput date-picker'
+                    popperPlacement='top-end'
                     dateFormat='dd.MM.yyyy'
                     locale='en-gb'
                     selected={dateWarrantyBegins}
@@ -154,6 +155,7 @@ export default function Items() {
                 {isSearching &&
                   <Form.Control as={DatePicker}
                     className='SearchInput date-picker'
+                    popperPlacement='top-end'
                     dateFormat='dd.MM.yyyy'
                     locale='en-gb'
                     selected={dateWarrantyExpires}
