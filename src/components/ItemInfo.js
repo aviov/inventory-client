@@ -6,11 +6,12 @@ import LoadingButton from './LoadingButton';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-// import Image from 'react-bootstrap/Image';
+import ImagePreview from './ImagePreview';
 import { ImSpinner2 } from 'react-icons/im';
 import { FcApproval } from 'react-icons/fc';
 import { MdError } from 'react-icons/md';
 import './ItemInfo.css'
+import { s3Delete } from '../libs/awsLib';
 import { MUTATION_deleteItem } from "../api/mutations";
 
 function ItemInfo() {
@@ -28,6 +29,9 @@ function ItemInfo() {
     const confirmed = window.confirm(`Do you want to delete item ${item.modelNumber}, SN: ${item.serialNumber}?`);
     if (confirmed) {
       setIsDeleting(true);
+      if (item.attachments) {
+        await s3Delete(JSON.parse(item.attachments));
+      }
       await deleteItem({ variables: { itemId: id } });
       history.push('/items');
     } else {
@@ -47,6 +51,10 @@ function ItemInfo() {
     )
   }
   const item = data.getItemById;
+
+  // function formatFilename(str) {
+  //   return str.replace(/^\w+-/, '');
+  // };
   // console.log(data);
   const dateWarrantyBeginsFormatted = new Date(item.dateWarrantyBegins).toLocaleDateString('de-DE')
   const dateWarrantyExpiresFormatted = item.dateWarrantyExpires !== '' ? new Date(item.dateWarrantyExpires).toLocaleDateString('de-DE') : 'Lifetime'
@@ -90,21 +98,25 @@ function ItemInfo() {
             >
               {item.modelNumber}
             </div>
-            {/* <div
-              className='justify-content-md-center'
-            >
-              <a target='_blank' rel='noopener noreferrer' href='https://www.lg.com/global/business/monitors/lg-34bn770'>
-                Manufacturer info
+            {/* {item.attachments && JSON.parse(item.attachments).map((attachment) => (
+              <a
+                key={attachment}
+                target="_blank"
+                rel="noopener noreferrer"
+                href={attachment} //attachemntURL
+              >
+                {attachment}
               </a>
-            </div> */}
+            ))} */}
           </Col>
-          {/* <Col lg='7'>
-            <Image
-              className='justify-content-md-center'
-              fluid
-              src='https://www.lg.com/global/images/business/md07516653/gallery/desktop-03.jpg'
-            />
-          </Col> */}
+          <Col lg='7'>
+            {item && item.attachments && JSON.parse(item.attachments).map((attachment) => (
+              <ImagePreview
+                key={attachment}
+                filename={attachment}
+              />
+            ))}
+          </Col>
         </Row>
         <Row>
           <Col>

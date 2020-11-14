@@ -2,7 +2,13 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import DatePicker, { registerLocale } from "react-datepicker";
+import { FilePond, registerPlugin } from "react-filepond";
+import "filepond/dist/filepond.min.css";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { v1 as uuidv1 } from 'uuid';
+import { s3Upload } from '../libs/awsLib';
 import { useMutation } from '@apollo/client'
 import { MUTATION_createItem } from '../api/mutations'
 import { QUERY_listItems } from '../api/queries';
@@ -13,6 +19,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 registerLocale('en-gb', enGb);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 function ItemForm() {
   const history = useHistory();
@@ -21,6 +28,7 @@ function ItemForm() {
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [files, setFiles] = useState([]);
   const [createItem] = useMutation(MUTATION_createItem, {
     refetchQueries: [{ query: QUERY_listItems }]
   });
@@ -55,6 +63,8 @@ function ItemForm() {
     //   'dateWarrantyExpires', dateWarrantyExpires
     // )
     try {
+      const attachments = (files.length !== 0) ? await s3Upload(files) : null;
+      // console.log(attachments);
       const itemCreated = await createItem({
         variables: {
           item: {
@@ -63,7 +73,8 @@ function ItemForm() {
             modelNumber,
             serialNumber,
             dateWarrantyBegins,
-            dateWarrantyExpires
+            dateWarrantyExpires,
+            attachments: JSON.stringify(attachments)
           }
         }
       })
@@ -79,7 +90,7 @@ function ItemForm() {
       setIsLoading(false);
     }
   };
-  
+  console.log(files);
   return(
     <div
       className='ItemForm'
@@ -151,6 +162,16 @@ function ItemForm() {
                 setDateWarrantyExpires(date);
               }
             }}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Attachments</Form.Label>
+          <FilePond
+            files={files}
+            allowReorder={true}
+            allowMultiple={true}
+            onupdatefiles={setFiles}
+            labelIdle='Drop files here or <span class="filepond--label-action">Browse</span>'
           />
         </Form.Group>
         <LoadingButton

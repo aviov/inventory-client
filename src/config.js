@@ -5,6 +5,10 @@ const dev = {
     APP_CLIENT_ID: process.env.REACT_APP_COGNITO_APP_CLIENT_ID,
     IDENTITY_POOL_ID: process.env.REACT_APP_COGNITO_IDENTITY_POOL_ID
   },
+  storage: {
+    REGION: process.env.REACT_APP_S3_REGION,
+    BUCKET: process.env.REACT_APP_S3_BUCKET,
+  },
   appSyncConfig: {
     aws_appsync_graphqlEndpoint: process.env.REACT_APP_AWS_APPSYNC_GRAPHQL_ENDPOINT,
     aws_appsync_region: process.env.REACT_APP_AWS_APPSYNC_REGION,

@@ -17,6 +17,11 @@ Amplify.configure({
     identityPoolId: config.cognito.IDENTITY_POOL_ID,
     userPoolWebClientId: config.cognito.APP_CLIENT_ID
   },
+  Storage: {
+    region: config.storage.REGION,
+    bucket: config.storage.BUCKET,
+    identityPoolId: config.cognito.IDENTITY_POOL_ID
+  }
 });
 
 const url = config.appSyncConfig.aws_appsync_graphqlEndpoint;

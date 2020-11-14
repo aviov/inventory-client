@@ -8,6 +8,7 @@ export const FRAGMENT_ItemFields = gql`
     serialNumber
     dateWarrantyBegins
     dateWarrantyExpires
+    attachments
   }
 `
 
