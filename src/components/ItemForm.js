@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
-import AutoScroll from '@brianmcallister/react-auto-scroll';
 import Form from 'react-bootstrap/Form';
 import DatePicker, { registerLocale } from "react-datepicker";
 import { v1 as uuidv1 } from 'uuid';
@@ -82,10 +81,6 @@ function ItemForm() {
   };
   
   return(
-    <AutoScroll
-      showOption={false}
-      height={1500}
-    >
     <div
       className='ItemForm'
     >
@@ -172,7 +167,6 @@ function ItemForm() {
         </LoadingButton>
       </Form>
     </div>
-    </AutoScroll>
   )
 }
 
