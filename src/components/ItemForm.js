@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
+import AutoScroll from '@brianmcallister/react-auto-scroll';
 import Form from 'react-bootstrap/Form';
 import DatePicker, { registerLocale } from "react-datepicker";
 import { v1 as uuidv1 } from 'uuid';
@@ -81,6 +82,7 @@ function ItemForm() {
   };
   
   return(
+    <AutoScroll showOption={false}>
     <div
       className='ItemForm'
     >
@@ -115,6 +117,7 @@ function ItemForm() {
           <Form.Control as={DatePicker}
             className="date-picker"
             dateFormat='dd.MM.yyyy'
+            placeholderText='Select date'
             locale='en-gb'
             // todayButton='Today'
             selected={dateWarrantyBegins}
@@ -136,6 +139,7 @@ function ItemForm() {
           <Form.Control as={DatePicker}
             className='date-picker'
             dateFormat='dd.MM.yyyy'
+            placeholderText='Select date'
             locale='en-gb'
             // todayButton='Today'
             selected={dateWarrantyExpires}
@@ -165,6 +169,7 @@ function ItemForm() {
         </LoadingButton>
       </Form>
     </div>
+    </AutoScroll>
   )
 }
 
