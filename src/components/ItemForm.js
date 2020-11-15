@@ -14,6 +14,7 @@ import { MUTATION_createItem } from '../api/mutations'
 import { QUERY_listItems } from '../api/queries';
 import LoadingButton from './LoadingButton';
 import { onError } from '../libs/errorLib';
+import { isImage, getImageSize } from '../libs/imageLib';
 import './ItemForm.css';
 import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
@@ -63,8 +64,18 @@ function ItemForm() {
     //   'dateWarrantyExpires', dateWarrantyExpires
     // )
     try {
-      const attachments = (files.length !== 0) ? await s3Upload(files) : null;
+      const attachments = (files && files.length > 0) ? 
+      await Promise.all(files.map(async ({ file }) => {
+        const key = await s3Upload(file);
+        if (isImage(file)) {
+          const { width, height } = await getImageSize(file);
+          return { key, type: file.type, width, height };
+        } else {
+          return { key, type: file.type };
+        }
+      })) : null
       // console.log(attachments);
+      console.log('JSON.stringify(null)', JSON.stringify(null))
       const itemCreated = await createItem({
         variables: {
           item: {

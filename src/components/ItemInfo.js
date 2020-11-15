@@ -6,13 +6,15 @@ import LoadingButton from './LoadingButton';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ImagePreview from './ImagePreview';
+// import ImagePreview from './ImagePreview';
+import ImageGrid from './ImageGrid';
 import { ImSpinner2 } from 'react-icons/im';
 import { FcApproval } from 'react-icons/fc';
 import { MdError } from 'react-icons/md';
 import './ItemInfo.css'
 import { s3Delete } from '../libs/awsLib';
 import { MUTATION_deleteItem } from "../api/mutations";
+import { onError } from "../libs/errorLib";
 
 function ItemInfo() {
   const { id } = useParams();
@@ -29,11 +31,19 @@ function ItemInfo() {
     const confirmed = window.confirm(`Do you want to delete item ${item.modelNumber}, SN: ${item.serialNumber}?`);
     if (confirmed) {
       setIsDeleting(true);
-      if (item.attachments) {
-        await s3Delete(JSON.parse(item.attachments));
+      try {
+        if (item.attachments) {
+          const filenames = JSON.parse(item.attachments).map(({ key }) => key);
+          await Promise.all(filenames.map(async (filename) => {
+            await s3Delete(filename);
+          }));
+        }
+        await deleteItem({ variables: { itemId: id } });
+        history.push('/items');
+      } catch (error) {
+        onError(error);
       }
-      await deleteItem({ variables: { itemId: id } });
-      history.push('/items');
+      setIsDeleting(false);
     } else {
       return null;
     }
@@ -110,12 +120,18 @@ function ItemInfo() {
             ))} */}
           </Col>
           <Col lg='7'>
-            {item && item.attachments && JSON.parse(item.attachments).map((attachment) => (
+            {(item && item.attachments && !isDeleting) &&
+              <ImageGrid
+                attachments={JSON.parse(item.attachments)}
+              />
+            }
+            {/* {item && item.attachments && JSON.parse(item.attachments).map((attachment) => (
+              
               <ImagePreview
                 key={attachment}
                 filename={attachment}
               />
-            ))}
+            ))} */}
           </Col>
         </Row>
         <Row>
