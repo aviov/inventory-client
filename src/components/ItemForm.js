@@ -136,7 +136,7 @@ function ItemForm() {
           </Form.Label>
           <Form.Control as={DatePicker}
             className="date-picker"
-            popperPlacement='top-end'
+            // popperPlacement='top-end'
             withPortal={true}
             dateFormat='dd.MM.yyyy'
             placeholderText='Select date'
@@ -160,12 +160,8 @@ function ItemForm() {
           </Form.Label>
           <Form.Control as={DatePicker}
             className='date-picker'
-            popperPlacement='top-end'
-            popperModifiers={{
-              preventOverflow: {
-                enabled: true,
-              },
-            }}
+            // popperPlacement='top-end'
+            withPortal={true}
             dateFormat='dd.MM.yyyy'
             placeholderText='Select date'
             locale='en-gb'
