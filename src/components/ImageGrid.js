@@ -19,7 +19,7 @@ function ImageGrid({ attachments }) {
           if (isImage({ type })) {
             return { src, width, height }
           } else {
-            return { src: '/images/file-icon.png', width: 192, height: 192 }
+            return { src: '/images/file-icon-420x420.png', width: 192, height: 192 }
           }
         }));
         setImageData(galleryData);
