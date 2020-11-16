@@ -73,9 +73,8 @@ function ItemForm() {
         } else {
           return { key, type: file.type };
         }
-      })) : null
+      })) : []
       // console.log(attachments);
-      console.log('JSON.stringify(null)', JSON.stringify(null))
       const itemCreated = await createItem({
         variables: {
           item: {
