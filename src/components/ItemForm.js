@@ -185,6 +185,7 @@ function ItemForm() {
             allowMultiple={true}
             onupdatefiles={setFiles}
             labelIdle='Drop files here or <span class="filepond--label-action">Browse</span>'
+            credits={false}
           />
         </Form.Group>
         <LoadingButton
