@@ -100,7 +100,7 @@ function ItemForm() {
       setIsLoading(false);
     }
   };
-  console.log(files);
+  // console.log(files);
   return(
     <div
       className='ItemForm'
