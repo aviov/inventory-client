@@ -6,6 +6,7 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { v1 as uuidv1 } from 'uuid';
 import { s3Upload } from '../libs/awsLib';
@@ -20,7 +21,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 registerLocale('en-gb', enGb);
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
 function ItemForm() {
   const history = useHistory();
@@ -180,7 +181,10 @@ function ItemForm() {
           <Form.Label>Attachments</Form.Label>
           <FilePond
             files={files}
-            allowReorder={true}
+            allowFileTypeValidation={true}
+            acceptedFileTypes={['image/*']}
+            labelFileTypeNotAllowed={'Only images can be uploaded'}
+            allowReorder={false}
             allowMultiple={true}
             onupdatefiles={setFiles}
             labelIdle='Drop files here or <span class="filepond--label-action">Browse</span>'
