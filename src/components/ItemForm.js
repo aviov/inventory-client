@@ -136,8 +136,7 @@ function ItemForm() {
           </Form.Label>
           <Form.Control as={DatePicker}
             className="date-picker"
-            // popperPlacement='top-end'
-            withPortal={true}
+            // withPortal={true}
             dateFormat='dd.MM.yyyy'
             placeholderText='Select date'
             locale='en-gb'
@@ -150,6 +149,17 @@ function ItemForm() {
               } else {
                 setDateWarrantyBegins(date);
                 setDateWarrantyExpires(datePlusNYears({ date, nYears: 1 }));
+              }
+            }}
+            popperPlacement='top-end'
+            popperModifiers={{
+              flip: {
+                enabled: false
+              },
+              preventOverflow: {
+                enabled: true,
+                escapeWithReference: false,
+                boundariesElement: "viewport"
               }
             }}
           />
@@ -175,6 +185,10 @@ function ItemForm() {
                 setDateWarrantyExpires(date);
               }
             }}
+            showMonthDropdown
+            showYearDropdown
+            scrollableMonthYearDropdown
+            dropdownMode="select"
           />
         </Form.Group>
         <Form.Group>
