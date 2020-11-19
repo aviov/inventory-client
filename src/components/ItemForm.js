@@ -151,15 +151,12 @@ function ItemForm() {
                 setDateWarrantyExpires(datePlusNYears({ date, nYears: 1 }));
               }
             }}
+            showMonthDropdown
+            showYearDropdown
             popperPlacement='top-end'
             popperModifiers={{
               flip: {
                 enabled: false
-              },
-              preventOverflow: {
-                enabled: true,
-                escapeWithReference: false,
-                boundariesElement: "viewport"
               }
             }}
           />
@@ -188,7 +185,7 @@ function ItemForm() {
             showMonthDropdown
             showYearDropdown
             scrollableMonthYearDropdown
-            dropdownMode="select"
+            dropdownMode="scroll"
           />
         </Form.Group>
         <Form.Group>
