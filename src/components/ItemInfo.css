@@ -6,14 +6,6 @@
   align-items: center;
 }
 
-.SerialInfo {
-  font-weight: bold;
-}
-
-.WarrantyInfo {
-  align-items: center;
-}
-
-.ModelInfo {
-  font-weight: bold;
+.ItemInfo .LoadingButton {
+  margin: 5px;
 }
