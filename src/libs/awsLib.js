@@ -9,8 +9,11 @@ export async function s3Upload(file) {
 };
 
 export async function s3Delete(filename) {
-  const removed = await Storage.vault.remove(filename);
-  return removed.key;
+  await Storage.vault.remove(filename);
+  return filename;
+  // const removed = await Storage.vault.remove(filename);
+  // console.log('removed', removed);
+  // return removed.key;
 };
 
 export async function s3FileURL(filename) {

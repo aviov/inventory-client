@@ -1,29 +1,60 @@
 import React, { useEffect, useState } from 'react';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
 import { ImSpinner2 } from 'react-icons/im';
-import Gallery from 'react-photo-gallery';
+import { FilePond, registerPlugin } from "react-filepond";
+import "filepond/dist/filepond.min.css";
+import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImagePreview from "filepond-plugin-image-preview";
+import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+// import Gallery from 'react-photo-gallery';
 import { s3FileURL } from '../libs/awsLib';
-import { isImage } from '../libs/imageLib';
+import { s3Upload, s3Delete } from '../libs/awsLib';
+import { useMutation } from '@apollo/client'
+import { MUTATION_updateItem } from '../api/mutations'
+import { isImage, getImageSize } from '../libs/imageLib';
 import { onError } from '../libs/errorLib';
+import LoadingButton from './LoadingButton';
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
-function ImageGrid({ attachments='[]' }) {
-  const [prevAttachments, setPrevAttachments] = useState([])
+function ImageGrid({ attachments='[]', itemId }) {
+  const [prevAttachments, setPrevAttachments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [imageData, setImageData] = useState([]);
+  const [isEditingFiles, setIsEditingFiles] = useState(false);
+  // const [isDeletingFiles, setIsDeletingFiles] = useState(false);
+  const [isUpdatingFiles, setIsUpdatingFiles] = useState(false);
+  const [updateItem] = useMutation(MUTATION_updateItem);
+  const [urlsFromServer, setUrlsFromServer] = useState([]);
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     async function onLoad() {
       setIsLoading(true);
       // console.log(attachments);
       try {
-        const galleryData = await Promise.all(JSON.parse(attachments).map(async ({ key, type, width, height }) => {
-          const src = await s3FileURL(key);
+        const filepondData = await Promise.all(JSON.parse(attachments).map(async ({ key, type, width, height }) => {
+          const source = await s3FileURL(key);
           if (isImage({ type })) {
-            return { src, width, height }
+            return {
+              source,
+              key,
+              options: {
+                type: 'local'
+              }
+            };
           } else {
-            return { src: '/images/file-icon-420x420.png', width: 192, height: 192 }
+            return {
+              source, //: '/images/file-icon-420x420.png',
+              key,
+              options: {
+                type: 'local'
+              }
+            }
           }
         }));
-        setImageData(galleryData);
+        // console.log(filepondData);
+        setUrlsFromServer(filepondData);
         setIsLoading(false);
       } catch (error) {
         onError(error);
@@ -34,6 +65,89 @@ function ImageGrid({ attachments='[]' }) {
       onLoad();
     }
   }, [attachments, prevAttachments]);
+
+  async function uploadFile(file) {
+    try {
+      const key = await s3Upload(file);
+      const { width, height } = await getImageSize(file);
+      if (isImage(file)) {
+        return { key, type: file.type, width, height };
+      } else {
+        return { key, type: file.type };
+      };
+    } catch (error) {
+      onError(error);
+    }
+  };
+
+  async function uploadFiles(files=[]) {
+    const attachmentsUploaded = await Promise.all(files.map(async ({ file }) => uploadFile(file)));
+    return attachmentsUploaded;
+  };
+
+  async function deleteFile(filename) {
+    try {
+      const key = await s3Delete(filename);
+      return { key };
+    } catch (error) {
+      onError(error);
+    }
+  }
+
+  async function deleteFiles(urls=[]) {
+    const confirmed = (urls.length > 0) ?
+      window.confirm(`
+      Do you want to delete images?
+      ${urls.map(({ key }) => `\n${key}`)},
+      `) : false;
+    if (confirmed) {
+      // setIsDeletingFiles(true);
+      const filenames = urls.map(({ key }) => key);
+      const attachmentsDeleted = await Promise.all(filenames.map(async (filename) => deleteFile(filename)));
+      return attachmentsDeleted;
+      // setIsDeletingFiles(false);
+    } else {
+      return [];
+    }
+  };
+
+  async function handleUpdateFiles(files, urlsFromServer) {
+    setIsUpdatingFiles(true);
+    // console.log('files', files);
+    // console.log('urlsFromServer', urlsFromServer);
+    const filesToUpload = files.filter(({ file }) => 
+      !(urlsFromServer.some(({ key }) => (key === decodeURI(file.name)))));
+    // console.log('filesToUpload', filesToUpload);
+    const urlsToDelete = urlsFromServer.filter(({ key }) =>
+      !(files.some(({ file }) => (decodeURI(file.name) === key))));
+    // console.log('urlsToDelete', urlsToDelete);
+    const attachmentsUploaded = await uploadFiles(filesToUpload);
+    const attachmentsDeleted = await deleteFiles(urlsToDelete);
+    const attachmentsCurrent = JSON.parse(attachments);
+    // console.log('attachmentsUploaded', attachmentsUploaded);
+    // console.log('attachmentsDeleted', attachmentsDeleted);
+    // console.log('attachmentsCurrent', attachmentsCurrent);
+    const attachmentsUpdate = [ ...attachmentsCurrent, ...attachmentsUploaded ].filter(({ key }) =>
+      !(attachmentsDeleted.some((attachment) => (decodeURI(attachment.key) === key))));
+    // console.log('attachmentsUpdate', attachmentsUpdate);
+    try {
+      const data = await updateItem({
+        variables: {
+          item: {
+            id: itemId,
+            attachments: JSON.stringify(attachmentsUpdate)
+          }
+        }
+      });
+      if (data) {
+        // console.log('data', data);
+        setIsUpdatingFiles(false);
+        setIsEditingFiles(false);
+      }
+    } catch (error) {
+      onError(error);
+    }
+  }
   // console.log(imageData[0])
   return(
     isLoading ? (
@@ -43,11 +157,91 @@ function ImageGrid({ attachments='[]' }) {
         <ImSpinner2
           className='spinning'
         />
+        {/* <Gallery
+          photos={imageData}
+        /> */}
       </div>
     ) : (
-      <Gallery
-        photos={imageData}
+      ((urlsFromServer && urlsFromServer.length > 0) || (files && files.length > 0)) &&
+      <Container>
+      <Row className='justify-content-end'>
+        {!isEditingFiles ?
+          (
+            <LoadingButton
+              className='LoadingButton'
+              size='sm'
+              color='orange'
+              variant='outline-warning'
+              disabled={false}
+              type='submit'
+              isLoading={false}
+              onClick={() => setIsEditingFiles(true)}
+            >
+              Edit images
+            </LoadingButton>
+          ) : (
+            <>
+              <LoadingButton
+                className='LoadingButton'
+                size='sm'
+                variant='outline-secondary'
+                disabled={false}
+                type='submit'
+                isLoading={false}
+                onClick={() => setIsEditingFiles(false)}
+              >
+                Cancel changes
+              </LoadingButton>
+              <LoadingButton
+                className='LoadingButton'
+                size='sm'
+                variant='outline-primary'
+                disabled={isUpdatingFiles}
+                type='submit'
+                isLoading={isUpdatingFiles}
+                onClick={() => handleUpdateFiles(files, urlsFromServer)}
+              >
+                Save changes
+              </LoadingButton>
+              {/* <LoadingButton
+                className='LoadingButton'
+                size='sm'
+                color='red'
+                variant='outline-danger'
+                disabled={isDeletingFiles}
+                type='submit'
+                isLoading={isDeletingFiles}
+                onClick={() => handleDeleteFiles()}
+              >
+                Delete all images
+              </LoadingButton> */}
+            </>
+          )
+        }
+      </Row>
+      <FilePond
+        files={!isEditingFiles ? urlsFromServer : files}
+        server={!isEditingFiles ? {
+          load: (source, load, error, progress, abort, headers) => {
+            var myRequest = new Request(source);
+            fetch(myRequest).then(function(response) {
+              response.blob().then(function(myBlob) {
+                load(myBlob);
+              });
+            });
+          }
+        } : null}
+        allowFileTypeValidation={true}
+        acceptedFileTypes={['image/*']}
+        labelFileTypeNotAllowed={'Only images can be uploaded'}
+        allowReorder={false}
+        allowMultiple={true}
+        onupdatefiles={setFiles}
+        disabled={!isEditingFiles}
+        labelIdle={isEditingFiles ? 'Drop images here or <span class="filepond--label-action">Browse</span>' : 'images'}
+        credits={false}
       />
+      </Container>
     )
   )
 };

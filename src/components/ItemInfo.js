@@ -283,6 +283,7 @@ function ItemInfo() {
             {(item && item.attachments && !isDeleting) &&
               <ImageGrid
                 attachments={item.attachments}
+                itemId={id}
               />
             }
             {/* {item && item.attachments && JSON.parse(item.attachments).map((attachment) => (
