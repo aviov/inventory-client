@@ -146,6 +146,61 @@ function ItemInfo() {
       >
         <Row>
           <Col>
+            <Row>
+              {!isEditing ?
+                (
+                  <LoadingButton
+                    className='LoadingButton'
+                    size='sm'
+                    color='orange'
+                    variant='outline-warning'
+                    disabled={false}
+                    type='submit'
+                    isLoading={false}
+                    onClick={() => setIsEditing(true)}
+                  >
+                    Edit item
+                  </LoadingButton>
+                ) : (
+                  <>
+                    <LoadingButton
+                      className='LoadingButton'
+                      size='sm'
+                      variant='outline-secondary'
+                      disabled={false}
+                      type='submit'
+                      isLoading={false}
+                      onClick={() => setIsEditing(false)}
+                    >
+                      Cancel update
+                    </LoadingButton>
+                    <LoadingButton
+                      className='LoadingButton'
+                      size='sm'
+                      variant='outline-primary'
+                      disabled={isUpdating}
+                      type='submit'
+                      isLoading={isUpdating}
+                      onClick={() => handleSubmit(item)}
+                    >
+                      Submit update
+                    </LoadingButton>
+                    <LoadingButton
+                      className='LoadingButton'
+                      size='sm'
+                      color='red'
+                      variant='outline-danger'
+                      disabled={isDeleting}
+                      type='submit'
+                      isLoading={isDeleting}
+                      onClick={() => handleDelete(item)}
+                    >
+                      Delete item
+                    </LoadingButton>
+                  </>
+                )
+              }
+            </Row>
             <Form.Group as={Row}>
               <Form.Label column='sm=4'>
                 Serial Number
@@ -294,61 +349,6 @@ function ItemInfo() {
               />
             ))} */}
           </Col>
-        </Row>
-        <Row>
-          {!isEditing ?
-            (
-              <LoadingButton
-                className='LoadingButton'
-                size='sm'
-                color='orange'
-                variant='outline-warning'
-                disabled={false}
-                type='submit'
-                isLoading={false}
-                onClick={() => setIsEditing(true)}
-              >
-                Edit item
-              </LoadingButton>
-            ) : (
-              <>
-                <LoadingButton
-                  className='LoadingButton'
-                  size='sm'
-                  variant='outline-secondary'
-                  disabled={false}
-                  type='submit'
-                  isLoading={false}
-                  onClick={() => setIsEditing(false)}
-                >
-                  Cancel update
-                </LoadingButton>
-                <LoadingButton
-                  className='LoadingButton'
-                  size='sm'
-                  variant='outline-primary'
-                  disabled={isUpdating}
-                  type='submit'
-                  isLoading={isUpdating}
-                  onClick={() => handleSubmit(item)}
-                >
-                  Submit update
-                </LoadingButton>
-                <LoadingButton
-                  className='LoadingButton'
-                  size='sm'
-                  color='red'
-                  variant='outline-danger'
-                  disabled={isDeleting}
-                  type='submit'
-                  isLoading={isDeleting}
-                  onClick={() => handleDelete(item)}
-                >
-                  Delete item
-                </LoadingButton>
-              </>
-            )
-          }
         </Row>
       </Container>
     </div>
