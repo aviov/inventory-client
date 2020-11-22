@@ -8,6 +8,7 @@ import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orien
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import './ImageGrid.css';
 // import Gallery from 'react-photo-gallery';
 import { s3FileURL } from '../libs/awsLib';
 import { s3Upload, s3Delete } from '../libs/awsLib';
@@ -163,7 +164,7 @@ function ImageGrid({ attachments='[]', itemId }) {
       </div>
     ) : (
       ((urlsFromServer && urlsFromServer.length > 0) || (files && files.length > 0)) &&
-      <Container>
+      <>
       <Row className='justify-content-end'>
         {!isEditingFiles ?
           (
@@ -238,10 +239,10 @@ function ImageGrid({ attachments='[]', itemId }) {
         allowMultiple={true}
         onupdatefiles={setFiles}
         disabled={!isEditingFiles}
-        labelIdle={isEditingFiles ? 'Drop images here or <span class="filepond--label-action">Browse</span>' : 'images'}
+        labelIdle={isEditingFiles ? 'Drop images here or <span class="filepond--label-action">Browse</span>' : 'Images'}
         credits={false}
       />
-      </Container>
+      </>
     )
   )
 };

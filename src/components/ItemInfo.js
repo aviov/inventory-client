@@ -146,7 +146,7 @@ function ItemInfo() {
       >
         <Row>
           <Col>
-            <Row>
+            <Row className='justify-content-end'>
               {!isEditing ?
                 (
                   <LoadingButton
@@ -172,7 +172,7 @@ function ItemInfo() {
                       isLoading={false}
                       onClick={() => setIsEditing(false)}
                     >
-                      Cancel update
+                      Cancel
                     </LoadingButton>
                     <LoadingButton
                       className='LoadingButton'
@@ -183,7 +183,7 @@ function ItemInfo() {
                       isLoading={isUpdating}
                       onClick={() => handleSubmit(item)}
                     >
-                      Submit update
+                      Submit
                     </LoadingButton>
                     <LoadingButton
                       className='LoadingButton'
