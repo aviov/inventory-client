@@ -325,7 +325,7 @@ function ItemInfo() {
                 )}
               </Col>
             </Form.Group>
-            <hr/>
+            <hr style={{ marginBottom: 30 }}/>
           </Col>
           <Col lg='7'>
             {(item && item.attachments && !isDeleting) &&

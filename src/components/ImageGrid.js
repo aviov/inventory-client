@@ -5,6 +5,8 @@ import { ImSpinner2 } from 'react-icons/im';
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImageResize from 'filepond-plugin-image-resize';
+// import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
@@ -17,7 +19,7 @@ import { MUTATION_updateItem } from '../api/mutations'
 import { isImage, getImageSize } from '../libs/imageLib';
 import { onError } from '../libs/errorLib';
 import LoadingButton from './LoadingButton';
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
 function ImageGrid({ attachments='[]', itemId }) {
   const [prevAttachments, setPrevAttachments] = useState([]);
@@ -163,8 +165,8 @@ function ImageGrid({ attachments='[]', itemId }) {
         /> */}
       </div>
     ) : (
-      ((urlsFromServer && urlsFromServer.length > 0) || (files && files.length > 0)) &&
-      <>
+      // ((urlsFromServer && urlsFromServer.length > 0) || (files && files.length > 0)) &&
+      <div className='ImageGrid'>
       <Row className='justify-content-end'>
         {!isEditingFiles ?
           (
@@ -236,14 +238,20 @@ function ImageGrid({ attachments='[]', itemId }) {
         allowFileTypeValidation={true}
         acceptedFileTypes={['image/*']}
         labelFileTypeNotAllowed={'Only images can be uploaded'}
+        // allowImageResize={true}
+        // imageResizeTargetWidth={'200'}
+        // imageResizeTargetHeight={'200'}
+        // imageResizeMode={'force'}
+        // imageResizeUpscale={false}
         allowReorder={false}
         allowMultiple={true}
+        // maxFiles={3}
         onupdatefiles={setFiles}
         disabled={!isEditingFiles}
         labelIdle={isEditingFiles ? 'Drop images here or <span class="filepond--label-action">Browse</span>' : 'Images'}
         credits={false}
       />
-      </>
+      </div>
     )
   )
 };

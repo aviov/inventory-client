@@ -5,6 +5,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
+import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
@@ -21,7 +22,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 registerLocale('en-gb', enGb);
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileValidateType);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
 function ItemForm() {
   const history = useHistory();
@@ -188,8 +189,14 @@ function ItemForm() {
             allowFileTypeValidation={true}
             acceptedFileTypes={['image/*']}
             labelFileTypeNotAllowed={'Only images can be uploaded'}
+            // allowImageResize={true}
+            // imageResizeTargetWidth={'1000'}
+            // imageResizeTargetHeight={'1000'}
+            // imageResizeMode={'force'}
+            // imageResizeUpscale={false}
             allowReorder={false}
             allowMultiple={true}
+            // maxFiles={3}
             onupdatefiles={setFiles}
             labelIdle='Drop files here or <span class="filepond--label-action">Browse</span>'
             credits={false}
