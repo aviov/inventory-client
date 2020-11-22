@@ -60,11 +60,11 @@ function ImageGrid({ attachments='[]', itemId }) {
         onError(error);
       }
     }
-    if (attachments !== prevAttachments) {
+    if (attachments !== prevAttachments || !isEditingFiles) {
       setPrevAttachments(attachments);
       onLoad();
     }
-  }, [attachments, prevAttachments]);
+  }, [attachments, prevAttachments, isEditingFiles]);
 
   async function uploadFile(file) {
     try {
