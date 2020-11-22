@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Container from 'react-bootstrap/Container';
+// import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import { ImSpinner2 } from 'react-icons/im';
 import { FilePond, registerPlugin } from "react-filepond";
@@ -191,7 +191,7 @@ function ImageGrid({ attachments='[]', itemId }) {
                 isLoading={false}
                 onClick={() => setIsEditingFiles(false)}
               >
-                Cancel changes
+                Cancel
               </LoadingButton>
               <LoadingButton
                 className='LoadingButton'
@@ -202,7 +202,7 @@ function ImageGrid({ attachments='[]', itemId }) {
                 isLoading={isUpdatingFiles}
                 onClick={() => handleUpdateFiles(files, urlsFromServer)}
               >
-                Save changes
+                Save
               </LoadingButton>
               {/* <LoadingButton
                 className='LoadingButton'
