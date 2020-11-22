@@ -201,6 +201,28 @@ function ItemInfo() {
                 )
               }
             </Row>
+            <hr/>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4'>
+                Model
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={item.modelNumber}
+                  />
+                ) : (
+                  <Form.Control
+                    type='text'
+                    placeholder='Model number'
+                    value={item.modelNumber}
+                    onChange={(event) => setItem({ ...item, modelNumber: event.target.value })}
+                  />
+                )}
+              </Col>
+            </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4'>
                 Serial Number
@@ -260,25 +282,17 @@ function ItemInfo() {
             </Form.Group>
             <Form.Group as={Row}>
               {isWarrantyValid ? (
-                <>
-                  <Form.Label column='sm=1'>
-                    <FcApproval />
-                  </Form.Label>
-                  <Form.Label column='sm=4'>
-                    expires
-                  </Form.Label>
-                </>
+                <Form.Label column='sm=4'>
+                  <FcApproval />
+                  {' expires'}
+                </Form.Label>
               ) : (
-                <>
-                  <Form.Label column='sm=1'>
-                    <MdError
-                      color={'red'}
-                    />
-                  </Form.Label>
-                  <Form.Label column='sm=4'>
-                    expired
-                  </Form.Label>
-                </>
+                <Form.Label column='sm=4'>
+                  <MdError
+                    color={'red'}
+                  />
+                  {' expired'}
+                </Form.Label>
               )}
               <Col sm='8'>
                 {!isEditing ? (
@@ -312,27 +326,6 @@ function ItemInfo() {
               </Col>
             </Form.Group>
             <hr/>
-            <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
-                Model
-              </Form.Label>
-              <Col sm='8'>
-                {!isEditing ? (
-                  <Form.Control
-                    plaintext
-                    readOnly
-                    value={item.modelNumber}
-                  />
-                ) : (
-                  <Form.Control
-                    type='text'
-                    placeholder='Model number'
-                    value={item.modelNumber}
-                    onChange={(event) => setItem({ ...item, modelNumber: event.target.value })}
-                  />
-                )}
-              </Col>
-            </Form.Group>
           </Col>
           <Col lg='7'>
             {(item && item.attachments && !isDeleting) &&

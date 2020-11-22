@@ -1,7 +1,6 @@
 .filepond--panel-root {
-  border-radius: 5px;
-}
-
-.filepond--item-panel {
-  border-radius: 5px;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid lightgrey;
+  border-radius: 0px;
 }
