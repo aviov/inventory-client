@@ -183,7 +183,7 @@ function ItemForm() {
           />
         </Form.Group>
         <Form.Group>
-          <Form.Label>Attachments</Form.Label>
+          <Form.Label>Images</Form.Label>
           <FilePond
             files={files}
             allowFileTypeValidation={true}
@@ -196,9 +196,9 @@ function ItemForm() {
             // imageResizeUpscale={false}
             allowReorder={false}
             allowMultiple={true}
-            // maxFiles={3}
+            maxFiles={3}
             onupdatefiles={setFiles}
-            labelIdle='Drop files here or <span class="filepond--label-action">Browse</span>'
+            labelIdle='Drop images or <span class="filepond--label-action">Browse</span>'
             credits={false}
           />
         </Form.Group>
