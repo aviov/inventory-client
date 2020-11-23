@@ -19,3 +19,8 @@
 .filepond--file-info {
   visibility: hidden;
 }
+
+.ImageGrid .FilepondInactive
+.filepond--image-preview-overlay {
+  visibility: hidden;
+}
