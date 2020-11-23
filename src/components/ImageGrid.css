@@ -4,3 +4,18 @@
   border-bottom: 1px solid lightgrey;
   border-radius: 0px;
 }
+
+/* .ImageGrid .FilepondInactive
+.filepond--file-action-button {
+  visibility: hidden;
+}
+
+.ImageGrid .FilepondInactive
+.filepond--action-remove-item {
+  visibility: hidden;
+} */
+
+.ImageGrid .FilepondInactive
+.filepond--file-info {
+  visibility: hidden;
+}

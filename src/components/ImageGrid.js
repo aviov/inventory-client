@@ -231,6 +231,7 @@ function ImageGrid({ attachments='[]', itemId }) {
       </Row>
       <hr style={{ marginBottom: 0 }}/>
       <FilePond
+        className='FilepondInactive'
         files={!isEditingFiles ? urlsFromServer : files}
         server={!isEditingFiles ? {
           load: (source, load, error, progress, abort, headers) => {
