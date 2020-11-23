@@ -12,13 +12,16 @@
   color: #999;
 }
 
-.Items .ListItem {
-  display: flex;
-  justify-items: space-between;
+.Items .AddItemButton {
+  margin: 5px;
 }
 
-.Items .AddItemButton {
-  margin: 10px;
+.Items .List {
+  margin-top: 15px;
+}
+
+.Items .ListItem {
+  cursor: pointer;
 }
 
 .Items .CloseSearchIcon {

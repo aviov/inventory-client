@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -56,17 +56,15 @@ export default function Items() {
     return items.map((item) =>
       (
         <tr
+          className='ListItem'
           key={item.id}
+          onClick={() => history.push(`/items/${item.id}`)}
         >
           <td>
             {item.modelNumber}
           </td>
           <td>
-            <Link
-              to={`/items/${item.id}`}
-            >
-              {item.serialNumber}
-            </Link>
+            {item.serialNumber}
           </td>
           <td>
             {new Date(item.dateWarrantyBegins).toLocaleDateString('RU-ru')}
@@ -92,7 +90,7 @@ export default function Items() {
   function renderItems() {
     return(
       <div
-        className='Items'
+        className='Items List'
       >
         <Table
           striped
@@ -205,9 +203,11 @@ export default function Items() {
     >
       {isAuthenticated ?
         <div>
-          {!loading &&
+          {//!loading &&
             <Button
+              disabled={loading}
               className='AddItemButton'
+              size='sm'
               variant='outline-primary'
               title='Add Item'
               onClick={() => history.push('/items/new')}
