@@ -6,7 +6,7 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImageResize from 'filepond-plugin-image-resize';
-// import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
+import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
@@ -19,7 +19,7 @@ import { MUTATION_updateItem } from '../api/mutations'
 import { isImage, getImageSize } from '../libs/imageLib';
 import { onError } from '../libs/errorLib';
 import LoadingButton from './LoadingButton';
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImagePreview, FilePondPluginFileValidateType);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImageTransform, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
 function ImageGrid({ attachments='[]', itemId }) {
   const [prevAttachments, setPrevAttachments] = useState([]);
@@ -30,6 +30,7 @@ function ImageGrid({ attachments='[]', itemId }) {
   const [updateItem] = useMutation(MUTATION_updateItem);
   const [urlsFromServer, setUrlsFromServer] = useState([]);
   const [files, setFiles] = useState([]);
+  const [filesResized, setFilesResized] = useState([]);
 
   useEffect(() => {
     async function onLoad() {
@@ -65,6 +66,7 @@ function ImageGrid({ attachments='[]', itemId }) {
     }
     if (attachments !== prevAttachments || !isEditingFiles) {
       setPrevAttachments(attachments);
+      setFilesResized([]);
       onLoad();
     }
   }, [attachments, prevAttachments, isEditingFiles]);
@@ -114,17 +116,20 @@ function ImageGrid({ attachments='[]', itemId }) {
     }
   };
 
-  async function handleUpdateFiles(files, urlsFromServer) {
+  async function handleUpdateFiles(files, urlsFromServer, filesResized, attachments) {
     setIsUpdatingFiles(true);
     // console.log('files', files);
     // console.log('urlsFromServer', urlsFromServer);
     const filesToUpload = files.filter(({ file }) => 
       !(urlsFromServer.some(({ key }) => (key === decodeURI(file.name)))));
+    const filesResizedToUpload = filesToUpload.map(({ file }) =>
+      (filesResized.find(({ filename }) => (filename === file.name))));
+    // console.log('filesResizedToUpload', filesResizedToUpload);
     // console.log('filesToUpload', filesToUpload);
     const urlsToDelete = urlsFromServer.filter(({ key }) =>
       !(files.some(({ file }) => (decodeURI(file.name) === key))));
     // console.log('urlsToDelete', urlsToDelete);
-    const attachmentsUploaded = await uploadFiles(filesToUpload);
+    const attachmentsUploaded = await uploadFiles(filesResizedToUpload);
     const attachmentsDeleted = await deleteFiles(urlsToDelete);
     const attachmentsCurrent = JSON.parse(attachments);
     // console.log('attachmentsUploaded', attachmentsUploaded);
@@ -152,6 +157,8 @@ function ImageGrid({ attachments='[]', itemId }) {
     }
   }
   // console.log(imageData[0])
+  // console.log('files', files);
+  // console.log('filesResized',filesResized)
   return(
     isLoading ? (
       <div
@@ -202,7 +209,7 @@ function ImageGrid({ attachments='[]', itemId }) {
                 disabled={isUpdatingFiles}
                 type='submit'
                 isLoading={isUpdatingFiles}
-                onClick={() => handleUpdateFiles(files, urlsFromServer)}
+                onClick={() => handleUpdateFiles(files, urlsFromServer, filesResized, attachments)}
               >
                 Save
               </LoadingButton>
@@ -238,11 +245,17 @@ function ImageGrid({ attachments='[]', itemId }) {
         allowFileTypeValidation={true}
         acceptedFileTypes={['image/*']}
         labelFileTypeNotAllowed={'Only images can be uploaded'}
-        // allowImageResize={true}
-        // imageResizeTargetWidth={'200'}
-        // imageResizeTargetHeight={'200'}
-        // imageResizeMode={'force'}
-        // imageResizeUpscale={false}
+        allowImageResize={true}
+        imageResizeTargetWidth={'500'}
+        imageResizeMode={'contain'}
+        imageResizeUpscale={false}
+        onpreparefile={(fileItem, output) => {
+          const filename = fileItem.filename;
+          const type = fileItem.fileType;
+          const transformedFile = new File([output], filename, { type });
+          // console.log('transformedFile', transformedFile);
+          setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
+        }}
         allowReorder={false}
         allowMultiple={true}
         // maxFiles={3}

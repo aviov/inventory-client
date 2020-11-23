@@ -6,6 +6,7 @@ import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
 import FilePondPluginImageExifOrientation from "filepond-plugin-image-exif-orientation";
 import FilePondPluginImageResize from 'filepond-plugin-image-resize';
+import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
@@ -22,7 +23,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 registerLocale('en-gb', enGb);
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImagePreview, FilePondPluginFileValidateType);
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImageTransform, FilePondPluginImagePreview, FilePondPluginFileValidateType);
 
 function ItemForm() {
   const history = useHistory();
@@ -32,6 +33,7 @@ function ItemForm() {
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
+  const [filesResized, setFilesResized] = useState([]);
   const [createItem] = useMutation(MUTATION_createItem, {
     refetchQueries: [{ query: QUERY_listItems }]
   });
@@ -66,8 +68,10 @@ function ItemForm() {
     //   'dateWarrantyExpires', dateWarrantyExpires
     // )
     try {
-      const attachments = (files && files.length > 0) ? 
-      await Promise.all(files.map(async ({ file }) => {
+      const filesResizedToUpload = files.map(({ file }) =>
+        (filesResized.find(({ filename }) => (filename === file.name))));
+      const attachments = (filesResizedToUpload && filesResizedToUpload.length > 0) ? 
+      await Promise.all(filesResizedToUpload.map(async ({ file }) => {
         const key = await s3Upload(file);
         if (isImage(file)) {
           const { width, height } = await getImageSize(file);
@@ -189,11 +193,17 @@ function ItemForm() {
             allowFileTypeValidation={true}
             acceptedFileTypes={['image/*']}
             labelFileTypeNotAllowed={'Only images can be uploaded'}
-            // allowImageResize={true}
-            // imageResizeTargetWidth={'1000'}
-            // imageResizeTargetHeight={'1000'}
-            // imageResizeMode={'force'}
-            // imageResizeUpscale={false}
+            allowImageResize={true}
+            imageResizeTargetWidth={'500'}
+            imageResizeMode={'contain'}
+            imageResizeUpscale={false}
+            onpreparefile={(fileItem, output) => {
+              const filename = fileItem.filename;
+              const type = fileItem.fileType;
+              const transformedFile = new File([output], filename, { type });
+              // console.log('transformedFile', transformedFile);
+              setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
+            }}
             allowReorder={false}
             allowMultiple={true}
             maxFiles={3}
