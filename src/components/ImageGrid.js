@@ -258,7 +258,7 @@ function ImageGrid({ attachments='[]', itemId }) {
         }}
         allowReorder={false}
         allowMultiple={true}
-        // maxFiles={3}
+        maxFiles={3}
         onupdatefiles={setFiles}
         disabled={!isEditingFiles}
         labelIdle={isEditingFiles ? 'Drop images here or <span class="filepond--label-action">Browse</span>' : 'Images'}
