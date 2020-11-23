@@ -205,7 +205,6 @@ export default function Items() {
     >
       {isAuthenticated ?
         <div>
-          {renderItems()}
           {!loading &&
             <Button
               className='AddItemButton'
@@ -216,6 +215,7 @@ export default function Items() {
               Add Item
             </Button>
           }
+          {renderItems()}
         </div> :
         renderLander()
       }
