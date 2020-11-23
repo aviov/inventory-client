@@ -92,7 +92,7 @@ function ItemInfo() {
     }
   }
 
-  console.log(typeof item.dateWarrantyBegins);
+  // console.log(typeof item.dateWarrantyBegins);
   // console.log(item.dateWarrantyBegins)
   // console.log(item.dateWarrantyExpires)
 
