@@ -194,17 +194,6 @@ function ImageGrid({ attachments='[]', itemId }) {
               <LoadingButton
                 className='LoadingButton'
                 size='sm'
-                variant='outline-secondary'
-                disabled={false}
-                type='submit'
-                isLoading={false}
-                onClick={() => setIsEditingFiles(false)}
-              >
-                Cancel
-              </LoadingButton>
-              <LoadingButton
-                className='LoadingButton'
-                size='sm'
                 variant='outline-primary'
                 disabled={isUpdatingFiles}
                 type='submit'
@@ -212,6 +201,17 @@ function ImageGrid({ attachments='[]', itemId }) {
                 onClick={() => handleUpdateFiles(files, urlsFromServer, filesResized, attachments)}
               >
                 Save
+              </LoadingButton>
+              <LoadingButton
+                className='LoadingButton'
+                size='sm'
+                variant='outline-secondary'
+                disabled={false}
+                type='submit'
+                isLoading={false}
+                onClick={() => setIsEditingFiles(false)}
+              >
+                Cancel
               </LoadingButton>
               {/* <LoadingButton
                 className='LoadingButton'

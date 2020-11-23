@@ -71,7 +71,7 @@ function ItemInfo() {
   }) {
     setIsUpdating(true);
     try {
-      const data = updateItem({
+      const data = await updateItem({
         variables: {
           item: {
             id,
@@ -166,13 +166,14 @@ function ItemInfo() {
                     <LoadingButton
                       className='LoadingButton'
                       size='sm'
-                      variant='outline-secondary'
-                      disabled={false}
+                      color='red'
+                      variant='outline-danger'
+                      disabled={isDeleting}
                       type='submit'
-                      isLoading={false}
-                      onClick={() => setIsEditing(false)}
+                      isLoading={isDeleting}
+                      onClick={() => handleDelete(item)}
                     >
-                      Cancel
+                      Delete item
                     </LoadingButton>
                     <LoadingButton
                       className='LoadingButton'
@@ -183,19 +184,18 @@ function ItemInfo() {
                       isLoading={isUpdating}
                       onClick={() => handleSubmit(item)}
                     >
-                      Submit
+                      Save
                     </LoadingButton>
                     <LoadingButton
                       className='LoadingButton'
                       size='sm'
-                      color='red'
-                      variant='outline-danger'
-                      disabled={isDeleting}
+                      variant='outline-secondary'
+                      disabled={false}
                       type='submit'
-                      isLoading={isDeleting}
-                      onClick={() => handleDelete(item)}
+                      isLoading={false}
+                      onClick={() => setIsEditing(false)}
                     >
-                      Delete item
+                      Cancel
                     </LoadingButton>
                   </>
                 )
