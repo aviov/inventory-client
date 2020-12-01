@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { QUERY_getItemById, QUERY_listItems } from '../api/queries';
+import { QUERY_getItemById, QUERY_listItemTypes, QUERY_listItems } from '../api/queries';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Select from 'react-select';
 import DatePicker, { registerLocale } from 'react-datepicker';
 // import ImagePreview from './ImagePreview';
 import ImageGrid from './ImageGrid';
@@ -32,8 +33,10 @@ function ItemInfo() {
     serialNumber: '',
     dateWarrantyBegins: new Date(),
     dateWarrantyExpires: new Date(),
-    attachments: '[]'
+    attachments: '[]',
+    itemTypeId: null
   });
+  const [itemUpdate, setItemUpdate] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -41,6 +44,13 @@ function ItemInfo() {
   const [updateItem] = useMutation(MUTATION_updateItem);
   const [deleteItem] = useMutation(MUTATION_deleteItem, {
     refetchQueries: [{ query: QUERY_listItems }]
+  });
+  const [itemTypeOption, setItemTypeOption] = useState(null);
+  const [itemTypeOptions, setItemTypeOptions] = useState([]);
+  const [listItemTypes, {
+    data: dataItemTypeOptions,
+  }] = useLazyQuery(QUERY_listItemTypes, {
+    fetchPolicy: 'cache-first'
   });
   
   useEffect(() => {
@@ -53,21 +63,57 @@ function ItemInfo() {
         getItemById({
           variables: { itemId: id }
         });
-        data && data.getItemById && setItem(data.getItemById);
+        const itemById = data && data.getItemById;
+        // console.log(data);
+        if (itemById) {
+          const {
+            id,
+            modelNumber,
+            serialNumber,
+            dateWarrantyBegins,
+            dateWarrantyExpires,
+            attachments,
+            itemType
+          } = itemById;
+          const itemTypeId = itemById.itemType && itemById.itemType.id;
+          const itemTypeIdWithoutPrefix = (((typeof itemTypeId) === 'string') && itemTypeId.startsWith('item:')) ? itemTypeId.slice(itemTypeId.indexOf('itemtype:')) : itemTypeId
+          setItem(itemById);
+          setItemUpdate({
+            id,
+            modelNumber,
+            serialNumber,
+            dateWarrantyBegins,
+            dateWarrantyExpires,
+            attachments,
+            itemTypeId: itemTypeIdWithoutPrefix
+          });
+          itemType && setItemTypeOption({ value: itemTypeIdWithoutPrefix, label: itemType.name });
+        }
+      } catch (error) {
+        onError(error);
+      }
+      try {
+        listItemTypes();
+        const data = dataItemTypeOptions && dataItemTypeOptions.listItemTypes;
+        if (data) {
+          const options = data.map(({ id, name }) => ({ value: id, label: name }));
+          setItemTypeOptions(options);
+        }
       } catch (error) {
         onError(error);
       }
       setIsLoading(false);
     }
     onLoad();
-  },[isAuthenticated, getItemById, id, data]);
+  },[isAuthenticated, getItemById, id, data, listItemTypes, dataItemTypeOptions]);
 
   async function handleSubmit({
     id,
     modelNumber,
     serialNumber,
     dateWarrantyBegins,
-    dateWarrantyExpires
+    dateWarrantyExpires,
+    itemTypeId
   }) {
     setIsUpdating(true);
     try {
@@ -78,7 +124,8 @@ function ItemInfo() {
             modelNumber,
             serialNumber,
             dateWarrantyBegins,
-            dateWarrantyExpires
+            dateWarrantyExpires,
+            itemTypeId: itemTypeId && ('item:' + itemTypeId)
           }
         }
       });
@@ -135,7 +182,7 @@ function ItemInfo() {
   // function formatFilename(str) {
   //   return str.replace(/^\w+-/, '');
   // };
-  // console.log(data);
+  // console.log(itemUpdate);
   const isWarrantyValid = item.dateWarrantyExpires ? new Date().valueOf() <= new Date(item.dateWarrantyExpires).valueOf() : true;
   return(
     <div
@@ -182,7 +229,7 @@ function ItemInfo() {
                       disabled={isUpdating}
                       type='submit'
                       isLoading={isUpdating}
-                      onClick={() => handleSubmit(item)}
+                      onClick={() => handleSubmit(itemUpdate)}
                     >
                       Save
                     </LoadingButton>
@@ -204,6 +251,30 @@ function ItemInfo() {
             <hr/>
             <Form.Group as={Row}>
               <Form.Label column='sm=4'>
+                Item type
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={item.itemType ? item.itemType.name : ''}
+                  />
+                ) : (
+                  <Select
+                    isClearable={true}
+                    value={itemTypeOption}
+                    options={itemTypeOptions}
+                    onChange={(option) => {
+                      setItemTypeOption(option);
+                      setItemUpdate({ ...itemUpdate, itemTypeId: option ? option.value : '' });
+                    }}
+                  />
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4'>
                 Model
               </Form.Label>
               <Col sm='8'>
@@ -216,16 +287,16 @@ function ItemInfo() {
                 ) : (
                   <Form.Control
                     type='text'
-                    placeholder='Model number'
-                    value={item.modelNumber}
-                    onChange={(event) => setItem({ ...item, modelNumber: event.target.value })}
+                    placeholder='Model'
+                    value={itemUpdate.modelNumber}
+                    onChange={(event) => setItemUpdate({ ...itemUpdate, modelNumber: event.target.value })}
                   />
                 )}
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4'>
-                Serial Number
+                Serial number
               </Form.Label>
               <Col sm='8'>
                 {!isEditing ? (
@@ -237,9 +308,9 @@ function ItemInfo() {
                 ) : (
                   <Form.Control
                     type='text'
-                    placeholder='Serial Number'
-                    value={item.serialNumber}
-                    onChange={(event) => setItem({ ...item, serialNumber: event.target.value})}
+                    placeholder='Serial number'
+                    value={itemUpdate.serialNumber}
+                    onChange={(event) => setItemUpdate({ ...itemUpdate, serialNumber: event.target.value})}
                   />
                 )}
               </Col>
@@ -264,13 +335,13 @@ function ItemInfo() {
                     placeholderText='Select date'
                     locale='en-gb'
                     // todayButton='Today'
-                    selected={new Date(item.dateWarrantyBegins)}
+                    selected={new Date(itemUpdate.dateWarrantyBegins)}
                     onSelect={(date) => {
                       if (!date) {
-                        setItem({ ...item, dateWarrantyBegins: ''});
+                        setItemUpdate({ ...itemUpdate, dateWarrantyBegins: ''});
                         return null;
                       } else {
-                        setItem({ ...item, dateWarrantyBegins: date});
+                        setItemUpdate({ ...itemUpdate, dateWarrantyBegins: date});
                       }
                     }}
                     showMonthDropdown
@@ -309,13 +380,13 @@ function ItemInfo() {
                     placeholderText='Select date'
                     locale='en-gb'
                     // todayButton='Today'
-                    selected={new Date(item.dateWarrantyExpires)}
+                    selected={new Date(itemUpdate.dateWarrantyExpires)}
                     onSelect={(date) => {
                       if (!date) {
-                        setItem({ ...item, dateWarrantyExpires: ''});
+                        setItemUpdate({ ...itemUpdate, dateWarrantyExpires: ''});
                         return null;
                       } else {
-                        setItem({ ...item, dateWarrantyExpires: date});
+                        setItemUpdate({ ...itemUpdate, dateWarrantyExpires: date});
                       }
                     }}
                     showMonthDropdown

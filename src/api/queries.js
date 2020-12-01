@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import {
-  FRAGMENT_ItemFields
+  FRAGMENT_ItemFields,
+  FRAGMENT_ItemTypeFields
 } from './fragments'
 
 export const QUERY_listItems = gql`
@@ -36,4 +37,27 @@ export const QUERY_getItemBySerialNumber = gql`
     }
   }
   ${FRAGMENT_ItemFields}
+`
+
+
+export const QUERY_listItemTypes = gql`
+  query listItemTypes {
+    listItemTypes {
+      ...ItemTypeFields
+    }
+  }
+  ${FRAGMENT_ItemTypeFields}
+`
+
+export const QUERY_getItemTypeById = gql`
+  query getItemTypeById(
+    $itemTypeId: String!
+  ) {
+    getItemTypeById(
+      itemTypeId: $itemTypeId
+    ) {
+      ...ItemTypeFields
+    }
+  }
+  ${FRAGMENT_ItemTypeFields}
 `

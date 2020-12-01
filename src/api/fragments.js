@@ -9,6 +9,11 @@ export const FRAGMENT_ItemFields = gql`
     dateWarrantyBegins
     dateWarrantyExpires
     attachments
+    itemType {
+      id
+      dateCreatedAt
+      name
+    }
   }
 `
 
@@ -32,3 +37,11 @@ export const FRAGMENT_ItemFields = gql`
 //     dateWarrantyExpires
 //   }
 // `
+
+export const FRAGMENT_ItemTypeFields = gql`
+  fragment ItemTypeFields on ItemType {
+    id
+    dateCreatedAt
+    name
+  }
+`
