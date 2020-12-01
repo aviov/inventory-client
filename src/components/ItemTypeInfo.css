@@ -1,0 +1,12 @@
+.ItemTypeInfo {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ItemTypeInfo .LoadingButton {
+  margin: 5px;
+}

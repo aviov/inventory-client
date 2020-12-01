@@ -1,0 +1,35 @@
+.ItemTypes .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.ItemTypes .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.ItemTypes .lander p {
+  color: #999;
+}
+
+.ItemTypes .AddItemTypeButton {
+  margin: 5px;
+}
+
+.ItemTypes .List {
+  max-width: 500px;
+  margin-top: 15px;
+}
+
+.ItemTypes .ListItemType {
+  cursor: pointer;
+}
+
+.ItemTypes .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.ItemTypes .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}

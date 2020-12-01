@@ -1,6 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom';
+import { ImSpinner2 } from 'react-icons/im';
 import Form from 'react-bootstrap/Form';
+import Select from 'react-select';
 import DatePicker, { registerLocale } from "react-datepicker";
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
@@ -12,9 +14,9 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import { v1 as uuidv1 } from 'uuid';
 import { s3Upload } from '../libs/awsLib';
-import { useMutation } from '@apollo/client'
+import { useLazyQuery, useMutation } from '@apollo/client'
 import { MUTATION_createItem } from '../api/mutations'
-import { QUERY_listItems } from '../api/queries';
+import { QUERY_listItemTypes, QUERY_listItems } from '../api/queries';
 import LoadingButton from './LoadingButton';
 import { onError } from '../libs/errorLib';
 import { isImage, getImageSize } from '../libs/imageLib';
@@ -31,13 +33,38 @@ function ItemForm() {
   const [serialNumber, setSerialNumber] = useState('');
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
+  const [itemTypeId, setItemTypeId] = useState('');
+  const [itemTypeOption, setItemTypeOption] = useState(null);
+  const [itemTypeOptions, setItemTypeOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [files, setFiles] = useState([]);
   const [filesResized, setFilesResized] = useState([]);
+  const [listItemTypes, {
+    data: dataItemTypeOptions,
+  }] = useLazyQuery(QUERY_listItemTypes, {
+    fetchPolicy: 'cache-first'
+  });
   const [createItem] = useMutation(MUTATION_createItem, {
     refetchQueries: [{ query: QUERY_listItems }]
   });
 
+  useEffect(() => {
+    function onload() {
+      setIsLoading(true);
+      try {
+        listItemTypes();
+        const data = dataItemTypeOptions && dataItemTypeOptions.listItemTypes;
+        if (data) {
+          const options = data.map(({ id, name }) => ({ value: id, label: name }));
+          setItemTypeOptions(options);
+        }
+      } catch (error) {
+        onError(error);
+      }
+      setIsLoading(false);
+    };
+    onload()
+  },[listItemTypes, dataItemTypeOptions])
 
   function datePlusNYears({ date, nYears }) {
     if (date) {
@@ -56,7 +83,7 @@ function ItemForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const id = uuidv1();
+    const id = 'item:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
     // console.log(
@@ -90,7 +117,8 @@ function ItemForm() {
             serialNumber,
             dateWarrantyBegins,
             dateWarrantyExpires,
-            attachments: JSON.stringify(attachments)
+            attachments: JSON.stringify(attachments),
+            itemTypeId: 'item:' + itemTypeId
           }
         }
       })
@@ -106,7 +134,19 @@ function ItemForm() {
       setIsLoading(false);
     }
   };
-  // console.log(files);
+
+  if (!dataItemTypeOptions) {
+    return(
+      <div
+        className='Loading'
+      >
+        <ImSpinner2
+          className='spinning'
+        />
+      </div>
+    )
+  }
+  // console.log(itemTypeOption)
   return(
     <div
       className='ItemForm'
@@ -114,22 +154,35 @@ function ItemForm() {
       <Form>
         <Form.Group>
           <Form.Label>
-            Model Number
+            Item type
+          </Form.Label>
+          <Select
+            isClearable={true}
+            value={itemTypeOption}
+            options={itemTypeOptions}onChange={(option) => {
+              setItemTypeOption(option);
+              setItemTypeId(option ? option.value : '');
+            }}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Model
           </Form.Label>
           <Form.Control
             type='text'
-            placeholder='Model Number'
+            placeholder='Model'
             value={modelNumber}
             onChange={(event) => setModelNumber(event.target.value)}
           />
         </Form.Group>
         <Form.Group>
           <Form.Label>
-            Serial Number
+            Serial number
           </Form.Label>
           <Form.Control
             type='text'
-            placeholder='Serial Number'
+            placeholder='Serial number'
             id={'serialNumber'}
             value={serialNumber}
             onChange={(event) => setSerialNumber(event.target.value)}

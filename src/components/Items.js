@@ -61,6 +61,9 @@ export default function Items() {
           onClick={() => history.push(`/items/${item.id}`)}
         >
           <td>
+            {item.itemType ? item.itemType.name : ''}
+          </td>
+          <td>
             {item.modelNumber}
           </td>
           <td>
@@ -98,14 +101,24 @@ export default function Items() {
           responsive
         >
           <colgroup>
-            <col span='1' style={{ width: 25+'%' }}/>
-            <col span='1' style={{ width: 30+'%' }}/>
+            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
             <col span='1' style={{ width: 20+'%' }}/>
             <col span='1' style={{ width: 20+'%' }}/>
             <col span='1' style={{ width: 5+'%' }}/>
           </colgroup>
           <thead>
             <tr>
+              <th>
+                {'Type'}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                  />
+                }
+              </th>
               <th>
                 {'Model'}
                 {isSearching &&
