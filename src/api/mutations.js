@@ -1,7 +1,8 @@
 import gql from 'graphql-tag'
 import {
   FRAGMENT_ItemFields,
-  FRAGMENT_ItemTypeFields
+  FRAGMENT_ItemTypeFields,
+  FRAGMENT_EndUserFields
 } from './fragments'
 
 export const MUTATION_createItem = gql`
@@ -73,6 +74,43 @@ export const MUTATION_deleteItemType = gql`
   ) {
     deleteItemType(
       itemTypeId: $itemTypeId
+    )
+  }
+`
+
+
+export const MUTATION_createEndUser = gql`
+  mutation createEndUser(
+    $endUser: EndUserInput!
+  ) {
+    createEndUser(
+      endUser: $endUser
+    ) {
+      ...EndUserFields
+    }
+  }
+  ${FRAGMENT_EndUserFields}
+`
+
+export const MUTATION_updateEndUser = gql`
+  mutation updateEndUser(
+    $endUser: EndUserInputUpdate!
+  ) {
+    updateEndUser(
+      endUser: $endUser
+    ) {
+      ...EndUserFields
+    }
+  }
+  ${FRAGMENT_EndUserFields}
+`
+
+export const MUTATION_deleteEndUser = gql`
+  mutation deleteEndUser(
+    $endUserId: String!
+  ) {
+    deleteEndUser(
+      endUserId: $endUserId
     )
   }
 `

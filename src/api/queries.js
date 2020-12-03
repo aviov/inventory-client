@@ -1,7 +1,8 @@
 import gql from 'graphql-tag'
 import {
   FRAGMENT_ItemFields,
-  FRAGMENT_ItemTypeFields
+  FRAGMENT_ItemTypeFields,
+  FRAGMENT_EndUserFields
 } from './fragments'
 
 export const QUERY_listItems = gql`
@@ -60,4 +61,27 @@ export const QUERY_getItemTypeById = gql`
     }
   }
   ${FRAGMENT_ItemTypeFields}
+`
+
+
+export const QUERY_listEndUsers = gql`
+  query listEndUsers {
+    listEndUsers {
+      ...EndUserFields
+    }
+  }
+  ${FRAGMENT_EndUserFields}
+`
+
+export const QUERY_getEndUserById = gql`
+  query getEndUserById(
+    $endUserId: String!
+  ) {
+    getEndUserById(
+      endUserId: $endUserId
+    ) {
+      ...EndUserFields
+    }
+  }
+  ${FRAGMENT_EndUserFields}
 `
