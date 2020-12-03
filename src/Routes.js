@@ -10,6 +10,9 @@ import ItemInfo from './components/ItemInfo';
 import ItemTypes from './components/ItemTypes';
 import ItemTypeForm from './components/ItemTypeForm';
 import ItemTypeInfo from './components/ItemTypeInfo';
+import EndUsers from './components/EndUsers';
+import EndUserForm from './components/EndUserForm';
+import EndUserInfo from './components/EndUserInfo';
 import NotFound from './components/NotFound';
 import './Routes.css';
 
@@ -45,6 +48,15 @@ export default function Routes() {
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path='/itemTypes/:id'>
           <ItemTypeInfo />
+        </AuthenticatedRoute>
+        <Route exact path='/endUsers'>
+          <EndUsers />
+        </Route>
+        <AuthenticatedRoute exact path='/endUsers/new'>
+          <EndUserForm />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path='/endUsers/:id'>
+          <EndUserInfo />
         </AuthenticatedRoute>
         <Route>
           <NotFound />

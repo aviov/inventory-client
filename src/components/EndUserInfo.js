@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { QUERY_getItemTypeById, QUERY_listItemTypes } from '../api/queries';
+import { QUERY_getEndUserById, QUERY_listEndUsers } from '../api/queries';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,27 +9,29 @@ import Form from 'react-bootstrap/Form';
 import { ImSpinner2 } from 'react-icons/im';
 import { useAuthContext } from "../libs/contextLib";
 import LoadingButton from './LoadingButton';
-import './ItemTypeInfo.css'
-import { MUTATION_deleteItemType, MUTATION_updateItemType } from "../api/mutations";
+import './EndUserInfo.css'
+import { MUTATION_deleteEndUser, MUTATION_updateEndUser } from "../api/mutations";
 import { onError } from "../libs/errorLib";
 
-function ItemTypeInfo() {
+function EndUserInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
-  const [itemType, setItemType] = useState({
+  const [endUser, setEndUser] = useState({
     id,
-    name: ''
+    name: '',
+    email: '',
+    phone: ''
   });
-  const [itemTypeUpdate, setItemTypeUpdate] = useState({});
+  const [endUserUpdate, setEndUserUpdate] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [getItemTypeById, { data, loading }] = useLazyQuery(QUERY_getItemTypeById);
-  const [updateItemType] = useMutation(MUTATION_updateItemType);
-  const [deleteItemType] = useMutation(MUTATION_deleteItemType, {
-    refetchQueries: [{ query: QUERY_listItemTypes }]
+  const [getEndUserById, { data, loading }] = useLazyQuery(QUERY_getEndUserById);
+  const [updateEndUser] = useMutation(MUTATION_updateEndUser);
+  const [deleteEndUser] = useMutation(MUTATION_deleteEndUser, {
+    refetchQueries: [{ query: QUERY_listEndUsers }]
   });
   
   useEffect(() => {
@@ -39,20 +41,24 @@ function ItemTypeInfo() {
     function onLoad() {
       setIsLoading(true);
       try {
-        getItemTypeById({
-          variables: { itemTypeId: id }
+        getEndUserById({
+          variables: { endUserId: id }
         });
-        const itemTypeById = data && data.getItemTypeById;
+        const endUserById = data && data.getEndUserById;
         // console.log(data);
-        if (itemTypeById) {
+        if (endUserById) {
           const {
             id,
-            name
-          } = itemTypeById;
-          setItemType(itemTypeById);
-          setItemTypeUpdate({
+            name,
+            email,
+            phone
+          } = endUserById;
+          setEndUser(endUserById);
+          setEndUserUpdate({
             id,
-            name
+            name,
+            email,
+            phone
           });
         }
       } catch (error) {
@@ -61,19 +67,23 @@ function ItemTypeInfo() {
       setIsLoading(false);
     }
     onLoad();
-  },[isAuthenticated, getItemTypeById, id, data]);
+  },[isAuthenticated, getEndUserById, id, data]);
 
   async function handleSubmit({
     id,
-    name
+    name,
+    email,
+    phone
   }) {
     setIsUpdating(true);
     try {
-      const data = await updateItemType({
+      const data = await updateEndUser({
         variables: {
-          itemType: {
+          endUser: {
             id,
-            name
+            name,
+            email,
+            phone
           }
         }
       });
@@ -87,18 +97,18 @@ function ItemTypeInfo() {
     }
   }
 
-  // console.log(typeof itemType.dateWarrantyBegins);
-  // console.log(itemType.dateWarrantyBegins)
-  // console.log(itemType.dateWarrantyExpires)
+  // console.log(typeof endUser.dateWarrantyBegins);
+  // console.log(endUser.dateWarrantyBegins)
+  // console.log(endUser.dateWarrantyExpires)
 
 
-  async function handleDelete(itemType) {
-    const confirmed = window.confirm(`Do you want to delete item type ${itemType.name}?`);
+  async function handleDelete(endUser) {
+    const confirmed = window.confirm(`Do you want to delete end user ${endUser.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
-        await deleteItemType({ variables: { itemTypeId: id } });
-        history.push('/itemTypes');
+        await deleteEndUser({ variables: { endUserId: id } });
+        history.push('/endUsers');
       } catch (error) {
         onError(error);
       }
@@ -119,11 +129,11 @@ function ItemTypeInfo() {
       </div>
     )
   }
-  // const itemType = data.getItemTypeById;
+  // const endUser = data.getEndUserById;
   // console.log(data);
   return(
     <div
-      className='ItemTypeInfo'
+      className='EndUserInfo'
     >
       <Container
         // fluid
@@ -155,7 +165,7 @@ function ItemTypeInfo() {
                       disabled={isDeleting}
                       type='submit'
                       isLoading={isDeleting}
-                      onClick={() => handleDelete(itemType)}
+                      onClick={() => handleDelete(endUser)}
                     >
                       Delete
                     </LoadingButton>
@@ -166,7 +176,7 @@ function ItemTypeInfo() {
                       disabled={isUpdating}
                       type='submit'
                       isLoading={isUpdating}
-                      onClick={() => handleSubmit(itemTypeUpdate)}
+                      onClick={() => handleSubmit(endUserUpdate)}
                     >
                       Save
                     </LoadingButton>
@@ -195,14 +205,56 @@ function ItemTypeInfo() {
                   <Form.Control
                     plaintext
                     readOnly
-                    value={itemType.name}
+                    value={endUser.name}
                   />
                 ) : (
                   <Form.Control
                     type='text'
                     placeholder='Name'
-                    value={itemTypeUpdate.name}
-                    onChange={(event) => setItemTypeUpdate({ ...itemTypeUpdate, name: event.target.value })}
+                    value={endUserUpdate.name}
+                    onChange={(event) => setEndUserUpdate({ ...endUserUpdate, name: event.target.value })}
+                  />
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4'>
+                Email
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={endUser.email}
+                  />
+                ) : (
+                  <Form.Control
+                    type='text'
+                    placeholder='Email'
+                    value={endUserUpdate.email}
+                    onChange={(event) => setEndUserUpdate({ ...endUserUpdate, email: event.target.value })}
+                  />
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4'>
+                Name
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={endUser.phone}
+                  />
+                ) : (
+                  <Form.Control
+                    type='text'
+                    placeholder='Phone'
+                    value={endUserUpdate.phone}
+                    onChange={(event) => setEndUserUpdate({ ...endUserUpdate, phone: event.target.value })}
                   />
                 )}
               </Col>
@@ -215,4 +267,4 @@ function ItemTypeInfo() {
   )
 }
 
-export default ItemTypeInfo
+export default EndUserInfo

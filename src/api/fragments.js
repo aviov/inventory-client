@@ -45,3 +45,13 @@ export const FRAGMENT_ItemTypeFields = gql`
     name
   }
 `
+
+export const FRAGMENT_EndUserFields = gql`
+  fragment EndUserFields on EndUser {
+    id
+    dateCreatedAt
+    name
+    email
+    phone
+  }
+`
