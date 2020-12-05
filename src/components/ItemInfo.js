@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select';
 import DatePicker, { registerLocale } from 'react-datepicker';
-// import ImagePreview from './ImagePreview';
 import ImageGrid from './ImageGrid';
 import { ImSpinner2 } from 'react-icons/im';
 import { FcApproval } from 'react-icons/fc';
@@ -20,6 +19,7 @@ import { s3Delete } from '../libs/awsLib';
 import { MUTATION_deleteItem, MUTATION_updateItem } from "../api/mutations";
 import { onError } from "../libs/errorLib";
 import enGb from 'date-fns/locale/en-GB';
+import ItemActions from "./ItemActions";
 registerLocale('en-gb', enGb);
 
 function ItemInfo() {
@@ -139,11 +139,6 @@ function ItemInfo() {
     }
   }
 
-  // console.log(typeof item.dateWarrantyBegins);
-  // console.log(item.dateWarrantyBegins)
-  // console.log(item.dateWarrantyExpires)
-
-
   async function handleDelete(item) {
     const confirmed = window.confirm(`Do you want to delete item ${item.modelNumber}, SN: ${item.serialNumber}?`);
     if (confirmed) {
@@ -182,7 +177,7 @@ function ItemInfo() {
   // function formatFilename(str) {
   //   return str.replace(/^\w+-/, '');
   // };
-  // console.log(itemUpdate);
+  // console.log(item);
   const isWarrantyValid = item.dateWarrantyExpires ? new Date().valueOf() <= new Date(item.dateWarrantyExpires).valueOf() : true;
   return(
     <div
@@ -397,6 +392,13 @@ function ItemInfo() {
               </Col>
             </Form.Group>
             <hr style={{ marginBottom: 30 }}/>
+            {(item.actions && item.actions.length > 0) &&
+              <ItemActions
+                actions={item.actions}
+                itemId={id}
+              />
+            }
+            <hr/>
           </Col>
           <Col lg='7'>
             {(item && item.attachments && !isDeleting) &&
@@ -405,13 +407,6 @@ function ItemInfo() {
                 itemId={id}
               />
             }
-            {/* {item && item.attachments && JSON.parse(item.attachments).map((attachment) => (
-              
-              <ImagePreview
-                key={attachment}
-                filename={attachment}
-              />
-            ))} */}
           </Col>
         </Row>
       </Container>

@@ -14,6 +14,16 @@ export const FRAGMENT_ItemFields = gql`
       dateCreatedAt
       name
     }
+    actions {
+      id
+      dateCreatedAt
+      endUser {
+        id
+        name
+      }
+      dateActionStart
+      dateActionEnd
+    }
   }
 `
 
@@ -53,5 +63,18 @@ export const FRAGMENT_EndUserFields = gql`
     name
     email
     phone
+  }
+`
+
+export const FRAGMENT_ActionFields = gql`
+  fragment ActionFields on Action {
+    id
+    dateCreatedAt
+    endUser {
+      id
+      name
+    }
+    dateActionStart
+    dateActionEnd
   }
 `

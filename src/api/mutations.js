@@ -2,7 +2,8 @@ import gql from 'graphql-tag'
 import {
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
-  FRAGMENT_EndUserFields
+  FRAGMENT_EndUserFields,
+  FRAGMENT_ActionFields
 } from './fragments'
 
 export const MUTATION_createItem = gql`
@@ -111,6 +112,43 @@ export const MUTATION_deleteEndUser = gql`
   ) {
     deleteEndUser(
       endUserId: $endUserId
+    )
+  }
+`
+
+
+export const MUTATION_createAction = gql`
+  mutation createAction(
+    $action: ActionInput!
+  ) {
+    createAction(
+      action: $action
+    ) {
+      ...ActionFields
+    }
+  }
+  ${FRAGMENT_ActionFields}
+`
+
+export const MUTATION_updateAction = gql`
+  mutation updateAction(
+    $action: ActionInputUpdate!
+  ) {
+    updateAction(
+      action: $action
+    ) {
+      ...ActionFields
+    }
+  }
+  ${FRAGMENT_ActionFields}
+`
+
+export const MUTATION_deleteAction = gql`
+  mutation deleteAction(
+    $actionId: String!
+  ) {
+    deleteAction(
+      actionId: $actionId
     )
   }
 `
