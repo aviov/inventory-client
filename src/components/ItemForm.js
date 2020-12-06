@@ -31,6 +31,7 @@ function ItemForm() {
   const history = useHistory();
   const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
+  const [inventoryNumber, setInventoryNumber] = useState('');
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
   const [itemTypeId, setItemTypeId] = useState('');
@@ -86,14 +87,6 @@ function ItemForm() {
     const id = 'item:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
-    // console.log(
-    //   'id', id,
-    //   'dateCreatedAt', dateCreatedAt,
-    //   'modelNumber', modelNumber,
-    //   'serialNumber', serialNumber,
-    //   'dateWarrantyBegins', dateWarrantyBegins,
-    //   'dateWarrantyExpires', dateWarrantyExpires
-    // )
     try {
       const filesResizedToUpload = files.map(({ file }) =>
         (filesResized.find(({ filename }) => (filename === file.name))));
@@ -115,6 +108,7 @@ function ItemForm() {
             dateCreatedAt,
             modelNumber,
             serialNumber,
+            inventoryNumber,
             dateWarrantyBegins,
             dateWarrantyExpires,
             attachments: JSON.stringify(attachments),
@@ -186,6 +180,18 @@ function ItemForm() {
             id={'serialNumber'}
             value={serialNumber}
             onChange={(event) => setSerialNumber(event.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Inventory number
+          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Serial number'
+            id={'inventoryNumber'}
+            value={inventoryNumber}
+            onChange={(event) => setInventoryNumber(event.target.value)}
           />
         </Form.Group>
         <Form.Group>
