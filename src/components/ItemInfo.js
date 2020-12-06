@@ -210,7 +210,7 @@ function ItemInfo() {
                       size='sm'
                       color='red'
                       variant='outline-danger'
-                      disabled={isDeleting}
+                      disabled={isDeleting || (item.actions && item.actions.length > 0)}
                       type='submit'
                       isLoading={isDeleting}
                       onClick={() => handleDelete(item)}
@@ -392,13 +392,10 @@ function ItemInfo() {
               </Col>
             </Form.Group>
             <hr style={{ marginBottom: 30 }}/>
-            {(item.actions && item.actions.length > 0) &&
-              <ItemActions
-                actions={item.actions}
-                itemId={id}
-              />
-            }
-            <hr/>
+            <ItemActions
+              actions={item.actions}
+              itemId={id}
+            />
           </Col>
           <Col lg='7'>
             {(item && item.attachments && !isDeleting) &&

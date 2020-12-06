@@ -1,0 +1,35 @@
+.Locations .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.Locations .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.Locations .lander p {
+  color: #999;
+}
+
+.Locations .AddLocationButton {
+  margin: 5px;
+}
+
+.Locations .List {
+  /* max-width: 500px; */
+  margin-top: 15px;
+}
+
+.Locations .ListLocation {
+  cursor: pointer;
+}
+
+.Locations .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.Locations .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}
