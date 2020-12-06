@@ -3,7 +3,8 @@ import {
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
-  FRAGMENT_ActionFields
+  FRAGMENT_ActionFields,
+  FRAGMENT_LocationFields
 } from './fragments'
 
 export const MUTATION_createItem = gql`
@@ -149,6 +150,43 @@ export const MUTATION_deleteAction = gql`
   ) {
     deleteAction(
       actionId: $actionId
+    )
+  }
+`
+
+
+export const MUTATION_createLocation = gql`
+  mutation createLocation(
+    $location: LocationInput!
+  ) {
+    createLocation(
+      location: $location
+    ) {
+      ...LocationFields
+    }
+  }
+  ${FRAGMENT_LocationFields}
+`
+
+export const MUTATION_updateLocation = gql`
+  mutation updateLocation(
+    $location: LocationInputUpdate!
+  ) {
+    updateLocation(
+      location: $location
+    ) {
+      ...LocationFields
+    }
+  }
+  ${FRAGMENT_LocationFields}
+`
+
+export const MUTATION_deleteLocation = gql`
+  mutation deleteLocation(
+    $locationId: String!
+  ) {
+    deleteLocation(
+      locationId: $locationId
     )
   }
 `

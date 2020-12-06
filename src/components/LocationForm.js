@@ -3,20 +3,23 @@ import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { v1 as uuidv1 } from 'uuid';
 import { useMutation } from '@apollo/client'
-import { MUTATION_createEndUser } from '../api/mutations'
-import { QUERY_listEndUsers } from '../api/queries';
+import { MUTATION_createLocation } from '../api/mutations'
+import { QUERY_listLocations } from '../api/queries';
 import LoadingButton from './LoadingButton';
 import { onError } from '../libs/errorLib';
-import './EndUserForm.css';
+import './LocationForm.css';
 
-function EndUserForm() {
+function LocationForm() {
   const history = useHistory();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [webPage, setWebPage] = useState('');
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [createEndUser] = useMutation(MUTATION_createEndUser, {
-    refetchQueries: [{ query: QUERY_listEndUsers }]
+  const [createLocation] = useMutation(MUTATION_createLocation, {
+    refetchQueries: [{ query: QUERY_listLocations }]
   });
 
   function validateForm(fields={}) {
@@ -29,7 +32,7 @@ function EndUserForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const id = 'enduser:' + uuidv1();
+    const id = 'location:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
     // console.log(
@@ -37,23 +40,29 @@ function EndUserForm() {
     //   'dateCreatedAt', dateCreatedAt
     // )
     try {
-      const endUserCreated = await createEndUser({
+      const locationCreated = await createLocation({
         variables: {
-          endUser: {
+          location: {
             id,
-            name,
             dateCreatedAt,
+            name,
             email,
-            phone
+            phone,
+            webPage,
+            city,
+            country,
           }
         }
       })
-      if (endUserCreated) {
+      if (locationCreated) {
         setIsLoading(false);
         setName('');
         setEmail('');
         setPhone('');
-        history.push('/endUsers');
+        setWebPage('');
+        setCity('');
+        setCountry('');
+        history.push('/locations');
       }
     } catch (error) {
       onError(error);
@@ -63,7 +72,7 @@ function EndUserForm() {
   // console.log(files);
   return(
     <div
-      className='EndUserForm'
+      className='LocationForm'
     >
       <Form>
         <Form.Group>
@@ -99,12 +108,48 @@ function EndUserForm() {
             onChange={(event) => setPhone(event.target.value)}
           />
         </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Web page
+          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Web page'
+            value={webPage}
+            onChange={(event) => setWebPage(event.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            City
+          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='City'
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Country
+          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Country'
+            value={country}
+            onChange={(event) => setCountry(event.target.value)}
+          />
+        </Form.Group>
         <LoadingButton
           block
           disabled={!validateForm({
             name,
-            email,
-            phone
+            // email,
+            // phone,
+            // webPage,
+            // city,
+            // country
           })}
           type='submit'
           isLoading={isLoading}
@@ -117,4 +162,4 @@ function EndUserForm() {
   )
 }
 
-export default EndUserForm
+export default LocationForm

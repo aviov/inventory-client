@@ -24,13 +24,16 @@ export default function ItemTypes() {
     if (!isAuthenticated) {
       return null;
     }
-    try {
-      listItemTypes();
-      setItemTypes(data ? data.listItemTypes : []);
-    } catch (error) {
-      onError(error);
-    }
-  },[isAuthenticated, loading, listItemTypes, data]);
+    function onLoad() {
+      try {
+        listItemTypes();
+        setItemTypes(data ? data.listItemTypes : []);
+      } catch (error) {
+        onError(error);
+      }
+    };
+    onLoad();
+  },[isAuthenticated, listItemTypes, data]);
 
   function renderLoading() {
     return(

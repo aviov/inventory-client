@@ -13,6 +13,9 @@ import ItemTypeInfo from './components/ItemTypeInfo';
 import EndUsers from './components/EndUsers';
 import EndUserForm from './components/EndUserForm';
 import EndUserInfo from './components/EndUserInfo';
+import Locations from './components/Locations';
+import LocationForm from './components/LocationForm';
+import LocationInfo from './components/LocationInfo';
 import NotFound from './components/NotFound';
 import './Routes.css';
 
@@ -57,6 +60,15 @@ export default function Routes() {
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path='/endUsers/:id'>
           <EndUserInfo />
+        </AuthenticatedRoute>
+        <Route exact path='/locations'>
+          <Locations />
+        </Route>
+        <AuthenticatedRoute exact path='/locations/new'>
+          <LocationForm />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path='/locations/:id'>
+          <LocationInfo />
         </AuthenticatedRoute>
         <Route>
           <NotFound />

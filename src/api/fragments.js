@@ -21,6 +21,10 @@ export const FRAGMENT_ItemFields = gql`
         id
         name
       }
+      location {
+        id
+        name
+      }
       dateActionStart
       dateActionEnd
     }
@@ -74,7 +78,25 @@ export const FRAGMENT_ActionFields = gql`
       id
       name
     }
+    location {
+      id
+      name
+    }
     dateActionStart
     dateActionEnd
+  }
+`
+
+export const FRAGMENT_LocationFields = gql`
+  fragment LocationFields on Location {
+    id
+    dateCreatedAt
+    name
+    dateCreatedAt
+    email
+    phone
+    webPage
+    city
+    country
   }
 `

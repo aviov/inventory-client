@@ -5,37 +5,39 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import { useAuthContext } from "../libs/contextLib";
 import { useLazyQuery } from '@apollo/client'
-import { QUERY_listEndUsers } from '../api/queries'
+import { QUERY_listLocations } from '../api/queries'
 import { ImSpinner2 } from 'react-icons/im';
 // import { ImSearch } from 'react-icons/im';
 import { ImCancelCircle } from 'react-icons/im';
-import "./EndUsers.css";
+import "./Locations.css";
 import { onError } from "../libs/errorLib";
 
-export default function EndUsers() {
+export default function Locations() {
   const history = useHistory();
-  const [endUsers, setEndUsers] = useState([]);
+  const [locations, setLocations] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [listEndUsers, { loading, data }] = useLazyQuery(QUERY_listEndUsers);
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
+  const [listLocations, { loading, data }] = useLazyQuery(QUERY_listLocations);
 
   useEffect(() => {
     if (!isAuthenticated) {
       return null;
     }
-    function onLoad() {
+    function onload() {
       try {
-        listEndUsers();
-        setEndUsers(data ? data.listEndUsers : []);
+        listLocations();
+        setLocations(data ? data.listLocations : []);
       } catch (error) {
         onError(error);
       }
-    };
-    onLoad();
-  },[isAuthenticated, listEndUsers, data]);
+    }
+    onload();
+  },[isAuthenticated, listLocations, data]);
 
   function renderLoading() {
     return(
@@ -49,22 +51,28 @@ export default function EndUsers() {
     )
   }
   
-  function renderEndUsersList(endUsers=[]) {
-    return endUsers.map((endUser) =>
+  function renderLocationsList(locations=[]) {
+    return locations.map((location) =>
       (
         <tr
-          className='ListEndUsers'
-          key={endUser.id}
-          onClick={() => history.push(`/endUsers/${endUser.id}`)}
+          className='ListLocation'
+          key={location.id}
+          onClick={() => history.push(`/locations/${location.id}`)}
         >
           <td>
-            {endUser.name}
+            {location.name}
           </td>
           <td>
-            {endUser.email}
+            {location.email}
           </td>
           <td>
-            {endUser.phone}
+            {location.phone}
+          </td>
+          <td>
+            {location.city}
+          </td>
+          <td>
+            {location.country}
           </td>
           <td>
           </td>
@@ -80,10 +88,10 @@ export default function EndUsers() {
       </div>
     );
   };
-  function renderEndUsers() {
+  function renderLocations() {
     return(
       <div
-        className='EndUsers List'
+        className='Locations List'
       >
         <Table
           striped
@@ -91,10 +99,12 @@ export default function EndUsers() {
           responsive
         >
           <colgroup>
-            <col span='1' style={{ width: 40+'%' }}/>
-            <col span='1' style={{ width: 30+'%' }}/>
             <col span='1' style={{ width: 20+'%' }}/>
-            <col span='1' style={{ width: 10+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 5+'%' }}/>
           </colgroup>
           <thead>
             <tr>
@@ -132,6 +142,28 @@ export default function EndUsers() {
                 }
               </th>
               <th>
+                {'City'}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={city}
+                    onChange={(event) => setCity(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
+                {'Country'}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={country}
+                    onChange={(event) => setCountry(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
                 <div>
                   {/* {!isSearching &&
                     <ImSearch
@@ -150,7 +182,7 @@ export default function EndUsers() {
           </thead>
           <tbody>
             {!loading &&
-              renderEndUsersList(endUsers)
+              renderLocationsList(locations)
             }
           </tbody>
         </Table>
@@ -162,23 +194,23 @@ export default function EndUsers() {
   };
   return (
     <div
-      className='EndUsers'
+      className='Locations'
     >
       {isAuthenticated ?
         <div>
           {//!loading &&
             <Button
               disabled={loading}
-              className='AddEndUserButton'
+              className='AddLocationButton'
               size='sm'
               variant='outline-primary'
-              title='Add EndUser'
-              onClick={() => history.push('/endUsers/new')}
+              title='Add Location'
+              onClick={() => history.push('/locations/new')}
             >
-              Add end user
+              Add Location
             </Button>
           }
-          {renderEndUsers()}
+          {renderLocations()}
         </div> :
         renderLander()
       }

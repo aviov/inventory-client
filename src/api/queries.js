@@ -3,7 +3,8 @@ import {
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
-  FRAGMENT_ActionFields
+  FRAGMENT_ActionFields,
+  FRAGMENT_LocationFields
 } from './fragments'
 
 export const QUERY_listItems = gql`
@@ -108,4 +109,27 @@ export const QUERY_getActionById = gql`
     }
   }
   ${FRAGMENT_ActionFields}
+`
+
+
+export const QUERY_listLocations = gql`
+  query listLocations {
+    listLocations {
+      ...LocationFields
+    }
+  }
+  ${FRAGMENT_LocationFields}
+`
+
+export const QUERY_getLocationById = gql`
+  query getLocationById(
+    $locationId: String!
+  ) {
+    getLocationById(
+      locationId: $locationId
+    ) {
+      ...LocationFields
+    }
+  }
+  ${FRAGMENT_LocationFields}
 `

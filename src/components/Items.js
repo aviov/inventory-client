@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 import { onError } from "../libs/errorLib";
+import { getLatestByDateCreatedAt } from '../libs/fnsLib';
 registerLocale('en-gb', enGb);
 
 export default function Items() {
@@ -24,6 +25,8 @@ export default function Items() {
   const [isSearching, setIsSearching] = useState(false);
   const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
+  const [endUserName, setEndUserName] = useState('');
+  const [locationName, setLocationName] = useState('');
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
   const [listItems, { loading, data }] = useLazyQuery(QUERY_listItems);
@@ -32,13 +35,16 @@ export default function Items() {
     if (!isAuthenticated) {
       return null;
     }
-    try {
-      listItems();
-      setItems(data ? data.listItems : []);
-    } catch (error) {
-      onError(error);
-    }
-  },[isAuthenticated, loading, listItems, data]);
+    function onLoad() {
+      try {
+        listItems();
+        setItems(data ? data.listItems : []);
+      } catch (error) {
+        onError(error);
+      }
+    };
+    onLoad();
+  },[isAuthenticated, listItems, data]);
 
   function renderLoading() {
     return(
@@ -53,8 +59,9 @@ export default function Items() {
   }
   
   function renderItemsList(items=[]) {
-    return items.map((item) =>
-      (
+    return items.map((item) => {
+      const actionLatest = (item.actions && item.actions.length > 0) && getLatestByDateCreatedAt(item.actions);
+      return(
         <tr
           className='ListItem'
           key={item.id}
@@ -70,6 +77,12 @@ export default function Items() {
             {item.serialNumber}
           </td>
           <td>
+            {actionLatest && actionLatest.endUser && actionLatest.endUser.name}
+          </td>
+          <td>
+            {actionLatest && actionLatest.location && actionLatest.location.name}
+          </td>
+          <td>
             {new Date(item.dateWarrantyBegins).toLocaleDateString('RU-ru')}
           </td>
           <td>
@@ -79,7 +92,7 @@ export default function Items() {
 
           </td>
         </tr>
-      )
+      )}
     );
   };
   function renderLander() {
@@ -102,10 +115,12 @@ export default function Items() {
         >
           <colgroup>
             <col span='1' style={{ width: 15+'%' }}/>
-            <col span='1' style={{ width: 20+'%' }}/>
-            <col span='1' style={{ width: 20+'%' }}/>
-            <col span='1' style={{ width: 20+'%' }}/>
-            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 10+'%' }}/>
+            <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 5+'%' }}/>
           </colgroup>
           <thead>
@@ -131,13 +146,35 @@ export default function Items() {
                 }
               </th>
               <th>
-                {'Serial Nr'}
+                {'Serial nr'}
                 {isSearching &&
                   <Form.Control
                     className='SearchInput'
                     type='text'
                     value={serialNumber}
                     onChange={(event) => setSerialNumber(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
+                {'End user'}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={endUserName}
+                    onChange={(event) => setEndUserName(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
+                {'Location'}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={locationName}
+                    onChange={(event) => setLocationName(event.target.value)}
                   />
                 }
               </th>
