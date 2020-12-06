@@ -31,6 +31,7 @@ function ItemInfo() {
     id,
     modelNumber: '',
     serialNumber: '',
+    inventoryNumber: '',
     dateWarrantyBegins: new Date(),
     dateWarrantyExpires: new Date(),
     attachments: '[]',
@@ -70,6 +71,7 @@ function ItemInfo() {
             id,
             modelNumber,
             serialNumber,
+            inventoryNumber,
             dateWarrantyBegins,
             dateWarrantyExpires,
             attachments,
@@ -82,6 +84,7 @@ function ItemInfo() {
             id,
             modelNumber,
             serialNumber,
+            inventoryNumber,
             dateWarrantyBegins,
             dateWarrantyExpires,
             attachments,
@@ -111,6 +114,7 @@ function ItemInfo() {
     id,
     modelNumber,
     serialNumber,
+    inventoryNumber,
     dateWarrantyBegins,
     dateWarrantyExpires,
     itemTypeId
@@ -123,6 +127,7 @@ function ItemInfo() {
             id,
             modelNumber,
             serialNumber,
+            inventoryNumber,
             dateWarrantyBegins,
             dateWarrantyExpires,
             itemTypeId: itemTypeId && ('item:' + itemTypeId)
@@ -291,7 +296,7 @@ function ItemInfo() {
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4'>
-                Serial number
+                Serial nr
               </Form.Label>
               <Col sm='8'>
                 {!isEditing ? (
@@ -303,9 +308,30 @@ function ItemInfo() {
                 ) : (
                   <Form.Control
                     type='text'
-                    placeholder='Serial number'
+                    placeholder='Serial nr'
                     value={itemUpdate.serialNumber}
                     onChange={(event) => setItemUpdate({ ...itemUpdate, serialNumber: event.target.value})}
+                  />
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4'>
+                Inventory nr
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={item.inventoryNumber}
+                  />
+                ) : (
+                  <Form.Control
+                    type='text'
+                    placeholder='Inventory nr'
+                    value={itemUpdate.inventoryNumber}
+                    onChange={(event) => setItemUpdate({ ...itemUpdate, inventoryNumber: event.target.value})}
                   />
                 )}
               </Col>

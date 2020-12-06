@@ -15,7 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 import { onError } from "../libs/errorLib";
-import { getLatestByDateCreatedAt } from '../libs/fnsLib';
+import { getLatestByDateCreatedAt, getSortedByDateCreatedAt } from '../libs/fnsLib';
 registerLocale('en-gb', enGb);
 
 export default function Items() {
@@ -25,6 +25,7 @@ export default function Items() {
   const [isSearching, setIsSearching] = useState(false);
   const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
+  const [inventoryNumber, setInventoryNumber] = useState('');
   const [endUserName, setEndUserName] = useState('');
   const [locationName, setLocationName] = useState('');
   const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
@@ -59,7 +60,7 @@ export default function Items() {
   }
   
   function renderItemsList(items=[]) {
-    return items.map((item) => {
+    return getSortedByDateCreatedAt(items).map((item) => {
       const actionLatest = (item.actions && item.actions.length > 0) && getLatestByDateCreatedAt(item.actions);
       return(
         <tr
@@ -75,6 +76,9 @@ export default function Items() {
           </td>
           <td>
             {item.serialNumber}
+          </td>
+          <td>
+            {item.inventoryNumber}
           </td>
           <td>
             {actionLatest && actionLatest.endUser && actionLatest.endUser.name}
@@ -114,11 +118,12 @@ export default function Items() {
           responsive
         >
           <colgroup>
+            <col span='1' style={{ width: 10+'%' }}/>
+            <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 15+'%' }}/>
             <col span='1' style={{ width: 15+'%' }}/>
             <col span='1' style={{ width: 15+'%' }}/>
-            <col span='1' style={{ width: 15+'%' }}/>
-            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 5+'%' }}/>
@@ -153,6 +158,17 @@ export default function Items() {
                     type='text'
                     value={serialNumber}
                     onChange={(event) => setSerialNumber(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
+                {'Inventory nr'}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={inventoryNumber}
+                    onChange={(event) => setInventoryNumber(event.target.value)}
                   />
                 }
               </th>

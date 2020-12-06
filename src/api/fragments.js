@@ -6,6 +6,7 @@ export const FRAGMENT_ItemFields = gql`
     dateCreatedAt
     modelNumber
     serialNumber
+    inventoryNumber
     dateWarrantyBegins
     dateWarrantyExpires
     attachments
