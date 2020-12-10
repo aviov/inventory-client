@@ -4,6 +4,7 @@ import {
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
   FRAGMENT_ActionFields,
+  FRAGMENT_ActionTypeFields,
   FRAGMENT_LocationFields
 } from './fragments'
 
@@ -150,6 +151,43 @@ export const MUTATION_deleteAction = gql`
   ) {
     deleteAction(
       actionId: $actionId
+    )
+  }
+`
+
+
+export const MUTATION_createActionType = gql`
+  mutation createActionType(
+    $actionType: ActionTypeInput!
+  ) {
+    createActionType(
+      actionType: $actionType
+    ) {
+      ...ActionTypeFields
+    }
+  }
+  ${FRAGMENT_ActionTypeFields}
+`
+
+export const MUTATION_updateActionType = gql`
+  mutation updateActionType(
+    $actionType: ActionTypeInputUpdate!
+  ) {
+    updateActionType(
+      actionType: $actionType
+    ) {
+      ...ActionTypeFields
+    }
+  }
+  ${FRAGMENT_ActionTypeFields}
+`
+
+export const MUTATION_deleteActionType = gql`
+  mutation deleteActionType(
+    $actionTypeId: String!
+  ) {
+    deleteActionType(
+      actionTypeId: $actionTypeId
     )
   }
 `
