@@ -1,0 +1,35 @@
+.ActionTypes .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.ActionTypes .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.ActionTypes .lander p {
+  color: #999;
+}
+
+.ActionTypes .AddActionTypeButton {
+  margin: 5px;
+}
+
+.ActionTypes .List {
+  /* max-width: 500px; */
+  margin-top: 15px;
+}
+
+.ActionTypes .ListActionType {
+  cursor: pointer;
+}
+
+.ActionTypes .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.ActionTypes .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}

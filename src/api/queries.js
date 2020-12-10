@@ -4,6 +4,7 @@ import {
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
   FRAGMENT_ActionFields,
+  FRAGMENT_ActionTypeFields,
   FRAGMENT_LocationFields
 } from './fragments'
 
@@ -109,6 +110,29 @@ export const QUERY_getActionById = gql`
     }
   }
   ${FRAGMENT_ActionFields}
+`
+
+
+export const QUERY_listActionTypes = gql`
+  query listActionTypes {
+    listActionTypes {
+      ...ActionTypeFields
+    }
+  }
+  ${FRAGMENT_ActionTypeFields}
+`
+
+export const QUERY_getActionTypeById = gql`
+  query getActionTypeById(
+    $actionTypeId: String!
+  ) {
+    getActionTypeById(
+      actionTypeId: $actionTypeId
+    ) {
+      ...ActionTypeFields
+    }
+  }
+  ${FRAGMENT_ActionTypeFields}
 `
 
 

@@ -324,13 +324,13 @@ function ItemInfo() {
                   <Form.Control
                     plaintext
                     readOnly
-                    value={item.inventoryNumber}
+                    value={item.inventoryNumber || ''}
                   />
                 ) : (
                   <Form.Control
                     type='text'
                     placeholder='Inventory nr'
-                    value={itemUpdate.inventoryNumber}
+                    value={itemUpdate.inventoryNumber || ''}
                     onChange={(event) => setItemUpdate({ ...itemUpdate, inventoryNumber: event.target.value})}
                   />
                 )}

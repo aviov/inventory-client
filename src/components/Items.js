@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import { useAuthContext } from "../libs/contextLib";
 import { useLazyQuery } from '@apollo/client'
-import { QUERY_listItems } from '../api/queries'
+import { QUERY_listItems, QUERY_listActionTypes } from '../api/queries'
 import { ImSpinner2 } from 'react-icons/im';
 // import { ImSearch } from 'react-icons/im';
 import { ImCancelCircle } from 'react-icons/im';
@@ -15,7 +15,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 import { onError } from "../libs/errorLib";
-import { getLatestByDateCreatedAt, getSortedByDateCreatedAt } from '../libs/fnsLib';
+import {
+  getSortedByDateCreatedAt,
+  getLatestPastActionByDateActionStart,
+  getEarliestFutureActionByDateActionStart
+} from '../libs/fnsLib';
 registerLocale('en-gb', enGb);
 
 export default function Items() {
@@ -28,9 +32,20 @@ export default function Items() {
   const [inventoryNumber, setInventoryNumber] = useState('');
   const [endUserName, setEndUserName] = useState('');
   const [locationName, setLocationName] = useState('');
-  const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
+  const [actionIsVisibleLatestDateCreatedAt, setActionIsVisibleLatestDateCreatedAt] = useState('');
+  const [actionIsVisibleNextDateCreatedAt, setActionIsVisibleNextDateCreatedAt] = useState('');
+  // const [dateWarrantyBegins, setDateWarrantyBegins] = useState('');
   const [dateWarrantyExpires, setDateWarrantyExpires] = useState('');
   const [listItems, { loading, data }] = useLazyQuery(QUERY_listItems);
+  const [listActionTypes, {
+    data: dataActionTypes,
+  }] = useLazyQuery(QUERY_listActionTypes, {
+    fetchPolicy: 'cache-first'
+  });
+  const [actionTypesIsVisibleLatest, setActionTypesIsVisibleLatest] = useState([]);
+  const [isVisibleLatest, setIsVisibleLatest] = useState(false);
+  const [actionTypesIsVisibleNext, setActionTypesIsVisibleNext] = useState([]);
+  const [isVisibleNext, setIsVisibleNext] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -43,9 +58,23 @@ export default function Items() {
       } catch (error) {
         onError(error);
       }
+      try {
+        listActionTypes();
+        const actionTypes = dataActionTypes && dataActionTypes.listActionTypes;
+        if (actionTypes) {
+          const visibleLatest = actionTypes.filter(({ isVisibleLatest }) => (isVisibleLatest === true));
+          setActionTypesIsVisibleLatest(visibleLatest);
+          setIsVisibleLatest((visibleLatest[0] && visibleLatest[0].id) ? true : false);
+          const visibleNext = actionTypes.filter(({ isVisibleNext }) => (isVisibleNext === true));
+          setActionTypesIsVisibleNext(visibleNext);
+          setIsVisibleNext((visibleNext[0] && visibleNext[0].id) ? true : false);
+        }
+      } catch (error) {
+        onError(error);
+      }
     };
     onLoad();
-  },[isAuthenticated, listItems, data]);
+  },[isAuthenticated, listItems, data, listActionTypes, dataActionTypes]);
 
   function renderLoading() {
     return(
@@ -61,7 +90,11 @@ export default function Items() {
   
   function renderItemsList(items=[]) {
     return getSortedByDateCreatedAt(items).map((item) => {
-      const actionLatest = (item.actions && item.actions.length > 0) && getLatestByDateCreatedAt(item.actions);
+      const actionLatest = (item.actions && item.actions.length > 0) && getLatestPastActionByDateActionStart(item.actions);
+      const actionVisibleLatest = (isVisibleLatest && item.actions && item.actions.length > 0) && getLatestPastActionByDateActionStart(item.actions.filter(({ actionType }) =>
+        ((actionType && actionType.id) === (actionTypesIsVisibleLatest[0] && actionTypesIsVisibleLatest[0].id))));
+      const actionVisibleNext = (isVisibleNext && item.actions && item.actions.length > 0) && getEarliestFutureActionByDateActionStart(item.actions.filter(({ actionType }) =>
+        ((actionType && actionType.id) === (actionTypesIsVisibleNext[0] && actionTypesIsVisibleNext[0].id))));
       return(
         <tr
           className='ListItem'
@@ -87,8 +120,14 @@ export default function Items() {
             {actionLatest && actionLatest.location && actionLatest.location.name}
           </td>
           <td>
-            {new Date(item.dateWarrantyBegins).toLocaleDateString('RU-ru')}
+            {actionVisibleLatest && new Date(actionVisibleLatest.dateActionStart).toLocaleDateString('RU-ru')}
           </td>
+          <td>
+            {actionVisibleNext && new Date(actionVisibleNext.dateActionStart).toLocaleDateString('RU-ru')}
+          </td>
+          {/* <td>
+            {new Date(item.dateWarrantyBegins).toLocaleDateString('RU-ru')}
+          </td> */}
           <td>
             {new Date(item.dateWarrantyExpires).toLocaleDateString('RU-ru')}
           </td>
@@ -119,12 +158,14 @@ export default function Items() {
         >
           <colgroup>
             <col span='1' style={{ width: 10+'%' }}/>
-            <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 15+'%' }}/>
-            <col span='1' style={{ width: 15+'%' }}/>
-            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
             <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 10+'%' }}/>
+            <col span='1' style={{ width: 0+'%' }}/>
+            <col span='1' style={{ width: 0+'%' }}/>
+            {/* <col span='1' style={{ width: 10+'%' }}/> */}
             <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 5+'%' }}/>
           </colgroup>
@@ -195,6 +236,28 @@ export default function Items() {
                 }
               </th>
               <th>
+                {(actionTypesIsVisibleLatest[0] ? 'Latest ' + actionTypesIsVisibleLatest[0].name : '')}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={actionIsVisibleLatestDateCreatedAt}
+                    onChange={(event) => setActionIsVisibleLatestDateCreatedAt(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
+                {(actionTypesIsVisibleNext[0] ? 'Next ' + actionTypesIsVisibleNext[0].name : '')}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={actionIsVisibleNextDateCreatedAt}
+                    onChange={(event) => setActionIsVisibleNextDateCreatedAt(event.target.value)}
+                  />
+                }
+              </th>
+              {/* <th>
                 {'Warranty begins'}
                 {isSearching &&
                   <Form.Control as={DatePicker}
@@ -213,7 +276,7 @@ export default function Items() {
                     }}
                   />
                 }
-              </th>
+              </th> */}
               <th>
                 {'Warranty expires'}
                 {isSearching &&

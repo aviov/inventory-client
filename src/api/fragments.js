@@ -26,6 +26,13 @@ export const FRAGMENT_ItemFields = gql`
         id
         name
       }
+      actionType {
+        id
+        name
+        dateCreatedAt
+        isVisibleLatest
+        isVisibleNext
+      }
       dateActionStart
       dateActionEnd
     }
@@ -83,8 +90,25 @@ export const FRAGMENT_ActionFields = gql`
       id
       name
     }
+    actionType {
+      id
+      name
+      dateCreatedAt
+      isVisibleLatest
+      isVisibleNext
+    }
     dateActionStart
     dateActionEnd
+  }
+`
+
+export const FRAGMENT_ActionTypeFields = gql`
+  fragment ActionTypeFields on ActionType {
+    id
+    dateCreatedAt
+    name
+    isVisibleLatest
+    isVisibleNext
   }
 `
 

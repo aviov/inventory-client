@@ -83,6 +83,13 @@ function App() {
                 </Nav.Link>
               </LinkContainer>
             }
+            {isAuthenticated &&
+              <LinkContainer to='/actionTypes'>
+                <Nav.Link>
+                  Action types
+                </Nav.Link>
+              </LinkContainer>
+            }
           </Nav>
           <Nav activeKey={window.location.pathname}>
             {isAuthenticated ? (
