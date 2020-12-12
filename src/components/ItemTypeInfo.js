@@ -187,7 +187,7 @@ function ItemTypeInfo() {
             </Row>
             <hr/>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Name
               </Form.Label>
               <Col sm='8'>

@@ -213,7 +213,7 @@ function ActionTypeInfo() {
             </Row>
             <hr/>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Name
               </Form.Label>
               <Col sm='8'>
@@ -234,7 +234,7 @@ function ActionTypeInfo() {
               </Col>
             </Form.Group>
             <Form.Group as={Row} className='align-items-center'>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Latest action is visible
               </Form.Label>
               <Col sm='8'>
@@ -256,7 +256,7 @@ function ActionTypeInfo() {
               </Col>
             </Form.Group>
             <Form.Group as={Row} className='align-items-center'>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Next action is visible
               </Form.Label>
               <Col sm='8'>

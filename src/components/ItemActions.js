@@ -6,6 +6,8 @@ import { QUERY_getItemById, QUERY_listItems, QUERY_listEndUsers, QUERY_listLocat
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+// import Modal from 'react-bootstrap/Modal';
+// import { Container } from "react-bootstrap";
 import Select from 'react-select';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import Card from 'react-bootstrap/Card';
@@ -15,6 +17,7 @@ import { ImSpinner2 } from 'react-icons/im';
 import { ImUser } from 'react-icons/im';
 import { ImLocation } from 'react-icons/im';
 import LoadingButton from './LoadingButton';
+import ImageGrid from './ImageGrid';
 import './ItemActions.css'
 // import { s3Delete } from '../libs/awsLib';
 import { MUTATION_createAction, MUTATION_updateAction, MUTATION_deleteAction } from "../api/mutations";
@@ -86,6 +89,8 @@ function ItemActions({ actions=[], itemId }) {
     fetchPolicy: 'cache-first'
   });
   const [actionsLimit] = useState(3);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalVisibleId, setModalVisibleId] = useState('');
   
   useEffect(() => {
     function onLoad() {
@@ -234,10 +239,54 @@ function ItemActions({ actions=[], itemId }) {
     )
   }
 
+  // function AttachmentsModal({ attachments='[]', entityId, show, setShow }) {
+  //   console.log('entityId', entityId);
+  //   console.log('attachments', attachments);
+  //   return (
+  //     <Modal
+  //       size="lg"
+  //       aria-labelledby="contained-modal-title-vcenter"
+  //       centered
+  //       show={show}
+  //       onHide={() => setShow(false)}
+  //     >
+  //       {/* <Modal.Header closeButton>
+  //         <Modal.Title id="contained-modal-title-vcenter">
+  //           Modal heading
+  //         </Modal.Title>
+  //       </Modal.Header> */}
+  //       <Modal.Body>
+  //         <Container>
+  //           <ImageGrid
+  //             attachments={attachments}
+  //             entityId={entityId}
+  //             entityType={'Action'}
+  //           />
+  //         </Container>
+  //       </Modal.Body>
+  //       <Modal.Footer>
+  //         <LoadingButton
+  //           className='LoadingButton'
+  //           size='sm'
+  //           variant='outline-secondary'
+  //           disabled={false}
+  //           type='submit'
+  //           isLoading={false}
+  //           onClick={() => setShow(false)}
+  //         >
+  //           Close
+  //         </LoadingButton>
+  //       </Modal.Footer>
+  //     </Modal>
+  //   )
+  // }
+
   return(
     <div>
       {isCreating &&
-        <Card>
+        <Card
+          bsPrefix={'shadow-lg p-3 bg-white rounded'}
+        >
           <Card.Body>
             <Card.Title>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -273,7 +322,7 @@ function ItemActions({ actions=[], itemId }) {
               </div>
             </Card.Title>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 <ImUser/>
               </Form.Label>
               <Col sm='8'>
@@ -300,7 +349,7 @@ function ItemActions({ actions=[], itemId }) {
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 <ImLocation/>
               </Form.Label>
               <Col sm='8'>
@@ -327,7 +376,7 @@ function ItemActions({ actions=[], itemId }) {
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Action type
               </Form.Label>
               <Col sm='8'>
@@ -354,7 +403,7 @@ function ItemActions({ actions=[], itemId }) {
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Action start
               </Form.Label>
               <Col sm='8'>
@@ -379,6 +428,14 @@ function ItemActions({ actions=[], itemId }) {
                   dropdownMode="scroll"
                 />
               </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4' className='font-weight-bold'>
+                Action files
+              </Form.Label>
+              <Form.Label column='sm=8'>
+                Add files later
+              </Form.Label>
             </Form.Group>
           </Card.Body>
         </Card>
@@ -480,7 +537,7 @@ function ItemActions({ actions=[], itemId }) {
                     </div>
                   </Card.Title>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImUser/>
                     </Form.Label>
                     <Col sm='8'>
@@ -500,7 +557,7 @@ function ItemActions({ actions=[], itemId }) {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImLocation/>
                     </Form.Label>
                     <Col sm='8'>
@@ -520,7 +577,7 @@ function ItemActions({ actions=[], itemId }) {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       Action type
                     </Form.Label>
                     <Col sm='8'>
@@ -540,7 +597,7 @@ function ItemActions({ actions=[], itemId }) {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       Action start
                     </Form.Label>
                     <Col sm='8'>
@@ -566,6 +623,63 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
+                      Action files
+                    </Form.Label>
+                    <Col sm='8'>
+                      {!(isModalVisible && modalVisibleId === action.id) ?
+                        (
+                          <LoadingButton
+                            className='LoadingButton'
+                            size='sm'
+                            id={action.id}
+                            variant='outline-warning'
+                            disabled={false}
+                            type='submit'
+                            isLoading={false}
+                            onClick={() => {
+                              setIsModalVisible(true);
+                              setModalVisibleId(action.id);
+                            }}
+                          >
+                            {(action.attachments && JSON.parse(action.attachments).length) ? 'View files' : 'Add files'}
+                          </LoadingButton>
+                        ) : (
+                          <LoadingButton
+                            className='LoadingButton'
+                            size='sm'
+                            id={action.id}
+                            variant='outline-secondary'
+                            disabled={false}
+                            type='submit'
+                            isLoading={false}
+                            onClick={() => {
+                              setIsModalVisible(false);
+                              setModalVisibleId('');
+                            }}
+                          >
+                            Close files
+                          </LoadingButton>
+                        )
+                      }
+                      {/* {(modalVisibleId === action.id) &&
+                        <AttachmentsModal
+                          attachments={action.attachments || '[]'}
+                          entityId={action.id}
+                          show={isModalVisible}
+                          setShow={setIsModalVisible}
+                        />
+                      } */}
+                    </Col>
+                  </Form.Group>
+                  {(isModalVisible && modalVisibleId === action.id) &&
+                    <ImageGrid
+                      attachments={action.attachments || '[]'}
+                      entityId={action.id}
+                      entityType={'Action'}
+                    />
+                  }
                 </Card.Body>
               </Card>
             ) : (
@@ -632,12 +746,12 @@ function ItemActions({ actions=[], itemId }) {
                           setIsEditing(true);
                         }}
                       >
-                        Edit
+                        Edit action
                       </LoadingButton>
                     </div>
                   </Card.Title>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImUser/>
                     </Form.Label>
                     <Col sm='8'>
@@ -649,7 +763,7 @@ function ItemActions({ actions=[], itemId }) {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImLocation/>
                     </Form.Label>
                     <Col sm='8'>
@@ -661,7 +775,7 @@ function ItemActions({ actions=[], itemId }) {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       Action type
                     </Form.Label>
                     <Col sm='8'>
@@ -673,7 +787,7 @@ function ItemActions({ actions=[], itemId }) {
                     </Col>
                   </Form.Group>
                   <Form.Group as={Row}>
-                    <Form.Label column='sm=4'>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
                       Action start
                     </Form.Label>
                     <Col sm='8'>
@@ -684,6 +798,63 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column='sm=4' className='font-weight-bold'>
+                      Action files
+                    </Form.Label>
+                    <Col sm='8'>
+                      {!(isModalVisible && modalVisibleId === action.id) ?
+                        (
+                          <LoadingButton
+                            className='LoadingButton'
+                            size='sm'
+                            id={action.id}
+                            variant='outline-primary'
+                            disabled={false}
+                            type='submit'
+                            isLoading={false}
+                            onClick={() => {
+                              setIsModalVisible(true);
+                              setModalVisibleId(action.id);
+                            }}
+                          >
+                            {(action.attachments && JSON.parse(action.attachments).length) ? 'View files' : 'Add files'}
+                          </LoadingButton>
+                        ) : (
+                          <LoadingButton
+                            className='LoadingButton'
+                            size='sm'
+                            id={action.id}
+                            variant='outline-secondary'
+                            disabled={false}
+                            type='submit'
+                            isLoading={false}
+                            onClick={() => {
+                              setIsModalVisible(false);
+                              setModalVisibleId('');
+                            }}
+                          >
+                            Close files
+                          </LoadingButton>
+                        )
+                      }
+                      {/* {(modalVisibleId === action.id) &&
+                        <AttachmentsModal
+                          attachments={action.attachments || '[]'}
+                          entityId={action.id}
+                          show={isModalVisible}
+                          setShow={setIsModalVisible}
+                        />
+                      } */}
+                    </Col>
+                  </Form.Group>
+                  {(isModalVisible && modalVisibleId === action.id) &&
+                    <ImageGrid
+                      attachments={action.attachments || '[]'}
+                      entityId={action.id}
+                      entityType={'Action'}
+                    />
+                  }
                 </Card.Body>
               </Card>
             )

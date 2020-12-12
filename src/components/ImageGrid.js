@@ -9,25 +9,41 @@ import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+import FilePondPluginMediaPreview from "filepond-plugin-media-preview";
+import FilePondPluginGetFile from 'filepond-plugin-get-file';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.min.css";
+import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.min.css';
 import './ImageGrid.css';
 // import Gallery from 'react-photo-gallery';
 import { s3FileURL } from '../libs/awsLib';
 import { s3Upload, s3Delete } from '../libs/awsLib';
 import { useMutation } from '@apollo/client'
 import { MUTATION_updateItem } from '../api/mutations'
+import { MUTATION_updateAction } from '../api/mutations';
 import { isImage, getImageSize } from '../libs/imageLib';
 import { onError } from '../libs/errorLib';
 import LoadingButton from './LoadingButton';
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImageTransform, FilePondPluginImagePreview, FilePondPluginFileValidateType);
+registerPlugin(
+  FilePondPluginImageExifOrientation,
+  FilePondPluginImageResize,
+  FilePondPluginImageTransform,
+  FilePondPluginImagePreview,
+  FilePondPluginFileValidateType,
+  FilePondPluginFileValidateSize,
+  FilePondPluginMediaPreview,
+  FilePondPluginGetFile
+);
 
-function ImageGrid({ attachments='[]', itemId }) {
+function ImageGrid({ attachments='[]', entityId, entityType }) {
   const [prevAttachments, setPrevAttachments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isEditingFiles, setIsEditingFiles] = useState(false);
   // const [isDeletingFiles, setIsDeletingFiles] = useState(false);
   const [isUpdatingFiles, setIsUpdatingFiles] = useState(false);
   const [updateItem] = useMutation(MUTATION_updateItem);
+  const [updateAction] = useMutation(MUTATION_updateAction);
   const [urlsFromServer, setUrlsFromServer] = useState([]);
   const [files, setFiles] = useState([]);
   const [filesResized, setFilesResized] = useState([]);
@@ -138,22 +154,43 @@ function ImageGrid({ attachments='[]', itemId }) {
     const attachmentsUpdate = [ ...attachmentsCurrent, ...attachmentsUploaded ].filter(({ key }) =>
       !(attachmentsDeleted.some((attachment) => (decodeURI(attachment.key) === key))));
     // console.log('attachmentsUpdate', attachmentsUpdate);
-    try {
-      const data = await updateItem({
-        variables: {
-          item: {
-            id: itemId,
-            attachments: JSON.stringify(attachmentsUpdate)
+    if (entityType === 'Item') {
+      try {
+        const data = await updateItem({
+          variables: {
+            item: {
+              id: entityId,
+              attachments: JSON.stringify(attachmentsUpdate)
+            }
           }
+        });
+        if (data) {
+          // console.log('data', data);
+          setIsUpdatingFiles(false);
+          setIsEditingFiles(false);
         }
-      });
-      if (data) {
-        // console.log('data', data);
-        setIsUpdatingFiles(false);
-        setIsEditingFiles(false);
+      } catch (error) {
+        onError(error);
       }
-    } catch (error) {
-      onError(error);
+    }
+    if (entityType === 'Action') {
+      try {
+        const data = await updateAction({
+          variables: {
+            action: {
+              id: entityId,
+              attachments: JSON.stringify(attachmentsUpdate)
+            }
+          }
+        });
+        if (data) {
+          // console.log('data', data);
+          setIsUpdatingFiles(false);
+          setIsEditingFiles(false);
+        }
+      } catch (error) {
+        onError(error);
+      }
     }
   }
   // console.log(imageData[0])
@@ -187,7 +224,7 @@ function ImageGrid({ attachments='[]', itemId }) {
               isLoading={false}
               onClick={() => setIsEditingFiles(true)}
             >
-              Edit images
+              {(files && files.length) ? 'Edit files' : 'Add files'}
             </LoadingButton>
           ) : (
             <>
@@ -244,8 +281,10 @@ function ImageGrid({ attachments='[]', itemId }) {
           }
         } : null}
         allowFileTypeValidation={true}
-        acceptedFileTypes={['image/*']}
-        labelFileTypeNotAllowed={'Only images can be uploaded'}
+        acceptedFileTypes={['image/*', 'application/pdf']}
+        labelFileTypeNotAllowed={'Only image or pdf can be uploaded'}
+        allowFileSizeValidation={true}
+        maxFileSize={'3MB'}
         allowImageResize={true}
         imageResizeTargetWidth={'500'}
         imageResizeMode={'contain'}
@@ -262,7 +301,9 @@ function ImageGrid({ attachments='[]', itemId }) {
         maxFiles={3}
         onupdatefiles={setFiles}
         disabled={!isEditingFiles}
-        labelIdle={isEditingFiles ? 'Drop images here or <span class="filepond--label-action">Browse</span>' : 'Images'}
+        labelIdle={isEditingFiles ? 'Drop files here or <span class="filepond--label-action">Browse</span>' : (entityType + ' files')}
+        labelButtonDownloadItem={'Download file'} // by default 'Download file'
+        allowDownloadByUrl={true} // by default downloading by URL disabled
         credits={false}
       />
       </div>
