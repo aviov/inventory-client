@@ -11,7 +11,10 @@ import FilePondPluginImageResize from 'filepond-plugin-image-resize';
 import FilePondPluginImageTransform from 'filepond-plugin-image-transform';
 import FilePondPluginImagePreview from "filepond-plugin-image-preview";
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+import FilePondPluginMediaPreview from "filepond-plugin-media-preview";
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
+import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.min.css";
 import { v1 as uuidv1 } from 'uuid';
 import { s3Upload } from '../libs/awsLib';
 import { useLazyQuery, useMutation } from '@apollo/client'
@@ -25,7 +28,15 @@ import "react-datepicker/dist/react-datepicker.css";
 import './DatePicker.css';
 import enGb from 'date-fns/locale/en-GB';
 registerLocale('en-gb', enGb);
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImageResize, FilePondPluginImageTransform, FilePondPluginImagePreview, FilePondPluginFileValidateType);
+registerPlugin(
+  FilePondPluginImageExifOrientation,
+  FilePondPluginImageResize,
+  FilePondPluginImageTransform,
+  FilePondPluginImagePreview,
+  FilePondPluginFileValidateType,
+  FilePondPluginFileValidateSize,
+  FilePondPluginMediaPreview
+);
 
 function ItemForm() {
   const history = useHistory();
@@ -250,8 +261,10 @@ function ItemForm() {
           <FilePond
             files={files}
             allowFileTypeValidation={true}
-            acceptedFileTypes={['image/*']}
-            labelFileTypeNotAllowed={'Only images can be uploaded'}
+            acceptedFileTypes={['image/*', 'application/pdf']}
+            labelFileTypeNotAllowed={'Only image or pdf can be uploaded'}
+            allowFileSizeValidation={true}
+            maxFileSize={'3MB'}
             allowImageResize={true}
             imageResizeTargetWidth={'500'}
             imageResizeMode={'contain'}
@@ -267,7 +280,7 @@ function ItemForm() {
             allowMultiple={true}
             maxFiles={3}
             onupdatefiles={setFiles}
-            labelIdle='Drop images or <span class="filepond--label-action">Browse</span>'
+            labelIdle='Drop files or <span class="filepond--label-action">Browse</span>'
             credits={false}
           />
         </Form.Group>

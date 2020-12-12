@@ -35,6 +35,7 @@ export const FRAGMENT_ItemFields = gql`
       }
       dateActionStart
       dateActionEnd
+      attachments
     }
   }
 `
@@ -99,6 +100,7 @@ export const FRAGMENT_ActionFields = gql`
     }
     dateActionStart
     dateActionEnd
+    attachments
   }
 `
 

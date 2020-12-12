@@ -250,7 +250,7 @@ function ItemInfo() {
             </Row>
             <hr/>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Item type
               </Form.Label>
               <Col sm='8'>
@@ -274,7 +274,7 @@ function ItemInfo() {
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Model
               </Form.Label>
               <Col sm='8'>
@@ -295,7 +295,7 @@ function ItemInfo() {
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Serial nr
               </Form.Label>
               <Col sm='8'>
@@ -316,7 +316,7 @@ function ItemInfo() {
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Inventory nr
               </Form.Label>
               <Col sm='8'>
@@ -338,7 +338,7 @@ function ItemInfo() {
             </Form.Group>
             <hr/>
             <Form.Group as={Row}>
-              <Form.Label column='sm=4'>
+              <Form.Label column='sm=4' className='font-weight-bold'>
                 Warranty begins
               </Form.Label>
               <Col sm='8'>
@@ -374,12 +374,12 @@ function ItemInfo() {
             </Form.Group>
             <Form.Group as={Row}>
               {isWarrantyValid ? (
-                <Form.Label column='sm=4'>
+                <Form.Label column='sm=4' className='font-weight-bold'>
                   <FcApproval />
                   {' expires'}
                 </Form.Label>
               ) : (
-                <Form.Label column='sm=4'>
+                <Form.Label column='sm=4' className='font-weight-bold'>
                   <MdError
                     color={'red'}
                   />
@@ -427,7 +427,8 @@ function ItemInfo() {
             {(item && item.attachments && !isDeleting) &&
               <ImageGrid
                 attachments={item.attachments}
-                itemId={id}
+                entityId={id}
+                entityType={'Item'}
               />
             }
           </Col>

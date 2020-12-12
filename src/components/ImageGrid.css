@@ -15,7 +15,11 @@
   visibility: hidden;
 } */
 
-.ImageGrid .FilepondInactive
+.ImageGrid .filepond--file {
+  height: 250px;
+}
+
+/* .ImageGrid .FilepondInactive
 .filepond--file-info {
   visibility: hidden;
 }
@@ -23,4 +27,4 @@
 .ImageGrid .FilepondInactive
 .filepond--image-preview-overlay {
   visibility: hidden;
-}
+} */
