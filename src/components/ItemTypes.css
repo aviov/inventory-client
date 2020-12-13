@@ -1,3 +1,7 @@
+.ItemTypes {
+  overflow: scroll;
+}
+
 .ItemTypes .lander {
   padding: 80px 0;
   text-align: center;
