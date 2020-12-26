@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
+import validator from 'validator';
 import { v1 as uuidv1 } from 'uuid';
 import { useMutation } from '@apollo/client'
 import { MUTATION_createEndUser } from '../api/mutations'
@@ -31,6 +32,24 @@ function EndUserForm() {
     event.preventDefault();
     const id = 'enduser:' + uuidv1();
     const dateCreatedAt = new Date();
+    if (!validator.isEmail(email)) {
+      alert(
+        email +
+        ' is not correct email. ' +
+        '\nEnter email that exist. ' +
+        '\nAfter this verify correct email.' +
+        '\nConfirmation will be sent to this email.'
+      );
+      return null;
+    };
+    if (!validator.isMobilePhone(phone, 'et-EE')) {
+      alert(
+        phone +
+        ' is not mobile number. ' +
+        '\nEnter mobile number that exist.'
+      );
+      return null;
+    }
     setIsLoading(true);
     // console.log(
     //   'id', id,
@@ -83,7 +102,7 @@ function EndUserForm() {
           </Form.Label>
           <Form.Control
             type='text'
-            placeholder='Email'
+            placeholder='Email that exist'
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />

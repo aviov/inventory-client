@@ -7,6 +7,7 @@ import { useAuthContext } from "../libs/contextLib";
 import { useLazyQuery } from '@apollo/client'
 import { QUERY_listEndUsers } from '../api/queries'
 import { ImSpinner2 } from 'react-icons/im';
+import { ImCheckmark } from 'react-icons/im';
 // import { ImSearch } from 'react-icons/im';
 import { ImCancelCircle } from 'react-icons/im';
 import "./EndUsers.css";
@@ -19,7 +20,9 @@ export default function EndUsers() {
   const [isSearching, setIsSearching] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [phone, setPhone] = useState('');
+  const [isClientSendEmail, setIsClientSendEmail] = useState(false);
   const [listEndUsers, { loading, data }] = useLazyQuery(QUERY_listEndUsers);
 
   useEffect(() => {
@@ -64,7 +67,17 @@ export default function EndUsers() {
             {endUser.email}
           </td>
           <td>
+            {(endUser.emailVerified && (endUser.emailVerified && endUser.emailVerified) === (endUser.email && endUser.email)) &&
+              <ImCheckmark as={Form.Control} color='green'/>
+            }
+          </td>
+          <td>
             {endUser.phone}
+          </td>
+          <td>
+            {endUser.isClientSendEmail &&
+              <ImCheckmark as={Form.Control} color='green'/>
+            }
           </td>
           <td>
           </td>
@@ -91,8 +104,9 @@ export default function EndUsers() {
           responsive
         >
           <colgroup>
-            <col span='1' style={{ width: 40+'%' }}/>
             <col span='1' style={{ width: 30+'%' }}/>
+            <col span='1' style={{ width: 30+'%' }}/>
+            <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 20+'%' }}/>
             <col span='1' style={{ width: 10+'%' }}/>
           </colgroup>
@@ -121,6 +135,17 @@ export default function EndUsers() {
                 }
               </th>
               <th>
+                {'Email verified'}
+                {isSearching &&
+                  <Form.Check
+                    type='switch'
+                    id='isEmailVerified'
+                    checked={isEmailVerified ? true : false}
+                    onChange={() => setIsEmailVerified(isEmailVerified ? false : true)}
+                  />
+                }
+              </th>
+              <th>
                 {'Phone'}
                 {isSearching &&
                   <Form.Control
@@ -128,6 +153,18 @@ export default function EndUsers() {
                     type='text'
                     value={phone}
                     onChange={(event) => setPhone(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
+                {'Send actions'}
+                {isSearching &&
+                  <Form.Check
+                    type='switch'
+                    id='isClientSendEmail'
+                    // disabled={!validator.isEmail(email)}
+                    checked={isClientSendEmail ? true : false}
+                    onChange={() => setIsClientSendEmail(isClientSendEmail ? false : true)}
                   />
                 }
               </th>
