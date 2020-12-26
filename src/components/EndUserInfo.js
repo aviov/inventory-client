@@ -7,10 +7,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { ImSpinner2 } from 'react-icons/im';
+import { ImCheckmark } from 'react-icons/im';
 import { useAuthContext } from "../libs/contextLib";
 import LoadingButton from './LoadingButton';
 import './EndUserInfo.css'
-import { MUTATION_deleteEndUser, MUTATION_updateEndUser } from "../api/mutations";
+import {
+  MUTATION_deleteEndUser,
+  MUTATION_updateEndUser,
+  MUTATION_verifyEndUserEmailRequest
+} from "../api/mutations";
+import validator from 'validator';
 import { onError } from "../libs/errorLib";
 
 function EndUserInfo() {
@@ -22,7 +28,9 @@ function EndUserInfo() {
     id,
     name: '',
     email: '',
-    phone: ''
+    emailVerified: '',
+    phone: '',
+    isClientSendEmail: false
   });
   const [endUserUpdate, setEndUserUpdate] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
@@ -30,6 +38,11 @@ function EndUserInfo() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [getEndUserById, { data, loading }] = useLazyQuery(QUERY_getEndUserById);
   const [updateEndUser] = useMutation(MUTATION_updateEndUser);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [verifyEndUserEmailRequest] = useMutation(MUTATION_verifyEndUserEmailRequest, {
+    refetchQueries: [{ query: QUERY_getEndUserById, variables: { endUserId: id } }]
+  });
+  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
   const [deleteEndUser] = useMutation(MUTATION_deleteEndUser, {
     refetchQueries: [{ query: QUERY_listEndUsers }]
   });
@@ -51,15 +64,21 @@ function EndUserInfo() {
             id,
             name,
             email,
-            phone
+            emailVerified,
+            phone,
+            isClientSendEmail
           } = endUserById;
           setEndUser(endUserById);
           setEndUserUpdate({
             id,
             name,
             email,
-            phone
+            phone,
+            isClientSendEmail: isClientSendEmail === true ? true : false
           });
+          setIsEmailVerified(
+            ((emailVerified && emailVerified) === (email && email))
+          )
         }
       } catch (error) {
         onError(error);
@@ -73,7 +92,8 @@ function EndUserInfo() {
     id,
     name,
     email,
-    phone
+    phone,
+    isClientSendEmail
   }) {
     setIsUpdating(true);
     try {
@@ -83,7 +103,8 @@ function EndUserInfo() {
             id,
             name,
             email,
-            phone
+            phone,
+            isClientSendEmail
           }
         }
       });
@@ -91,6 +112,43 @@ function EndUserInfo() {
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
+      }
+    } catch (error) {
+      onError(error);
+    }
+  }
+
+  async function handleSubmitVeriry({
+    id,
+    name,
+    email
+  }) {
+    if (!validator.isEmail(email)) {
+      alert(
+        email +
+        ' is not correct email. ' +
+        '\nUpdate and save email. ' +
+        '\nAfter this verify correct email.' +
+        '\nConfirmation will be sent to this email.'
+      );
+      return null;
+    }
+    setIsVerifyingEmail(true);
+    try {
+      const data = await verifyEndUserEmailRequest({
+        variables: {
+          endUser: {
+            id,
+            name,
+            email
+          }
+        }
+      });
+      // console.log('data', data);
+      if (data) {
+        setIsVerifyingEmail(false);
+        setIsEditing(false);
+        alert('Confirmation link is sent to ' + endUser.name + '\'s email ' + endUser.email);
       }
     } catch (error) {
       onError(error);
@@ -231,10 +289,42 @@ function EndUserInfo() {
                 ) : (
                   <Form.Control
                     type='text'
-                    placeholder='Email'
+                    placeholder='Email that exist'
                     value={endUserUpdate.email}
                     onChange={(event) => setEndUserUpdate({ ...endUserUpdate, email: event.target.value })}
                   />
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4' className='font-weight-bold'>
+                {isEmailVerified ? 'Email verified' : 'Email not verified'}
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <>
+                    {isEmailVerified &&
+                      <ImCheckmark as={Form.Control} color='green'/>
+                    }
+                  </>
+                ) : (
+                  <>
+                    {!isEmailVerified ? (
+                      <LoadingButton
+                        className='LoadingButton'
+                        size='sm'
+                        variant='outline-primary'
+                        disabled={isVerifyingEmail}
+                        type='submit'
+                        isLoading={isVerifyingEmail}
+                        onClick={() => handleSubmitVeriry(endUserUpdate)}
+                      >
+                        Verify email
+                      </LoadingButton>
+                    ) : (
+                      <ImCheckmark as={Form.Control} color='green'/>
+                    )}
+                  </>
                 )}
               </Col>
             </Form.Group>
@@ -255,6 +345,29 @@ function EndUserInfo() {
                     placeholder='Phone'
                     value={endUserUpdate.phone}
                     onChange={(event) => setEndUserUpdate({ ...endUserUpdate, phone: event.target.value })}
+                  />
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4' className='font-weight-bold'>
+                Send email with future actions
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <>
+                    {endUser.isClientSendEmail &&
+                      <ImCheckmark as={Form.Control} color='green'/>
+                    }
+                  </>
+                ) : (
+                  <Form.Check
+                    type='switch'
+                    id='isClientSendEmail'
+                    disabled={!isEmailVerified}
+                    label={!isEmailVerified ? 'Verify email to use this' : ''}
+                    checked={endUserUpdate.isClientSendEmail ? true : false}
+                    onChange={() => setEndUserUpdate({ ...endUserUpdate, isClientSendEmail: endUserUpdate.isClientSendEmail ? false : true })}
                   />
                 )}
               </Col>

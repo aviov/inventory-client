@@ -108,6 +108,26 @@ export const MUTATION_updateEndUser = gql`
   ${FRAGMENT_EndUserFields}
 `
 
+export const MUTATION_verifyEndUserEmailRequest = gql`
+  mutation verifyEndUserEmailRequest(
+    $endUser: EndUserInputUpdate!
+  ) {
+    verifyEndUserEmailRequest(
+      endUser: $endUser
+    )
+  }
+`
+
+export const MUTATION_verifyEndUserEmailConfirm = gql`
+  mutation verifyEndUserEmailConfirm(
+    $endUserToken: String!
+  ) {
+    verifyEndUserEmailConfirm(
+      endUserToken: $endUserToken
+    )
+  }
+`
+
 export const MUTATION_deleteEndUser = gql`
   mutation deleteEndUser(
     $endUserId: String!

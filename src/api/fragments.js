@@ -75,7 +75,9 @@ export const FRAGMENT_EndUserFields = gql`
     dateCreatedAt
     name
     email
+    emailVerified
     phone
+    isClientSendEmail
   }
 `
 
