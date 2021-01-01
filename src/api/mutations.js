@@ -3,6 +3,8 @@ import {
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
+  FRAGMENT_EndUserInfoFields,
+  FRAGMENT_GroupFields,
   FRAGMENT_ActionFields,
   FRAGMENT_ActionTypeFields,
   FRAGMENT_LocationFields
@@ -134,6 +136,102 @@ export const MUTATION_deleteEndUser = gql`
   ) {
     deleteEndUser(
       endUserId: $endUserId
+    )
+  }
+`
+
+
+export const MUTATION_createEndUserInfo = gql`
+  mutation createEndUserInfo(
+    $endUserInfo: EndUserInfoInput!
+  ) {
+    createEndUserInfo(
+      endUserInfo: $endUserInfo
+    ) {
+      ...EndUserInfoFields
+    }
+  }
+  ${FRAGMENT_EndUserInfoFields}
+`
+
+export const MUTATION_updateEndUserInfo = gql`
+  mutation updateEndUserInfo(
+    $endUserInfo: EndUserInfoInputUpdate!
+  ) {
+    updateEndUserInfo(
+      endUserInfo: $endUserInfo
+    ) {
+      ...EndUserInfoFields
+    }
+  }
+  ${FRAGMENT_EndUserInfoFields}
+`
+export const MUTATION_inviteEndUserRequest = gql`
+  mutation inviteEndUserRequest(
+    $endUserInfo: EndUserInfoInput!
+  ) {
+    inviteEndUserRequest(
+      endUserInfo: $endUserInfo
+    ) {
+      ...EndUserInfoFields
+    }
+  }
+  ${FRAGMENT_EndUserInfoFields}
+`
+
+export const MUTATION_inviteEndUserConfirm = gql`
+  mutation inviteEndUserConfirm(
+    $endUserInfoToken: String!
+  ) {
+    inviteEndUserConfirm(
+      endUserInfoToken: $endUserInfoToken
+    )
+  }
+`
+
+export const MUTATION_deleteEndUserInfo = gql`
+  mutation deleteEndUserInfo(
+    $endUserInfoId: String!
+  ) {
+    deleteEndUserInfo(
+      endUserInfoId: $endUserInfoId
+    )
+  }
+`
+
+
+export const MUTATION_createGroup = gql`
+  mutation createGroup(
+    $group: GroupInput!
+  ) {
+    createGroup(
+      group: $group
+    ) {
+      ...GroupFields
+    }
+  }
+  ${FRAGMENT_GroupFields}
+`
+
+export const MUTATION_updateGroup = gql`
+  mutation updateGroup(
+    $group: GroupInputUpdate!
+  ) {
+    updateGroup(
+      group: $group
+    ) {
+      ...GroupFields
+    }
+  }
+  ${FRAGMENT_GroupFields}
+`
+
+export const MUTATION_deleteGroup = gql`
+  mutation deleteGroup(
+    $groupId: String!
+  ) {
+    deleteGroup(
+      groupId: $groupId
     )
   }
 `

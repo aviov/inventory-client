@@ -13,6 +13,9 @@ import ItemTypeInfo from './components/ItemTypeInfo';
 import EndUsers from './components/EndUsers';
 import EndUserForm from './components/EndUserForm';
 import EndUserInfo from './components/EndUserInfo';
+import Groups from './components/Groups';
+import GroupForm from './components/GroupForm';
+import GroupInfo from './components/GroupInfo';
 import Locations from './components/Locations';
 import LocationForm from './components/LocationForm';
 import LocationInfo from './components/LocationInfo';
@@ -20,6 +23,7 @@ import ActionTypes from './components/ActionTypes';
 import ActionTypeForm from './components/ActionTypeForm';
 import ActionTypeInfo from './components/ActionTypeInfo';
 import VerifyEndUserEmail from './components/VerifyEndUserEmail';
+import InviteEndUserConfirm from './components/InviteEndUserConfirm';
 import NotFound from './components/NotFound';
 import './Routes.css';
 
@@ -65,6 +69,15 @@ export default function Routes() {
         <AuthenticatedRoute exact path='/endUsers/:id'>
           <EndUserInfo />
         </AuthenticatedRoute>
+        <Route exact path='/groups'>
+          <Groups />
+        </Route>
+        <AuthenticatedRoute exact path='/groups/new'>
+          <GroupForm />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path='/groups/:id'>
+          <GroupInfo />
+        </AuthenticatedRoute>
         <Route exact path='/locations'>
           <Locations />
         </Route>
@@ -85,6 +98,9 @@ export default function Routes() {
         </AuthenticatedRoute>
         <Route exact path="/verifyEmail">
           <VerifyEndUserEmail />
+        </Route>
+        <Route exact path="/inviteEmail">
+          <InviteEndUserConfirm />
         </Route>
         <Route>
           <NotFound />

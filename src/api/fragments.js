@@ -81,6 +81,51 @@ export const FRAGMENT_EndUserFields = gql`
   }
 `
 
+export const FRAGMENT_EndUserInfoFields = gql`
+  fragment EndUserInfoFields on EndUserInfo {
+    id
+    dateCreatedAt
+    endUser {
+      id
+      name
+      email
+      phone
+    }
+    group {
+      id
+      name
+    }
+    invitedBy
+    dateInvitedAt
+    inviteInfo
+    confirmedBy
+    dateConfirmedAt
+  }
+`
+
+export const FRAGMENT_GroupFields = gql`
+  fragment GroupFields on Group {
+    id
+    dateCreatedAt
+    name
+    regNr
+    email
+    phone
+    webPage
+    endUserInfos {
+      id
+      dateCreatedAt
+      endUser {
+        id
+        name
+        email
+        phone
+      }
+      dateConfirmedAt
+    }
+  }
+`
+
 export const FRAGMENT_ActionFields = gql`
   fragment ActionFields on Action {
     id
