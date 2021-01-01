@@ -1,0 +1,38 @@
+.Groups {
+  overflow: scroll;
+}
+
+.Groups .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.Groups .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.Groups .lander p {
+  color: #999;
+}
+
+.Groups .AddGroupButton {
+  margin: 5px;
+}
+
+.Groups .List {
+  margin-top: 15px;
+}
+
+.Groups .ListGroups {
+  cursor: pointer;
+}
+
+.Groups .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.Groups .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}

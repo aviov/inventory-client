@@ -77,6 +77,13 @@ function App() {
               </LinkContainer>
             }
             {isAuthenticated &&
+              <LinkContainer to='/groups'>
+                <Nav.Link>
+                  Groups
+                </Nav.Link>
+              </LinkContainer>
+            }
+            {isAuthenticated &&
               <LinkContainer to='/locations'>
                 <Nav.Link>
                   Locations

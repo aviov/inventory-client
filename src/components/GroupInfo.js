@@ -1,50 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { QUERY_getEndUserById, QUERY_listEndUsers } from '../api/queries';
+import { QUERY_getGroupById, QUERY_listGroups } from '../api/queries';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { ImSpinner2 } from 'react-icons/im';
-import { ImCheckmark } from 'react-icons/im';
 import { useAuthContext } from "../libs/contextLib";
 import LoadingButton from './LoadingButton';
-import './EndUserInfo.css'
+import GroupEndUsers from './GroupEndUsers';
+import './GroupInfo.css'
 import {
-  MUTATION_deleteEndUser,
-  MUTATION_updateEndUser,
-  MUTATION_verifyEndUserEmailRequest
+  MUTATION_deleteGroup,
+  MUTATION_updateGroup
 } from "../api/mutations";
-import validator from 'validator';
+// import validator from 'validator';
 import { onError } from "../libs/errorLib";
 
-function EndUserInfo() {
+function GroupInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
-  const [endUser, setEndUser] = useState({
+  const [group, setGroup] = useState({
     id,
+    regNr: '',
     name: '',
     email: '',
-    emailVerified: '',
     phone: '',
-    isClientSendEmail: false
+    webPage: '',
+    endUserInfos: []
   });
-  const [endUserUpdate, setEndUserUpdate] = useState({});
+  const [groupUpdate, setGroupUpdate] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [getEndUserById, { data, loading }] = useLazyQuery(QUERY_getEndUserById);
-  const [updateEndUser] = useMutation(MUTATION_updateEndUser);
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
-  const [verifyEndUserEmailRequest] = useMutation(MUTATION_verifyEndUserEmailRequest, {
-    refetchQueries: [{ query: QUERY_getEndUserById, variables: { endUserId: id } }]
-  });
-  const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
-  const [deleteEndUser] = useMutation(MUTATION_deleteEndUser, {
-    refetchQueries: [{ query: QUERY_listEndUsers }]
+  const [getGroupById, { data, loading }] = useLazyQuery(QUERY_getGroupById);
+  const [updateGroup] = useMutation(MUTATION_updateGroup);
+  const [deleteGroup] = useMutation(MUTATION_deleteGroup, {
+    refetchQueries: [{ query: QUERY_listGroups }]
   });
   
   useEffect(() => {
@@ -54,31 +49,30 @@ function EndUserInfo() {
     function onLoad() {
       setIsLoading(true);
       try {
-        getEndUserById({
-          variables: { endUserId: id }
+        getGroupById({
+          variables: { groupId: id }
         });
-        const endUserById = data && data.getEndUserById;
-        // console.log(data);
-        if (endUserById) {
+        const groupById = data && data.getGroupById;
+        if (groupById) {
           const {
             id,
             name,
+            regNr,
             email,
-            emailVerified,
             phone,
-            isClientSendEmail
-          } = endUserById;
-          setEndUser(endUserById);
-          setEndUserUpdate({
+            webPage,
+            endUserInfos
+          } = groupById;
+          setGroup(groupById);
+          setGroupUpdate({
             id,
             name,
+            regNr,
             email,
             phone,
-            isClientSendEmail: isClientSendEmail === true ? true : false
+            webPage,
+            endUserInfos
           });
-          setIsEmailVerified(
-            ((emailVerified && emailVerified) === (email && email))
-          )
         }
       } catch (error) {
         onError(error);
@@ -86,29 +80,30 @@ function EndUserInfo() {
       setIsLoading(false);
     }
     onLoad();
-  },[isAuthenticated, getEndUserById, id, data]);
+  },[isAuthenticated, getGroupById, id, data]);
 
   async function handleSubmit({
     id,
     name,
+    regNr,
     email,
     phone,
-    isClientSendEmail
+    webPage
   }) {
     setIsUpdating(true);
     try {
-      const data = await updateEndUser({
+      const data = await updateGroup({
         variables: {
-          endUser: {
+          group: {
             id,
             name,
+            regNr,
             email,
             phone,
-            isClientSendEmail
+            webPage
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -118,55 +113,13 @@ function EndUserInfo() {
     }
   }
 
-  async function handleSubmitVeriry({
-    id,
-    name,
-    email
-  }) {
-    if (!validator.isEmail(email)) {
-      alert(
-        email +
-        ' is not correct email. ' +
-        '\nUpdate and save email. ' +
-        '\nAfter this verify correct email.' +
-        '\nConfirmation will be sent to this email.'
-      );
-      return null;
-    }
-    setIsVerifyingEmail(true);
-    try {
-      const data = await verifyEndUserEmailRequest({
-        variables: {
-          endUser: {
-            id,
-            name,
-            email
-          }
-        }
-      });
-      // console.log('data', data);
-      if (data) {
-        setIsVerifyingEmail(false);
-        setIsEditing(false);
-        alert('Confirmation link is sent to ' + endUser.name + '\'s email ' + endUser.email);
-      }
-    } catch (error) {
-      onError(error);
-    }
-  }
-
-  // console.log(typeof endUser.dateWarrantyBegins);
-  // console.log(endUser.dateWarrantyBegins)
-  // console.log(endUser.dateWarrantyExpires)
-
-
-  async function handleDelete(endUser) {
-    const confirmed = window.confirm(`Do you want to delete end user ${endUser.name}?`);
+  async function handleDelete(group) {
+    const confirmed = window.confirm(`Do you want to delete group ${group.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
-        await deleteEndUser({ variables: { endUserId: id } });
-        history.push('/endUsers');
+        await deleteGroup({ variables: { groupId: id } });
+        history.push('/groups');
       } catch (error) {
         onError(error);
       }
@@ -187,11 +140,10 @@ function EndUserInfo() {
       </div>
     )
   }
-  // const endUser = data.getEndUserById;
-  // console.log(data);
+
   return(
     <div
-      className='EndUserInfo'
+      className='GroupInfo'
     >
       <Container
         // fluid
@@ -223,7 +175,7 @@ function EndUserInfo() {
                       disabled={isDeleting}
                       type='submit'
                       isLoading={isDeleting}
-                      onClick={() => handleDelete(endUser)}
+                      onClick={() => handleDelete(group)}
                     >
                       Delete
                     </LoadingButton>
@@ -234,7 +186,7 @@ function EndUserInfo() {
                       disabled={isUpdating}
                       type='submit'
                       isLoading={isUpdating}
-                      onClick={() => handleSubmit(endUserUpdate)}
+                      onClick={() => handleSubmit(groupUpdate)}
                     >
                       Save
                     </LoadingButton>
@@ -263,14 +215,35 @@ function EndUserInfo() {
                   <Form.Control
                     plaintext
                     readOnly
-                    value={endUser.name}
+                    value={group.name}
                   />
                 ) : (
                   <Form.Control
                     type='text'
                     placeholder='Name'
-                    value={endUserUpdate.name}
-                    onChange={(event) => setEndUserUpdate({ ...endUserUpdate, name: event.target.value })}
+                    value={groupUpdate.name}
+                    onChange={(event) => setGroupUpdate({ ...groupUpdate, name: event.target.value })}
+                  />
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4' className='font-weight-bold'>
+                Reg nr
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={group.regNr}
+                  />
+                ) : (
+                  <Form.Control
+                    type='text'
+                    placeholder='Web page'
+                    value={groupUpdate.regNr}
+                    onChange={(event) => setGroupUpdate({ ...groupUpdate, regNr: event.target.value })}
                   />
                 )}
               </Col>
@@ -284,47 +257,15 @@ function EndUserInfo() {
                   <Form.Control
                     plaintext
                     readOnly
-                    value={endUser.email}
+                    value={group.email}
                   />
                 ) : (
                   <Form.Control
                     type='text'
                     placeholder='Email that exist'
-                    value={endUserUpdate.email}
-                    onChange={(event) => setEndUserUpdate({ ...endUserUpdate, email: event.target.value })}
+                    value={groupUpdate.email}
+                    onChange={(event) => setGroupUpdate({ ...groupUpdate, email: event.target.value })}
                   />
-                )}
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row}>
-              <Form.Label column='sm=4' className='font-weight-bold'>
-                {isEmailVerified ? 'Email verified' : 'Email not verified'}
-              </Form.Label>
-              <Col sm='8'>
-                {!isEditing ? (
-                  <>
-                    {isEmailVerified &&
-                      <ImCheckmark as={Form.Control} color='green'/>
-                    }
-                  </>
-                ) : (
-                  <>
-                    {!isEmailVerified ? (
-                      <LoadingButton
-                        className='LoadingButton'
-                        size='sm'
-                        variant='outline-primary'
-                        disabled={isVerifyingEmail}
-                        type='submit'
-                        isLoading={isVerifyingEmail}
-                        onClick={() => handleSubmitVeriry(endUserUpdate)}
-                      >
-                        Verify email
-                      </LoadingButton>
-                    ) : (
-                      <ImCheckmark as={Form.Control} color='green'/>
-                    )}
-                  </>
                 )}
               </Col>
             </Form.Group>
@@ -337,42 +278,45 @@ function EndUserInfo() {
                   <Form.Control
                     plaintext
                     readOnly
-                    value={endUser.phone}
+                    value={group.phone}
                   />
                 ) : (
                   <Form.Control
                     type='text'
                     placeholder='Phone'
-                    value={endUserUpdate.phone}
-                    onChange={(event) => setEndUserUpdate({ ...endUserUpdate, phone: event.target.value })}
+                    value={groupUpdate.phone}
+                    onChange={(event) => setGroupUpdate({ ...groupUpdate, phone: event.target.value })}
                   />
                 )}
               </Col>
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
-                Send email with future actions
+                Web page
               </Form.Label>
               <Col sm='8'>
                 {!isEditing ? (
-                  <>
-                    {endUser.isClientSendEmail &&
-                      <ImCheckmark as={Form.Control} color='green'/>
-                    }
-                  </>
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={group.webPage}
+                  />
                 ) : (
-                  <Form.Check
-                    type='switch'
-                    id='isClientSendEmail'
-                    disabled={!isEmailVerified}
-                    label={!isEmailVerified ? 'Verify email to use this' : ''}
-                    checked={endUserUpdate.isClientSendEmail ? true : false}
-                    onChange={() => setEndUserUpdate({ ...endUserUpdate, isClientSendEmail: endUserUpdate.isClientSendEmail ? false : true })}
+                  <Form.Control
+                    type='text'
+                    placeholder='Web page'
+                    value={groupUpdate.webPage}
+                    onChange={(event) => setGroupUpdate({ ...groupUpdate, webPage: event.target.value })}
                   />
                 )}
               </Col>
             </Form.Group>
             <hr style={{ marginBottom: 30 }}/>
+            <GroupEndUsers
+              endUserInfos={group.endUserInfos}
+              groupId={id}
+              groupName={group.name}
+            />
           </Col>
         </Row>
       </Container>
@@ -380,4 +324,4 @@ function EndUserInfo() {
   )
 }
 
-export default EndUserInfo
+export default GroupInfo

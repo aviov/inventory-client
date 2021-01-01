@@ -3,6 +3,7 @@ import {
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
+  FRAGMENT_GroupFields,
   FRAGMENT_ActionFields,
   FRAGMENT_ActionTypeFields,
   FRAGMENT_LocationFields
@@ -87,6 +88,29 @@ export const QUERY_getEndUserById = gql`
     }
   }
   ${FRAGMENT_EndUserFields}
+`
+
+
+export const QUERY_listGroups = gql`
+  query listGroups {
+    listGroups {
+      ...GroupFields
+    }
+  }
+  ${FRAGMENT_GroupFields}
+`
+
+export const QUERY_getGroupById = gql`
+  query getGroupById(
+    $groupId: String!
+  ) {
+    getGroupById(
+      groupId: $groupId
+    ) {
+      ...GroupFields
+    }
+  }
+  ${FRAGMENT_GroupFields}
 `
 
 
