@@ -22,6 +22,7 @@ import LocationInfo from './components/LocationInfo';
 import ActionTypes from './components/ActionTypes';
 import ActionTypeForm from './components/ActionTypeForm';
 import ActionTypeInfo from './components/ActionTypeInfo';
+import EndUserAccount from './components/EndUserAccount';
 import VerifyEndUserEmail from './components/VerifyEndUserEmail';
 import InviteEndUserConfirm from './components/InviteEndUserConfirm';
 import NotFound from './components/NotFound';
@@ -95,6 +96,9 @@ export default function Routes() {
         </AuthenticatedRoute>
         <AuthenticatedRoute exact path='/actionTypes/:id'>
           <ActionTypeInfo />
+        </AuthenticatedRoute>
+        <AuthenticatedRoute exact path='/endUserAccount'>
+          <EndUserAccount />
         </AuthenticatedRoute>
         <Route exact path="/verifyEmail">
           <VerifyEndUserEmail />
