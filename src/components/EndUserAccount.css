@@ -1,0 +1,12 @@
+.EndUserAccount {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.EndUserAccount .LoadingButton {
+  margin: 5px;
+}

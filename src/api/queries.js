@@ -91,6 +91,16 @@ export const QUERY_getEndUserById = gql`
 `
 
 
+export const QUERY_getEndUserAccount = gql`
+  query getEndUserAccount {
+    getEndUserAccount {
+      ...EndUserFields
+    }
+  }
+  ${FRAGMENT_EndUserFields}
+`
+
+
 export const QUERY_listGroups = gql`
   query listGroups {
     listGroups {
