@@ -206,7 +206,8 @@ function ItemInfo() {
                     isLoading={false}
                     onClick={() => setIsEditing(true)}
                   >
-                    Edit item
+                    Edit machine
+                    {/* Edit item */}
                   </LoadingButton>
                 ) : (
                   <>
@@ -220,7 +221,8 @@ function ItemInfo() {
                       isLoading={isDeleting}
                       onClick={() => handleDelete(item)}
                     >
-                      Delete item
+                      Delete machine
+                      {/* Delete item */}
                     </LoadingButton>
                     <LoadingButton
                       className='LoadingButton'
@@ -251,7 +253,8 @@ function ItemInfo() {
             <hr/>
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
-                Item type
+                Machine type
+                {/* Item type */}
               </Form.Label>
               <Col sm='8'>
                 {!isEditing ? (
@@ -296,7 +299,8 @@ function ItemInfo() {
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
-                Serial nr
+                Reg nr
+                {/* Serial nr */}
               </Form.Label>
               <Col sm='8'>
                 {!isEditing ? (

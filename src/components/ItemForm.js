@@ -159,7 +159,8 @@ function ItemForm() {
       <Form>
         <Form.Group>
           <Form.Label>
-            Item type
+            Machine type
+            {/* Item type */}
           </Form.Label>
           <Select
             isClearable={true}
@@ -183,7 +184,8 @@ function ItemForm() {
         </Form.Group>
         <Form.Group>
           <Form.Label>
-            Serial number
+            Reg nr
+            {/* Serial number */}
           </Form.Label>
           <Form.Control
             type='text'

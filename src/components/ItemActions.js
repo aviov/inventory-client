@@ -290,7 +290,8 @@ function ItemActions({ actions=[], itemId }) {
           <Card.Body>
             <Card.Title>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                Next action
+                Next work
+                {/* Next action */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'end' }}>
                   <LoadingButton
                     className='LoadingButton'
@@ -377,7 +378,8 @@ function ItemActions({ actions=[], itemId }) {
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
-                Action type
+                Work type
+                {/* Action type */}
               </Form.Label>
               <Col sm='8'>
                 {!isCreating ? (
@@ -404,7 +406,8 @@ function ItemActions({ actions=[], itemId }) {
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
-                Action start
+                Work start
+                {/* Action start */}
               </Form.Label>
               <Col sm='8'>
                 <Form.Control as={DatePicker}
@@ -431,7 +434,8 @@ function ItemActions({ actions=[], itemId }) {
             </Form.Group>
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
-                Action files
+                Work files
+                {/* Action files */}
               </Form.Label>
               <Form.Label column='sm=8'>
                 Add files later
@@ -461,7 +465,8 @@ function ItemActions({ actions=[], itemId }) {
                   setActionTypeOption(null);
                 }}
               >
-                Next action
+                Next work
+                {/* Next action */}
               </LoadingButton>
               <ImArrowUp2
                 color={'lightblue'}
@@ -578,7 +583,8 @@ function ItemActions({ actions=[], itemId }) {
                   </Form.Group>
                   <Form.Group as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
-                      Action type
+                      Work type
+                      {/* Action type */}
                     </Form.Label>
                     <Col sm='8'>
                       <Select
@@ -598,7 +604,8 @@ function ItemActions({ actions=[], itemId }) {
                   </Form.Group>
                   <Form.Group as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
-                      Action start
+                      Work start
+                      {/* Action start */}
                     </Form.Label>
                     <Col sm='8'>
                       <Form.Control as={DatePicker}
@@ -625,7 +632,8 @@ function ItemActions({ actions=[], itemId }) {
                   </Form.Group>
                   <Form.Group as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
-                      Action files
+                      Work files
+                      {/* Action files */}
                     </Form.Label>
                     <Col sm='8'>
                       {!(isModalVisible && modalVisibleId === action.id) ?
@@ -746,7 +754,8 @@ function ItemActions({ actions=[], itemId }) {
                           setIsEditing(true);
                         }}
                       >
-                        Edit action
+                        Edit work
+                        {/* Edit action */}
                       </LoadingButton>
                     </div>
                   </Card.Title>
@@ -776,7 +785,8 @@ function ItemActions({ actions=[], itemId }) {
                   </Form.Group>
                   <Form.Group as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
-                      Action type
+                      Work type
+                      {/* Action type */}
                     </Form.Label>
                     <Col sm='8'>
                       <Form.Control
@@ -788,7 +798,8 @@ function ItemActions({ actions=[], itemId }) {
                   </Form.Group>
                   <Form.Group as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
-                      Action start
+                      Work start
+                      {/* Action start */}
                     </Form.Label>
                     <Col sm='8'>
                       <Form.Control
@@ -800,7 +811,8 @@ function ItemActions({ actions=[], itemId }) {
                   </Form.Group>
                   <Form.Group as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
-                      Action files
+                      Work files
+                      {/* Action files */}
                     </Form.Label>
                     <Col sm='8'>
                       {!(isModalVisible && modalVisibleId === action.id) ?
