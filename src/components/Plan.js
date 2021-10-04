@@ -369,7 +369,7 @@ export default function Plan() {
     ]
   );
 
-  async function handleSubmitCreate({
+  const handleSubmitCreate = useCallback(({
     name,
     description,
     itemId,
@@ -378,7 +378,7 @@ export default function Plan() {
     dateActionStart,
     dateActionEnd,
     actionTypeId
-  }) {
+  }) => {
     setIsUpdating(true);
     const actionId = 'action:' + uuidv1();
     const dateCreatedAt = new Date();
@@ -396,7 +396,7 @@ export default function Plan() {
     }
     console.log('actionInput', actionInput)
     try {
-      const data = await createAction({
+      const data = createAction({
         variables: {
           action: actionInput
         }
@@ -414,9 +414,9 @@ export default function Plan() {
       onError(error);
       setIsUpdating(false);
     }
-  };
+  }, [createAction]);
 
-  async function handleSubmitUpdate({
+  const handleSubmitUpdate = useCallback(({
     id,
     name,
     description,
@@ -426,7 +426,7 @@ export default function Plan() {
     dateActionStart,
     dateActionEnd,
     actionTypeId
-  }) {
+  }) => {
     setIsUpdating(true);
     const actionInputUpdate = {
       id,
@@ -440,7 +440,7 @@ export default function Plan() {
       actionTypeId: actionTypeId && ('action:' + actionTypeId)
     }
     try {
-      const data = await updateAction({
+      const data = updateAction({
         variables: {
           action: actionInputUpdate
         }
@@ -458,7 +458,7 @@ export default function Plan() {
       onError(error);
       setIsUpdating(false);
     }
-  };
+  }, [updateAction]);
 
   async function handleDelete(action) {
     const confirmed = window.confirm(`Do you want to delete action?`);
@@ -600,7 +600,7 @@ export default function Plan() {
     //     });
     // });
     handleDelete(actionCreate);
-  }, [actions, actionCreate, handleDelete]);
+  }, [actionCreate, handleDelete]);
 
   const loadPopupForm = useCallback((event) => {
     console.log('event', event);
