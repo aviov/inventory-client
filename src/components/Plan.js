@@ -364,11 +364,12 @@ export default function Plan() {
       listItems,
       dataItemOptions,
       listLocations,
-      dataLocationOptions
+      dataLocationOptions,
+      resources
     ]
   );
 
-  async function handleSubmitCreate({
+  const handleSubmitCreate = useCallback(({
     name,
     description,
     itemId,
@@ -377,7 +378,7 @@ export default function Plan() {
     dateActionStart,
     dateActionEnd,
     actionTypeId
-  }) {
+  }) => {
     setIsUpdating(true);
     const actionId = 'action:' + uuidv1();
     const dateCreatedAt = new Date();
@@ -395,7 +396,7 @@ export default function Plan() {
     }
     console.log('actionInput', actionInput)
     try {
-      const data = await createAction({
+      const data = createAction({
         variables: {
           action: actionInput
         }
@@ -413,9 +414,9 @@ export default function Plan() {
       onError(error);
       setIsUpdating(false);
     }
-  };
+  }, [createAction]);
 
-  async function handleSubmitUpdate({
+  const handleSubmitUpdate = useCallback(({
     id,
     name,
     description,
@@ -425,7 +426,7 @@ export default function Plan() {
     dateActionStart,
     dateActionEnd,
     actionTypeId
-  }) {
+  }) => {
     setIsUpdating(true);
     const actionInputUpdate = {
       id,
@@ -439,7 +440,7 @@ export default function Plan() {
       actionTypeId: actionTypeId && ('action:' + actionTypeId)
     }
     try {
-      const data = await updateAction({
+      const data = updateAction({
         variables: {
           action: actionInputUpdate
         }
@@ -457,14 +458,14 @@ export default function Plan() {
       onError(error);
       setIsUpdating(false);
     }
-  };
+  }, [updateAction]);
 
-  async function handleDelete(action) {
+  const handleDelete = useCallback((action) => {
     const confirmed = window.confirm(`Do you want to delete action?`);
     if (confirmed) {
       // setIsDeleting(true);
       try {
-        await deleteAction({ variables: { actionId: action.id } });
+        deleteAction({ variables: { actionId: action.id } });
       } catch (error) {
         onError(error);
       }
@@ -474,7 +475,7 @@ export default function Plan() {
     }
     setIsEditing(false);
     setActionCreate({});
-  };
+  }, [deleteAction]);
 
   const radioChange = (ev) => {
     const value = ev.target.value;
@@ -599,7 +600,7 @@ export default function Plan() {
     //     });
     // });
     handleDelete(actionCreate);
-  }, [actions, actionCreate]);
+  }, [actionCreate, handleDelete]);
 
   const loadPopupForm = useCallback((event) => {
     console.log('event', event);
@@ -734,7 +735,7 @@ export default function Plan() {
     setAnchor(target);
     // open the popup
     setIsModalVisible(true);
-  }, [loadPopupForm]);
+  }, [loadPopupForm, actionCreate]);
 
   const onEventDeleted = useCallback((args) => {
     deleteEvent(args.event)
@@ -817,7 +818,9 @@ export default function Plan() {
     isEditing,
     isCreating,
     isUpdating,
-    actionCreate
+    actionCreate,
+    handleSubmitCreate,
+    handleSubmitUpdate
     // saveEvent
   ]);
 

@@ -89,6 +89,7 @@ export default function Calendar() {
             agenda: { type: 'week' }
         }
         break;
+      default: break;
     }
 
     setView(event.target.value);
