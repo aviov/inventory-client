@@ -1,0 +1,46 @@
+.Calendar {
+  width: 100%;
+  overflow: scroll;
+}
+
+.Calendar .Header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.Calendar .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.Calendar .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.Calendar .lander p {
+  color: #999;
+}
+
+.Calendar .AddItemButton {
+  margin: 5px;
+}
+
+.Calendar .List {
+  margin-top: 15px;
+}
+
+.Calendar .ListItem {
+  cursor: pointer;
+}
+
+.Calendar .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.Calendar .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}

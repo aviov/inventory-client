@@ -130,6 +130,11 @@ export const FRAGMENT_ActionFields = gql`
   fragment ActionFields on Action {
     id
     dateCreatedAt
+    name
+    description
+    item {
+      id
+    }
     endUser {
       id
       name

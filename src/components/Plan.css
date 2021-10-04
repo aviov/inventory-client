@@ -1,0 +1,54 @@
+.Plan {
+  width: 100%;
+  overflow: scroll;
+}
+
+.Plan .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.Plan .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.Plan .lander p {
+  color: #999;
+}
+
+.Plan .AddItemButton {
+  margin: 5px;
+}
+
+.Plan .List {
+  margin-top: 15px;
+}
+
+.Plan .ListItem {
+  cursor: pointer;
+}
+
+.Plan .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.Plan .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}
+
+.work-order-checkbox-label.mbsc-checkbox {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.spinning {
+  margin-right: 10px;
+  animation: spin 1s infinite linear;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
