@@ -192,7 +192,8 @@ export default function Items() {
                 }
               </th>
               <th>
-                {'Serial nr'}
+                {'Reg nr'}
+                {/* {'Serial nr'} */}
                 {isSearching &&
                   <Form.Control
                     className='SearchInput'
@@ -214,7 +215,8 @@ export default function Items() {
                 }
               </th>
               <th>
-                {'End user'}
+                {'Person'}
+                {/* {'End user'} */}
                 {isSearching &&
                   <Form.Control
                     className='SearchInput'
@@ -341,7 +343,8 @@ export default function Items() {
               title='Add Item'
               onClick={() => history.push('/items/new')}
             >
-              Add Item
+              Add Machine
+              {/* Add Item */}
             </Button>
           }
           {renderItems()}

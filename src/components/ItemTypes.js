@@ -143,7 +143,8 @@ export default function ItemTypes() {
               title='Add ItemType'
               onClick={() => history.push('/itemTypes/new')}
             >
-              Add Item type
+              Add Machine type
+              {/* Add Item type */}
             </Button>
           }
           {renderItemTypes()}

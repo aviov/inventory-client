@@ -212,7 +212,8 @@ export default function EndUsers() {
               title='Add EndUser'
               onClick={() => history.push('/endUsers/new')}
             >
-              Add end user
+              Add person
+              {/* Add end user */}
             </Button>
           }
           {renderEndUsers()}

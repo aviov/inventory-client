@@ -72,21 +72,24 @@ function App() {
             {isAuthenticated &&
               <LinkContainer to='/items'>
                 <Nav.Link>
-                  Items
+                  Machines
+                  {/* Items */}
                 </Nav.Link>
               </LinkContainer>
             }
             {isAuthenticated &&
               <LinkContainer to='/itemTypes'>
                 <Nav.Link>
-                  Item types
+                  Machine types
+                  {/* Item types */}
                 </Nav.Link>
               </LinkContainer>
             }
             {isAuthenticated &&
               <LinkContainer to='/endUsers'>
                 <Nav.Link>
-                  End users
+                  Persons
+                  {/* End users */}
                 </Nav.Link>
               </LinkContainer>
             }
@@ -107,7 +110,8 @@ function App() {
             {isAuthenticated &&
               <LinkContainer to='/actionTypes'>
                 <Nav.Link>
-                  Action types
+                  Work types
+                  {/* Action types */}
                 </Nav.Link>
               </LinkContainer>
             }

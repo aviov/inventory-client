@@ -262,8 +262,8 @@ export default function Plan() {
               name: 'Workers',
               children: [
                 {
-                  id: 'autojuhid',
-                  name: 'Autojuhid',
+                  id: 'drivers',
+                  name: 'Drivers',
                   children: list
                 }
               ]
@@ -313,8 +313,8 @@ export default function Plan() {
               name: 'Locations',
               children: [
                 {
-                  id: 'harjumaa',
-                  name: 'Harjumaa',
+                  id: 'warehouses',
+                  name: 'Warehouses',
                   children: list
                 }
               ]
