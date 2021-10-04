@@ -5,6 +5,8 @@ import UnauthenticatedRoute from './components/UnauthenticatedRoute';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Items from './components/Items';
+import Calendar from './components/Calendar';
+import Plan from './components/Plan';
 import ItemForm from './components/ItemForm';
 import ItemInfo from './components/ItemInfo';
 import ItemTypes from './components/ItemTypes';
@@ -36,6 +38,12 @@ export default function Routes() {
       <Switch>
         <Route exact path='/'>
           <Items />
+        </Route>
+        <Route exact path='/calendar'>
+          <Calendar />
+        </Route>
+        <Route exact path='/plan'>
+          <Plan />
         </Route>
         <UnauthenticatedRoute exact path="/login">
           <Login />

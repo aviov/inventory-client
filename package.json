@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.2.5",
+    "@mobiscroll/react": "https://npm.mobiscroll.com/@mobiscroll/react-trial/-/react-trial-5.10.0.tgz",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -21,6 +22,7 @@
     "filepond-plugin-image-transform": "^3.7.4",
     "filepond-plugin-media-preview": "github:ernestbrandi/filepond-plugin-media-preview",
     "graphql": "^15.4.0",
+    "moment-timezone": "^0.5.33",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",
     "react-datepicker": "^3.3.0",

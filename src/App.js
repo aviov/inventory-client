@@ -45,7 +45,7 @@ function App() {
 
   return (
     !isAuthenticating &&
-    <div className='App container'>
+    <div className='App container-fluid'>
       <Navbar collapseOnSelect expand="lg" bg='light' className='mb-3'>
         <LinkContainer to='/'>
           <Navbar.Brand>
@@ -55,6 +55,20 @@ function App() {
         <Navbar.Toggle />
         <Navbar.Collapse className='justify-content-space-between'>
           <Nav className="mr-auto" activeKey={window.location.pathname}>
+            {isAuthenticated &&
+              <LinkContainer to='/calendar'>
+                <Nav.Link>
+                  Calendar
+                </Nav.Link>
+              </LinkContainer>
+            }
+            {isAuthenticated &&
+              <LinkContainer to='/plan'>
+                <Nav.Link>
+                  Plan
+                </Nav.Link>
+              </LinkContainer>
+            }
             {isAuthenticated &&
               <LinkContainer to='/items'>
                 <Nav.Link>

@@ -715,7 +715,7 @@ function ItemActions({ actions=[], itemId }) {
                 <Card.Body>
                   <Card.Title>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      {action.actionType.name}
+                      {action.actionType ? action.actionType.name : ''}
                       <LoadingButton
                         className='LoadingButton'
                         size='sm'
