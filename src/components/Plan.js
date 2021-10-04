@@ -460,12 +460,12 @@ export default function Plan() {
     }
   }, [updateAction]);
 
-  async function handleDelete(action) {
+  const handleDelete = useCallback((action) => {
     const confirmed = window.confirm(`Do you want to delete action?`);
     if (confirmed) {
       // setIsDeleting(true);
       try {
-        await deleteAction({ variables: { actionId: action.id } });
+        deleteAction({ variables: { actionId: action.id } });
       } catch (error) {
         onError(error);
       }
@@ -475,7 +475,7 @@ export default function Plan() {
     }
     setIsEditing(false);
     setActionCreate({});
-  };
+  }, [deleteAction]);
 
   const radioChange = (ev) => {
     const value = ev.target.value;
