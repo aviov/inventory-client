@@ -364,7 +364,8 @@ export default function Plan() {
       listItems,
       dataItemOptions,
       listLocations,
-      dataLocationOptions
+      dataLocationOptions,
+      resources
     ]
   );
 
@@ -599,7 +600,7 @@ export default function Plan() {
     //     });
     // });
     handleDelete(actionCreate);
-  }, [actions, actionCreate]);
+  }, [actions, actionCreate, handleDelete]);
 
   const loadPopupForm = useCallback((event) => {
     console.log('event', event);
@@ -734,7 +735,7 @@ export default function Plan() {
     setAnchor(target);
     // open the popup
     setIsModalVisible(true);
-  }, [loadPopupForm]);
+  }, [loadPopupForm, actionCreate]);
 
   const onEventDeleted = useCallback((args) => {
     deleteEvent(args.event)
@@ -817,7 +818,9 @@ export default function Plan() {
     isEditing,
     isCreating,
     isUpdating,
-    actionCreate
+    actionCreate,
+    handleSubmitCreate,
+    handleSubmitUpdate
     // saveEvent
   ]);
 
