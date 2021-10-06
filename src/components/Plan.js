@@ -36,7 +36,7 @@ import { ImSpinner2 } from 'react-icons/im';
 // import LoadingButton from './LoadingButton';
 import { onError } from '../libs/errorLib';
 import './Plan.css';
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import '@mobiscroll/react/dist/css/mobiscroll.react.min.css';
 
 momentTimezone.moment = moment;
 
@@ -901,9 +901,9 @@ export default function Plan() {
             value={actionCreate && actionCreate.actionTypeId}
             onChange={actionTypeChange}
           >
-            <option value=''/>
+            <option key={'actionTypeId=empty'} value=''/>
             {actionTypeOptions.map(({ value, label }) => (
-              <option value={value}>{label}</option>
+              <option key={value} value={value}>{label}</option>
             ))}
           </Dropdown>
           {/* <Input label="Location" value={popupEventLocation} onChange={locationChange} /> */}
