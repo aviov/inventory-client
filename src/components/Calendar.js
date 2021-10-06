@@ -14,7 +14,7 @@ import { QUERY_listActions } from '../api/queries';
 import { ImSpinner2 } from 'react-icons/im';
 import { onError } from '../libs/errorLib';
 import './Calendar.css';
-import '@mobiscroll/react/dist/css/mobiscroll.min.css';
+import '@mobiscroll/react/dist/css/mobiscroll.react.min.css';
 
 setOptions({
   theme: 'ios',
