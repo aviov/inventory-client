@@ -5,6 +5,10 @@ import UnauthenticatedRoute from './components/UnauthenticatedRoute';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Items from './components/Items';
+import Tenants from './components/Tenants';
+import Orgs from './components/Orgs';
+import OrgForm from './components/OrgForm';
+import OrgInfo from './components/OrgInfo';
 import Calendar from './components/Calendar';
 import Plan from './components/Plan';
 import ItemForm from './components/ItemForm';
@@ -39,6 +43,100 @@ export default function Routes() {
         <Route exact path='/'>
           <Items />
         </Route>
+        <Route exact path='/tenants'>
+          <Tenants />
+        </Route>
+
+        <Route
+          exact
+          path='/customers'
+          render={(props) => <Orgs
+            {...props}
+            prefix={'org::customer:'}
+            prefixType={'customers'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/customers/new'
+          render={(props) => <OrgForm
+            {...props}
+            prefix={'org::customer:'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/customers/:id'
+          render={(props) => <OrgInfo
+            {...props}
+            prefix={'org::customer:'}
+            prefixType={'customers'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/customers/:id/endUsers/new'
+          render={(props) => <EndUserForm
+            {...props}
+            prefix={'org:enduser::'}
+            prefixType={'customers'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/customers/:parentId/endUsers/:id'
+          render={(props) => <EndUserInfo
+            {...props}
+            prefix={'org:enduser::'}
+            prefixType={'customers'}
+          />}
+        />
+
+        <Route
+          exact
+          path='/suppliers'
+          render={(props) => <Orgs
+            {...props}
+            prefix={'org::supplier:'}
+            prefixType={'suppliers'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/suppliers/new'
+          render={(props) => <OrgForm
+            {...props}
+            prefix={'org::supplier:'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/suppliers/:id'
+          render={(props) => <OrgInfo
+            {...props}
+            prefix={'org::supplier:'}
+            prefixType={'suppliers'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/suppliers/:id/endUsers/new'
+          render={(props) => <EndUserForm
+            {...props}
+            prefix={'org:enduser::'}
+            prefixType={'suppliers'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/suppliers/:parentId/endUsers/:id'
+          render={(props) => <EndUserInfo
+            {...props}
+            prefix={'org:enduser::'}
+            prefixType={'suppliers'}
+          />}
+        />
+
         <Route exact path='/calendar'>
           <Calendar />
         </Route>
@@ -72,9 +170,14 @@ export default function Routes() {
         <Route exact path='/endUsers'>
           <EndUsers />
         </Route>
-        <AuthenticatedRoute exact path='/endUsers/new'>
-          <EndUserForm />
-        </AuthenticatedRoute>
+        <AuthenticatedRoute
+          exact
+          path='/endUsers/new'
+          render={(props) => <EndUserForm
+            {...props}
+            prefix={'enduser:'}
+          />}
+        />
         <AuthenticatedRoute exact path='/endUsers/:id'>
           <EndUserInfo />
         </AuthenticatedRoute>

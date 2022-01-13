@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Amplify, Auth } from 'aws-amplify';
 import { createAuthLink } from 'aws-appsync-auth-link';
+import { setContext } from 'apollo-link-context';
 import { ApolloClient, InMemoryCache, createHttpLink, ApolloLink, ApolloProvider } from '@apollo/client';
 import config from './config';
 import App from './App';
@@ -36,8 +37,14 @@ const auth = {
 const awsLink = createAuthLink({ url, region, auth })
 
 const link = ApolloLink.from([
-   awsLink,
-   createHttpLink({ uri: url })
+  setContext(async (request, prevContext) => ({
+    headers: {
+      ...prevContext.headers,
+      tenant: ((await Auth.currentSession()).getAccessToken().payload['cognito:groups'] || [])[0]
+    }
+  })),
+  awsLink,
+  createHttpLink({ uri: url })
 ]);
 const client = new ApolloClient({
   link,

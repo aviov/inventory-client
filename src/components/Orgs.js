@@ -5,44 +5,41 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import { useAuthContext } from "../libs/contextLib";
 import { useLazyQuery } from '@apollo/client'
-import { QUERY_listEndUsers } from '../api/queries'
+import { QUERY_listOrgs } from '../api/queries'
 import { ImSpinner2 } from 'react-icons/im';
-import { ImCheckmark } from 'react-icons/im';
 // import { ImSearch } from 'react-icons/im';
 import { ImCancelCircle } from 'react-icons/im';
-import "./EndUsers.css";
+import "./Orgs.css";
 import { onError } from "../libs/errorLib";
 
-export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) {
+export default function Orgs({ prefix, prefixType }) {
   const history = useHistory();
-  const [endUsers, setEndUsers] = useState([]);
+  const [orgs, setOrgs] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [phone, setPhone] = useState('');
-  const [isClientSendEmail, setIsClientSendEmail] = useState(false);
-  const [listEndUsers, { loading, data }] = useLazyQuery(QUERY_listEndUsers, {
-    variables: {
-      prefix
-    }
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
+  const [listOrgs, { loading, data }] = useLazyQuery(QUERY_listOrgs, {
+    variables: { prefix }
   });
 
   useEffect(() => {
     if (!isAuthenticated) {
       return null;
     }
-    function onLoad() {
+    function onload() {
       try {
-        listEndUsers();
-        setEndUsers(data ? data.listEndUsers : []);
+        listOrgs();
+        setOrgs(data ? data.listOrgs : []);
       } catch (error) {
         onError(error);
       }
-    };
-    onLoad();
-  },[isAuthenticated, listEndUsers, data]);
+    }
+    onload();
+  },[isAuthenticated, listOrgs, data]);
 
   function renderLoading() {
     return(
@@ -56,35 +53,28 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
     )
   }
   
-  function renderEndUsersList(endUsers=[]) {
-    return endUsers.map((endUser) =>
+  function renderOrgsList(orgs=[]) {
+    return orgs.map((org) =>
       (
         <tr
-          className='ListEndUsers'
-          key={endUser.id}
-          onClick={() => parentId ?
-            history.push(`/${prefixType}/${parentId}/endUsers/${endUser.id}`) :
-            history.push(`/endUsers/${endUser.id}`)
-          }
+          className='ListOrg'
+          key={org.id}
+          onClick={() => history.push(`/${prefixType}/${org.id}`)}
         >
           <td>
-            {endUser.name}
+            {org.name}
           </td>
           <td>
-            {endUser.email}
+            {org.email}
           </td>
           <td>
-            {(endUser.emailVerified && (endUser.emailVerified && endUser.emailVerified) === (endUser.email && endUser.email)) &&
-              <ImCheckmark as={Form.Control} color='green'/>
-            }
+            {org.phone}
           </td>
           <td>
-            {endUser.phone}
+            {org.city}
           </td>
           <td>
-            {endUser.isClientSendEmail &&
-              <ImCheckmark as={Form.Control} color='green'/>
-            }
+            {org.country}
           </td>
           <td>
           </td>
@@ -100,10 +90,10 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
       </div>
     );
   };
-  function renderEndUsers() {
+  function renderOrgs() {
     return(
       <div
-        className='EndUsers List'
+        className='Orgs List'
       >
         <Table
           striped
@@ -111,11 +101,12 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
           responsive
         >
           <colgroup>
-            <col span='1' style={{ width: 30+'%' }}/>
-            <col span='1' style={{ width: 30+'%' }}/>
-            <col span='1' style={{ width: 10+'%' }}/>
             <col span='1' style={{ width: 20+'%' }}/>
-            <col span='1' style={{ width: 10+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 20+'%' }}/>
+            <col span='1' style={{ width: 15+'%' }}/>
+            <col span='1' style={{ width: 5+'%' }}/>
           </colgroup>
           <thead>
             <tr>
@@ -142,17 +133,6 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
                 }
               </th>
               <th>
-                {'Email verified'}
-                {isSearching &&
-                  <Form.Check
-                    type='switch'
-                    id='isEmailVerified'
-                    checked={isEmailVerified ? true : false}
-                    onChange={() => setIsEmailVerified(isEmailVerified ? false : true)}
-                  />
-                }
-              </th>
-              <th>
                 {'Phone'}
                 {isSearching &&
                   <Form.Control
@@ -164,14 +144,24 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
                 }
               </th>
               <th>
-                {'Send actions'}
+                {'City'}
                 {isSearching &&
-                  <Form.Check
-                    type='switch'
-                    id='isClientSendEmail'
-                    // disabled={!validator.isEmail(email)}
-                    checked={isClientSendEmail ? true : false}
-                    onChange={() => setIsClientSendEmail(isClientSendEmail ? false : true)}
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={city}
+                    onChange={(event) => setCity(event.target.value)}
+                  />
+                }
+              </th>
+              <th>
+                {'Country'}
+                {isSearching &&
+                  <Form.Control
+                    className='SearchInput'
+                    type='text'
+                    value={country}
+                    onChange={(event) => setCountry(event.target.value)}
                   />
                 }
               </th>
@@ -194,7 +184,7 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
           </thead>
           <tbody>
             {!loading &&
-              renderEndUsersList(endUsers)
+              renderOrgsList(orgs)
             }
           </tbody>
         </Table>
@@ -206,24 +196,23 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
   };
   return (
     <div
-      className='EndUsers'
+      className='Orgs'
     >
       {isAuthenticated ?
         <div>
-          {!hideButtons &&
+          {//!loading &&
             <Button
               disabled={loading}
-              className='AddEndUserButton'
+              className='AddOrgButton'
               size='sm'
               variant='outline-primary'
-              title='Add EndUser'
-              onClick={() => history.push('/endUsers/new')}
+              title='Add Organization'
+              onClick={() => history.push(`/${prefixType}/new`)}
             >
-              Add person
-              {/* Add end user */}
+              Add Organization
             </Button>
           }
-          {renderEndUsers()}
+          {renderOrgs()}
         </div> :
         renderLander()
       }

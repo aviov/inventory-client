@@ -1,5 +1,31 @@
 import gql from 'graphql-tag'
 
+export const FRAGMENT_TenantFields = gql`
+  fragment TenantFields on Tenant {
+    id
+    dateCreatedAt
+    name
+    dateTenantLogIn
+    dateTenantLogOut
+    state
+  }
+`
+
+export const FRAGMENT_OrgFields = gql`
+  fragment OrgFields on Org {
+    id
+    dateCreatedAt
+    name
+    regNr
+    email
+    phone
+    webPage
+    city
+    country
+    address
+  }
+`
+
 export const FRAGMENT_ItemFields = gql`
   fragment ItemFields on Item {
     id

@@ -3,7 +3,11 @@ import { useHistory } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import './Login.css';
 import { Auth } from 'aws-amplify';
-import { useAuthContext, useUserContext } from '../libs/contextLib';
+import {
+  useAuthContext,
+  useUserContext,
+  useTenantContext
+} from '../libs/contextLib';
 import LoadingButton from './LoadingButton';
 import { useFormFields } from '../libs/hooksLib';
 import { onError } from '../libs/errorLib';
@@ -12,6 +16,7 @@ export default function Login() {
   const history = useHistory();
   const { setIsAuthenticated } = useAuthContext();
   const { setCurrentUserName } = useUserContext();
+  const { setCurrentTenantId } = useTenantContext();
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: '',
@@ -30,7 +35,13 @@ export default function Login() {
       await Auth.signIn(email, password);
       setCurrentUserName(email);
       setIsAuthenticated(true);
-      history.push('/');
+      const currentTenantId = ((await Auth.currentSession()).getAccessToken().payload['cognito:groups'] || [])[0]
+      if (currentTenantId !== null) {
+        setCurrentTenantId(currentTenantId);
+        history.push('/');
+      } else {
+        history.push('/tenants');
+      }
     } catch (error) {
       onError(error);
       setIsLoading(false);

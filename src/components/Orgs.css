@@ -1,0 +1,39 @@
+.Orgs {
+  overflow: scroll;
+}
+
+.Orgs .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.Orgs .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.Orgs .lander p {
+  color: #999;
+}
+
+.Orgs .AddOrgButton {
+  margin: 5px;
+}
+
+.Orgs .List {
+  /* max-width: 500px; */
+  margin-top: 15px;
+}
+
+.Orgs .ListOrg {
+  cursor: pointer;
+}
+
+.Orgs .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.Orgs .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}
