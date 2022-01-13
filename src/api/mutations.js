@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 import {
+  FRAGMENT_TenantFields,
+  FRAGMENT_OrgFields,
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
@@ -9,6 +11,80 @@ import {
   FRAGMENT_ActionTypeFields,
   FRAGMENT_LocationFields
 } from './fragments'
+
+export const MUTATION_createTenant = gql`
+  mutation createTenant(
+    $tenant: TenantInput!
+  ) {
+    createTenant(
+      tenant: $tenant
+    ) {
+      ...TenantFields
+    }
+  }
+  ${FRAGMENT_TenantFields}
+`
+
+export const MUTATION_updateTenant = gql`
+  mutation updateTenant(
+    $tenant: TenantInputUpdate!
+  ) {
+    updateTenant(
+      tenant: $tenant
+    ) {
+      ...TenantFields
+    }
+  }
+  ${FRAGMENT_TenantFields}
+`
+
+export const MUTATION_deleteTenant = gql`
+  mutation deleteTenant(
+    $tenantId: String!
+  ) {
+    deleteTenant(
+      tenantId: $tenantId
+    )
+  }
+`
+
+
+export const MUTATION_createOrg = gql`
+  mutation createOrg(
+    $org: OrgInput!
+  ) {
+    createOrg(
+      org: $org
+    ) {
+      ...OrgFields
+    }
+  }
+  ${FRAGMENT_OrgFields}
+`
+
+export const MUTATION_updateOrg = gql`
+  mutation updateOrg(
+    $org: OrgInputUpdate!
+  ) {
+    updateOrg(
+      org: $org
+    ) {
+      ...OrgFields
+    }
+  }
+  ${FRAGMENT_OrgFields}
+`
+
+export const MUTATION_deleteOrg = gql`
+  mutation deleteOrg(
+    $orgId: String!
+  ) {
+    deleteOrg(
+      orgId: $orgId
+    )
+  }
+`
+
 
 export const MUTATION_createItem = gql`
   mutation createItem(

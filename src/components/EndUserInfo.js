@@ -21,7 +21,7 @@ import { onError } from "../libs/errorLib";
 
 function EndUserInfo() {
   const { isAuthenticated } = useAuthContext();
-  const { id } = useParams();
+  const { parentId, id } = useParams();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
   const [endUser, setEndUser] = useState({
@@ -44,7 +44,11 @@ function EndUserInfo() {
   });
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
   const [deleteEndUser] = useMutation(MUTATION_deleteEndUser, {
-    refetchQueries: [{ query: QUERY_listEndUsers }]
+    refetchQueries: parentId ? [
+      { query: QUERY_listEndUsers, variables: { prefix: `org:enduser::${parentId}:` } }
+    ] : [
+      { query: QUERY_listEndUsers }
+    ]
   });
   
   useEffect(() => {
@@ -166,7 +170,7 @@ function EndUserInfo() {
       setIsDeleting(true);
       try {
         await deleteEndUser({ variables: { endUserId: id } });
-        history.push('/endUsers');
+        history.goBack();
       } catch (error) {
         onError(error);
       }

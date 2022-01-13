@@ -1,5 +1,7 @@
 import gql from 'graphql-tag'
 import {
+  FRAGMENT_TenantFields,
+  FRAGMENT_OrgFields,
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
   FRAGMENT_EndUserFields,
@@ -8,6 +10,56 @@ import {
   FRAGMENT_ActionTypeFields,
   FRAGMENT_LocationFields
 } from './fragments'
+
+export const QUERY_listTenants = gql`
+  query listTenants {
+    listTenants {
+      ...TenantFields
+    }
+  }
+  ${FRAGMENT_TenantFields}
+`
+
+export const QUERY_getTenantById = gql`
+  query getTenantById(
+    $tenantId: String!
+  ) {
+    getTenantById(
+      tenantId: $tenantId
+    ) {
+      ...TenantFields
+    }
+  }
+  ${FRAGMENT_TenantFields}
+`
+
+
+export const QUERY_listOrgs = gql`
+  query listOrgs(
+    $prefix: String
+  ) {
+    listOrgs(
+      prefix: $prefix
+    ) {
+      ...OrgFields
+    }
+  }
+  ${FRAGMENT_OrgFields}
+`
+
+export const QUERY_getOrgById = gql`
+  query getOrgById(
+    $orgId: String!
+  ) {
+    getOrgById(
+      orgId: $orgId
+    ) {
+      ...OrgFields
+    }
+  }
+  ${FRAGMENT_OrgFields}
+`
+
 
 export const QUERY_listItems = gql`
   query listItems {
@@ -69,8 +121,12 @@ export const QUERY_getItemTypeById = gql`
 
 
 export const QUERY_listEndUsers = gql`
-  query listEndUsers {
-    listEndUsers {
+  query listEndUsers(
+    $prefix: String
+  ) {
+    listEndUsers(
+      prefix: $prefix
+    ) {
       ...EndUserFields
     }
   }

@@ -1,29 +1,29 @@
 import React, { useState } from 'react'
-import { useParams, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-import validator from 'validator';
 import { v1 as uuidv1 } from 'uuid';
 import { useMutation } from '@apollo/client'
-import { MUTATION_createEndUser } from '../api/mutations'
-import {
-  QUERY_listEndUsers
-} from '../api/queries';
+import { MUTATION_createOrg } from '../api/mutations'
+import { QUERY_listOrgs } from '../api/queries';
 import LoadingButton from './LoadingButton';
 import { onError } from '../libs/errorLib';
-import './EndUserForm.css';
+import './OrgForm.css';
 
-function EndUserForm({ prefix }) {
-  const { id: parentId } = useParams();
+function OrgForm({ prefix }) {
   const history = useHistory();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [webPage, setWebPage] = useState('');
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [createEndUser] = useMutation(MUTATION_createEndUser, {
-    refetchQueries: parentId ? [
-      { query: QUERY_listEndUsers, variables: { prefix: `org:enduser::${parentId}:` } }
-    ] : [
-      { query: QUERY_listEndUsers }
+  const [createOrg] = useMutation(MUTATION_createOrg, {
+    refetchQueries: [
+      {
+        query: QUERY_listOrgs,
+        variables: { prefix }
+      }
     ]
   });
 
@@ -37,50 +37,34 @@ function EndUserForm({ prefix }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const id = (prefix ? `${prefix}` : '') + (parentId ? `${parentId}:` : '') + 'enduser:' + uuidv1();
+    const id = prefix + 'org:' + uuidv1();
     const dateCreatedAt = new Date();
-    if (!validator.isEmail(email)) {
-      alert(
-        email +
-        ' is not correct email. ' +
-        '\nEnter email that exist. ' +
-        '\nAfter this verify correct email.' +
-        '\nConfirmation will be sent to this email.'
-      );
-      return null;
-    };
-    if (!validator.isMobilePhone(phone, 'et-EE')) {
-      alert(
-        phone +
-        ' is not mobile number. ' +
-        '\nEnter mobile number that exist.'
-      );
-      return null;
-    }
     setIsLoading(true);
-    // console.log(
-    //   'id', id,
-    //   'dateCreatedAt', dateCreatedAt
-    // )
     try {
-      const endUserCreated = await createEndUser({
+      const orgCreated = await createOrg({
         variables: {
-          endUser: {
+          org: {
             id,
-            name,
             dateCreatedAt,
+            name,
             email,
-            phone
+            phone,
+            webPage,
+            city,
+            country,
           }
         }
       })
-      if (endUserCreated) {
+      if (orgCreated) {
         setIsLoading(false);
         setName('');
         setEmail('');
         setPhone('');
+        setWebPage('');
+        setCity('');
+        setCountry('');
         history.goBack();
-        // history.push('/endUsers');
+        // history.push('/orgs');
       }
     } catch (error) {
       onError(error);
@@ -90,7 +74,7 @@ function EndUserForm({ prefix }) {
   // console.log(files);
   return(
     <div
-      className='EndUserForm'
+      className='OrgForm'
     >
       <Form>
         <Form.Group>
@@ -110,7 +94,7 @@ function EndUserForm({ prefix }) {
           </Form.Label>
           <Form.Control
             type='text'
-            placeholder='Email that exist'
+            placeholder='Email'
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
@@ -126,12 +110,48 @@ function EndUserForm({ prefix }) {
             onChange={(event) => setPhone(event.target.value)}
           />
         </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Web page
+          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Web page'
+            value={webPage}
+            onChange={(event) => setWebPage(event.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            City
+          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='City'
+            value={city}
+            onChange={(event) => setCity(event.target.value)}
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>
+            Country
+          </Form.Label>
+          <Form.Control
+            type='text'
+            placeholder='Country'
+            value={country}
+            onChange={(event) => setCountry(event.target.value)}
+          />
+        </Form.Group>
         <LoadingButton
           block
           disabled={!validateForm({
             name,
-            email,
-            phone
+            // email,
+            // phone,
+            // webPage,
+            // city,
+            // country
           })}
           type='submit'
           isLoading={isLoading}
@@ -144,4 +164,4 @@ function EndUserForm({ prefix }) {
   )
 }
 
-export default EndUserForm
+export default OrgForm
