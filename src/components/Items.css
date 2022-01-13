@@ -1,5 +1,5 @@
 .Items {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .Items .lander {
