@@ -9,7 +9,7 @@
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
         "apollo-link-context": "^1.0.20",
-        "aws-amplify": "^3.3.10",
+        "aws-amplify": "^3.4.3",
         "aws-appsync-auth-link": "^3.0.2",
         "bootstrap": "^4.5.3",
         "dotenv": "^8.2.0",
