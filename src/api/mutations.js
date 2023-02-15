@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import {
   FRAGMENT_TenantFields,
+  FRAGMENT_TenantUserFields,
   FRAGMENT_OrgFields,
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
@@ -44,6 +45,65 @@ export const MUTATION_deleteTenant = gql`
   ) {
     deleteTenant(
       tenantId: $tenantId
+    )
+  }
+`
+
+export const MUTATION_inviteTenantUserRequest = gql`
+  mutation inviteTenantUserRequest(
+    $tenantUser: TenantUserInput!
+  ) {
+    inviteTenantUserRequest(
+      tenantUser: $tenantUser
+    ) {
+      ...TenantUserFields
+    }
+  }
+  ${FRAGMENT_TenantUserFields}
+`
+
+export const MUTATION_inviteTenantUserAccept = gql`
+  mutation inviteTenantUserAccept(
+    $tenantUser: TenantUserInputUpdate!
+  ) {
+    inviteTenantUserAccept(
+      tenantUser: $tenantUser
+    ) {
+      ...TenantUserFields
+    }
+  }
+  ${FRAGMENT_TenantUserFields}
+`
+
+// export const MUTATION_tenantUserInviteAcceptToken = gql`
+//   mutation tenantUserInviteAcceptToken(
+//     $tenantUserToken: String!
+//   ) {
+//     tenantUserInviteAcceptToken(
+//       tenantUserToken: $tenantUserToken
+//     )
+//   }
+// `
+
+export const MUTATION_updateTenantUser = gql`
+  mutation updateTenantUser(
+    $tenantUser: TenantUserInputUpdate!
+  ) {
+    updateTenantUser(
+      tenantUser: $tenantUser
+    ) {
+      ...TenantUserFields
+    }
+  }
+  ${FRAGMENT_TenantUserFields}
+`
+
+export const MUTATION_deleteTenantUser = gql`
+  mutation deleteTenantUser(
+    $tenantUserId: String!
+  ) {
+    deleteTenantUser(
+      tenantUserId: $tenantUserId
     )
   }
 `

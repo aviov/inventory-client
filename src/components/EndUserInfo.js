@@ -1,26 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { QUERY_getEndUserById, QUERY_listEndUsers } from '../api/queries';
+import {
+  QUERY_getEndUserById,
+  QUERY_listTenantUsers,
+  QUERY_listEndUsers
+} from '../api/queries';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { ImSpinner2 } from 'react-icons/im';
 import { ImCheckmark } from 'react-icons/im';
-import { useAuthContext } from "../libs/contextLib";
+import { useUserContext, useAuthContext, useTenantUserContext } from "../libs/contextLib";
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 import LoadingButton from './LoadingButton';
 import './EndUserInfo.css'
 import {
   MUTATION_deleteEndUser,
   MUTATION_updateEndUser,
-  MUTATION_verifyEndUserEmailRequest
+  MUTATION_verifyEndUserEmailRequest,
+  MUTATION_inviteTenantUserRequest
 } from "../api/mutations";
 import validator from 'validator';
+import { sliceStringAfter } from "../libs/fnsLib";
 import { onError } from "../libs/errorLib";
 
 function EndUserInfo() {
   const { isAuthenticated } = useAuthContext();
+  const { currentUserName } = useUserContext();
+  const userEmail = currentUserName && sliceStringAfter(currentUserName, ':');
+  const { currentTenantUser } = useTenantUserContext();
   const { parentId, id } = useParams();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
@@ -36,13 +47,16 @@ function EndUserInfo() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [getEndUserById, { data, loading }] = useLazyQuery(QUERY_getEndUserById);
+  const [getEndUserById, { data, loading, client }] = useLazyQuery(QUERY_getEndUserById);
   const [updateEndUser] = useMutation(MUTATION_updateEndUser);
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [verifyEndUserEmailRequest] = useMutation(MUTATION_verifyEndUserEmailRequest, {
     refetchQueries: [{ query: QUERY_getEndUserById, variables: { endUserId: id } }]
   });
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
+  const [inviteTenantUserRequest] = useMutation(MUTATION_inviteTenantUserRequest);
+  const [isUserInvited, setIsUserInvited] = useState(true);
+  const [isInviting, setIsInviting] = useState(false);
   const [deleteEndUser] = useMutation(MUTATION_deleteEndUser, {
     refetchQueries: parentId ? [
       { query: QUERY_listEndUsers, variables: { prefix: `org:enduser::${parentId}:` } }
@@ -163,6 +177,94 @@ function EndUserInfo() {
   // console.log(endUser.dateWarrantyBegins)
   // console.log(endUser.dateWarrantyExpires)
 
+  async function loadTenantUsers({
+    client,
+    queryGql
+  }) {
+    try {
+      const { data: dataTenantUsers } = await client.query({
+        query: queryGql
+      });
+      if (dataTenantUsers) {
+        return dataTenantUsers.listTenantUsers
+      }
+      return []
+    } catch (error) {
+      onError(error);
+    }
+  };
+
+  function knowIsUserInvited({
+    tenantUsers,
+    emailVerified
+  }) {
+    const tenantUser = tenantUsers.find((tenantUser) => tenantUser.emailVerified === emailVerified);
+    if (tenantUser) {
+      return true;
+    }
+    return false;
+  };
+
+  async function handleSubmitInvite({
+    name,
+    email,
+    emailVerified,
+    userEmail,
+    currentTenantName
+  }) {
+    if (!emailVerified || emailVerified === null || emailVerified === userEmail || email === userEmail) {
+      window.alert(`Can not invite yourself to own organisation.
+                    \n The user ${emailVerified} is the owner of organisation
+                    \n currently logged in.`);
+      return null;
+    }
+    if (isUserInvited) {
+      window.alert(`This person with email ${emailVerified} was aready user at ${currentTenantName}.`);
+      return null;
+    }
+    setIsInviting(true);
+    const tenantUserId = 'tenantuser:';
+    const dateCreatedAt = new Date();
+    const dateInvitedAt = new Date();
+    const inviteInfo = {
+      nameInvitedBy: userEmail,
+      emailInvitedBy: userEmail,
+      tenantInvitedTo: currentTenantName,
+      nameInvited: name,
+      emailInvited: emailVerified,
+      dateInvitedAt
+    };
+    const inviteInfoJSON = JSON.stringify(inviteInfo);
+    const tenantUserInput = {
+      id: tenantUserId,
+      dateCreatedAt,
+      name: currentTenantName,
+      nameTwo: name,
+      emailVerified,
+      inviteInfo: inviteInfoJSON
+    }
+    try {
+      const data = await inviteTenantUserRequest({
+        variables: {
+          tenantUser: tenantUserInput
+        },
+        awaitRefetchQueries: true,
+        refetchQueries: [
+          {
+            query: QUERY_listTenantUsers
+          }
+        ]
+      });
+      if (data) {
+        setIsUserInvited(true);
+        setIsUpdating(false);
+        setIsInviting(false);
+        // setEndUserOption(null);
+      }
+    } catch (error) {
+      onError(error);
+    }
+  };
 
   async function handleDelete(endUser) {
     const confirmed = window.confirm(`Do you want to delete end user ${endUser.name}?`);
@@ -213,7 +315,11 @@ function EndUserInfo() {
                     disabled={false}
                     type='submit'
                     isLoading={false}
-                    onClick={() => setIsEditing(true)}
+                    onClick={async () => {
+                      setIsEditing(true);
+                      const tenantUsers = await loadTenantUsers({ client: client, queryGql: QUERY_listTenantUsers});
+                      setIsUserInvited(knowIsUserInvited({ tenantUsers, emailVerified: endUser.emailVerified }));
+                    }}
                   >
                     Edit
                   </LoadingButton>
@@ -327,6 +433,55 @@ function EndUserInfo() {
                       </LoadingButton>
                     ) : (
                       <ImCheckmark as={Form.Control} color='green'/>
+                    )}
+                  </>
+                )}
+              </Col>
+            </Form.Group>
+            <Form.Group as={Row}>
+              <Form.Label column='sm=4' className='font-weight-bold'>
+                {'User status'}
+              </Form.Label>
+              <Col sm='8'>
+                {!isEditing ? (
+                  <Form.Control
+                    plaintext
+                    readOnly
+                    value={'Click Edit to know'}
+                  />
+                ) : (
+                  <>
+                    {!isUserInvited ? (
+                      <OverlayTrigger
+                        placement="right"
+                        delay={{ show: 250, hide: 400 }}
+                        overlay={(props) => (
+                          <Tooltip id="button-tooltip" {...props}>
+                            {!isEmailVerified ? 'Make sure the email is correct and belongs to user' : `Click to invite as user to ${currentTenantUser.name}`}
+                          </Tooltip>)}
+                        >
+                        <LoadingButton
+                          className='LoadingButton'
+                          size='sm'
+                          disabled={isInviting}
+                          variant='outline-primary'
+                          type='submit'
+                          isLoading={isInviting}
+                          onClick={() => isEmailVerified && handleSubmitInvite({
+                            ...endUser,
+                            userEmail,
+                            currentTenantName: currentTenantUser.name
+                          })}
+                        >
+                          Invite user
+                        </LoadingButton>
+                      </OverlayTrigger>
+                    ) : (
+                      <Form.Control
+                        plaintext
+                        readOnly
+                        value={`User at ${currentTenantUser.name}`}
+                      />
                     )}
                   </>
                 )}

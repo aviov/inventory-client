@@ -20,6 +20,7 @@ import {
   MUTATION_verifyEndUserEmailRequest
 } from "../api/mutations";
 import validator from 'validator';
+import { sliceStringAfter } from "../libs/fnsLib";
 import { onError } from "../libs/errorLib";
 
 function EndUserAccount() {
@@ -27,7 +28,7 @@ function EndUserAccount() {
   // const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
   const { currentUserName } = useUserContext();
-  const email = currentUserName;
+  const email = currentUserName && sliceStringAfter(currentUserName, ':');
   const [endUser, setEndUser] = useState({
     id: '',
     name: '',

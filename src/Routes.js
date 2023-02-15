@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Items from './components/Items';
 import Tenants from './components/Tenants';
+import TenantUsers from './components/TenantUsers';
 import Orgs from './components/Orgs';
 import OrgForm from './components/OrgForm';
 import OrgInfo from './components/OrgInfo';
@@ -46,6 +47,14 @@ export default function Routes() {
         <Route exact path='/tenants'>
           <Tenants />
         </Route>
+
+        <AuthenticatedRoute
+          exact
+          path='/tenantUsers'
+          render={(props) => <TenantUsers
+            {...props}
+          />}
+        />
 
         <Route
           exact
