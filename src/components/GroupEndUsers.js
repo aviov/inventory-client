@@ -25,6 +25,7 @@ import {
 import {
   QUERY_getGroupById
 } from '../api/queries';
+import { sliceStringAfter } from '../libs/fnsLib';
 import { useUserContext } from '../libs/contextLib';
 import { onError } from "../libs/errorLib";
 
@@ -57,7 +58,7 @@ function GroupEndUsers({ endUserInfos=[], groupId, groupName }) {
     fetchPolicy: 'cache-first'
   });
   const { currentUserName } = useUserContext();
-  const currentUserEmail = currentUserName;
+  const currentUserEmail = currentUserName && sliceStringAfter(currentUserName, ':');
   const [endUserInfosLimit] = useState(7);
   
   useEffect(() => {

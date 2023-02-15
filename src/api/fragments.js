@@ -11,6 +11,21 @@ export const FRAGMENT_TenantFields = gql`
   }
 `
 
+export const FRAGMENT_TenantUserFields = gql`
+  fragment TenantUserFields on TenantUser {
+    id
+    dateCreatedAt
+    name
+    nameTwo
+    emailVerified
+    inviteInfo
+    dateTenantLogIn
+    dateTenantLogOut
+    state
+    access
+  }
+`
+
 export const FRAGMENT_OrgFields = gql`
   fragment OrgFields on Org {
     id

@@ -1,6 +1,7 @@
 import gql from 'graphql-tag'
 import {
   FRAGMENT_TenantFields,
+  FRAGMENT_TenantUserFields,
   FRAGMENT_OrgFields,
   FRAGMENT_ItemFields,
   FRAGMENT_ItemTypeFields,
@@ -20,6 +21,21 @@ export const QUERY_listTenants = gql`
   ${FRAGMENT_TenantFields}
 `
 
+export const QUERY_listTenantsNotOwn = gql`
+  query listTenantsNotOwn(
+    $prefix: String
+    $refId: String
+  ) {
+    listTenantsNotOwn(
+      prefix: $prefix
+      refId: $refId
+    ) {
+      ...TenantUserFields
+    }
+  }
+  ${FRAGMENT_TenantUserFields}
+`
+
 export const QUERY_getTenantById = gql`
   query getTenantById(
     $tenantId: String!
@@ -31,6 +47,31 @@ export const QUERY_getTenantById = gql`
     }
   }
   ${FRAGMENT_TenantFields}
+`
+
+
+export const QUERY_listTenantUsers = gql`
+  query listTenantUsers {
+    listTenantUsers {
+      ...TenantUserFields
+    }
+  }
+  ${FRAGMENT_TenantUserFields}
+`
+
+export const QUERY_getTenantUser = gql`
+  query getTenantUser(
+    $refId: String!,
+    $tenantUserId: String!
+  ) {
+    getTenantUser(
+      refId: $refId,
+      tenantUserId: $tenantUserId
+    ) {
+      ...TenantUserFields
+    }
+  }
+  ${FRAGMENT_TenantUserFields}
 `
 
 

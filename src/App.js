@@ -5,11 +5,13 @@ import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Auth } from 'aws-amplify';
-import { AuthContext, UserContext, TenantContext } from './libs/contextLib';
+import { AuthContext, UserContext, TenantContext, TenantUserContext } from './libs/contextLib';
 import { useApolloClient } from '@apollo/client';
+import { sliceStringAfter } from './libs/fnsLib';
 import { onError } from './libs/errorLib';
 import Routes from './Routes';
 import {
+  QUERY_getTenantUser,
   QUERY_getTenantById
 } from './api/queries';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -21,14 +23,21 @@ function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUserName, setCurrentUserName] = useState(null);
   const [currentTenantId, setCurrentTenantId] = useState(null);
+  const [currentTenantUser, setCurrentTenantUser] = useState({
+    name: null,
+    nameTwo: null,
+    emailVerified: null
+  });
+  const [getTenantUser, { data: dataTenantUser, loading: loadingTenantUser }] = useLazyQuery(QUERY_getTenantUser);
   const [getTenantById, { data, loading }] = useLazyQuery(QUERY_getTenantById);
   const client = useApolloClient();
   
   useEffect(() => {
     async function onLoad() {
+      let email = '';
       try {
         const currentSession = await Auth.currentSession();
-        setCurrentUserName(currentSession.idToken.payload.email);
+        email = currentSession.idToken.payload.email
         setIsAuthenticated(true);
         setCurrentTenantId(
           (currentSession.getAccessToken().payload['cognito:groups'] || [])[0]
@@ -39,9 +48,43 @@ function App() {
         }
       }
       try {
+        getTenantUser({
+          variables: {
+            refId: 'user:' + email,
+            tenantUserId: 'tenantuser:' + email + ':tenant:' + sliceStringAfter(currentTenantId, ':') 
+          }
+        });
+        // console.log('dataTenantUser', dataTenantUser);
+        if (dataTenantUser && dataTenantUser.getTenantUser !== null) {
+          const {
+            name,
+            nameTwo,
+            emailVerified
+          } = dataTenantUser.getTenantUser;
+          setCurrentTenantUser({
+            name,
+            nameTwo,
+            emailVerified
+          });
+          setCurrentUserName('user:' + email);
+        }
+      } catch (error) {
+        onError(error);
+      }
+      try {
         getTenantById({
           variables: { tenantId: currentTenantId }
         });
+        // console.log('data', data);
+        if (data && data.getTenantById !== null) {
+          const {
+            name
+          } = data.getTenantById;
+          setCurrentTenantUser({
+            name
+          });
+          setCurrentUserName('owner:' + email);
+        }
       } catch (error) {
         onError(error);
       }
@@ -49,6 +92,8 @@ function App() {
     };
     onLoad();
   }, [
+    getTenantUser,
+    dataTenantUser,
     getTenantById,
     currentTenantId,
     data
@@ -162,31 +207,38 @@ function App() {
           </Nav>
           <Nav activeKey={window.location.pathname}>
             {isAuthenticated ? (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center'
-                }}
-              >
+              <>
                 {(loading || !data) ? 
+                  (
+                    <>
+                    </>
+                  ) : (
+                    <LinkContainer to='/tenantUsers'>
+                      <Nav.Link>
+                        {'Users'}
+                      </Nav.Link>
+                    </LinkContainer>
+                  )
+                }
+                {(loading || loadingTenantUser || !data) ? 
                   (
                     <>
                     </>
                   ) : (
                     <LinkContainer to='/tenants'>
                       <Nav.Link>
-                        {data && data.getTenantById.name}
+                        {currentTenantUser && currentTenantUser.name}
                       </Nav.Link>
                     </LinkContainer>
                   )
                 }
                 <LinkContainer to='/endUserAccount'>
                   <Nav.Link>
-                    {currentUserName}
+                    {currentUserName && sliceStringAfter(currentUserName, ':')}
                   </Nav.Link>
                 </LinkContainer>
                 <Nav.Link onClick={handleLogout}>Logout</Nav.Link>
-              </div>
+              </>
             ) : (
               <>
                 <LinkContainer to="/signup">
@@ -203,7 +255,9 @@ function App() {
       <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
         <UserContext.Provider value={{ currentUserName, setCurrentUserName }}>
           <TenantContext.Provider value={{ currentTenantId, setCurrentTenantId }}>
-            <Routes />
+            <TenantUserContext.Provider value={{ currentTenantUser, setCurrentTenantUser }}>
+              <Routes />
+            </TenantUserContext.Provider>
           </TenantContext.Provider>
         </UserContext.Provider>
       </AuthContext.Provider>

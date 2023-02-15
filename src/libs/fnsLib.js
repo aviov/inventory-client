@@ -50,9 +50,15 @@ export const getEarliestFutureActionByDateActionStart = (arrayOfObjects=[]) => {
   return getSortedAscendingByDateActionStart(getFutureActionsByDateActionStart(arrayOfObjects))[0];
 };
 
-export const sliceStringFrom = (str, start) =>
+// unused
+// export const sliceStringFrom = (str, start) =>
+//   (((typeof str) === 'string') && !str.startsWith(start)) ?
+//   str.slice(str.indexOf(start)) :
+//   str;
+
+export const sliceStringAfter = (str, start) =>
   (((typeof str) === 'string') && !str.startsWith(start)) ?
-  str.slice(str.indexOf(start)) :
+  str.slice(str.indexOf(start) + start.length) :
   str;
 
 export const getIsDisabledVisibleLatest = (actionTypes=[]) => (
