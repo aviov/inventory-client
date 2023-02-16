@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import {
   useLazyQuery,
@@ -41,6 +41,7 @@ function TenantsNotOwn() {
   });
   const [isUpdating, setIsUpdating] = useState(false);
   const [updateTenantUser] = useMutation(MUTATION_updateTenantUser);
+  let ref = useRef(null);
   // const [tenantsNotOwnLimit] = useState(3);
   
   useEffect(() => {
@@ -165,8 +166,9 @@ function TenantsNotOwn() {
                           // variant='outline-warning'
                           disabled={false}
                           type='submit'
-                          isLoading={isUpdating}
+                          isLoading={isUpdating && ref.current === index}
                           onClick={async () => {
+                            ref.current = index;
                             await handleSubmitUpdateTenant(tenant);
                             await refreshToken();
                           }}
