@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHistory } from 'react-router-dom';
 import {
   useLazyQuery,
@@ -50,6 +50,7 @@ function TenantsOwn() {
   const [deleteTenant] = useMutation(MUTATION_deleteTenant, {
     refetchQueries: [{ query: QUERY_listTenants }]
   });
+  let ref = useRef(null);
   // const [tenantsLimit] = useState(3);
   
   useEffect(() => {
@@ -345,8 +346,9 @@ function TenantsOwn() {
                             // variant='outline-warning'
                             disabled={false}
                             type='submit'
-                            isLoading={isUpdating}
+                            isLoading={isUpdating && ref.current === index}
                             onClick={async () => {
+                              ref.current = index;
                               setIsUpdating(true);
                               await handleSubmitUpdateTenant(tenant);
                               await refreshToken();
@@ -457,7 +459,7 @@ function TenantsOwn() {
             <div
               style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', margin: 20 }}
             >
-              {!currentTenantId &&
+              {/* {!currentTenantId &&
                 <LoadingButton
                   style={{
                     margin: 10
@@ -475,7 +477,7 @@ function TenantsOwn() {
                 >
                   Login as person
                 </LoadingButton>
-              }
+              } */}
               <LoadingButton
                 style={{
                   margin: 10

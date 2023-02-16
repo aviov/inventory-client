@@ -19,6 +19,7 @@ import LoadingButton from './LoadingButton';
 import './EndUserInfo.css'
 import {
   MUTATION_deleteEndUser,
+  MUTATION_deleteTenantUser,
   MUTATION_updateEndUser,
   MUTATION_verifyEndUserEmailRequest,
   MUTATION_inviteTenantUserRequest
@@ -55,6 +56,7 @@ function EndUserInfo() {
   });
   const [isVerifyingEmail, setIsVerifyingEmail] = useState(false);
   const [inviteTenantUserRequest] = useMutation(MUTATION_inviteTenantUserRequest);
+  // const [tenantUsers, setTenantUsers] = useState(null);
   const [isUserInvited, setIsUserInvited] = useState(true);
   const [isInviting, setIsInviting] = useState(false);
   const [deleteEndUser] = useMutation(MUTATION_deleteEndUser, {
@@ -63,6 +65,18 @@ function EndUserInfo() {
     ] : [
       { query: QUERY_listEndUsers }
     ]
+  });
+  const [deleteTenantUser] = useMutation(MUTATION_deleteTenantUser, {
+    refetchQueries: [
+      {
+        query: QUERY_listTenantUsers
+      },
+      {
+        query: QUERY_getEndUserById,
+        variables: { endUserId: endUser.id }
+      }
+    ],
+    awaitRefetchQueries: true
   });
   
   useEffect(() => {
@@ -194,15 +208,15 @@ function EndUserInfo() {
     }
   };
 
-  function knowIsUserInvited({
+  function getUserInvited({
     tenantUsers,
     emailVerified
   }) {
     const tenantUser = tenantUsers.find((tenantUser) => tenantUser.emailVerified === emailVerified);
     if (tenantUser) {
-      return true;
+      return { user: tenantUser, isInvited: true };
     }
-    return false;
+    return { user: null, isInvited: false };
   };
 
   async function handleSubmitInvite({
@@ -282,6 +296,25 @@ function EndUserInfo() {
     }
   };
 
+  async function handleDeleteTenantUser(tenantUser) {
+    const {
+      id,
+      name
+    } = tenantUser;
+    const confirmed = window.confirm(`Do you want to revoke user access to ${name}?`);
+    if (confirmed) {
+      setIsDeleting(true);
+      try {
+        await deleteTenantUser({ variables: { tenantUserId: id } });
+      } catch (error) {
+        onError(error);
+      }
+      setIsDeleting(false);
+    } else {
+      return null;
+    }
+  };
+
   if (loading || isLoading) {
     return(
       <div
@@ -318,7 +351,7 @@ function EndUserInfo() {
                     onClick={async () => {
                       setIsEditing(true);
                       const tenantUsers = await loadTenantUsers({ client: client, queryGql: QUERY_listTenantUsers});
-                      setIsUserInvited(knowIsUserInvited({ tenantUsers, emailVerified: endUser.emailVerified }));
+                      setIsUserInvited(getUserInvited({ tenantUsers, emailVerified: endUser.emailVerified }).isInvited);
                     }}
                   >
                     Edit
@@ -457,7 +490,7 @@ function EndUserInfo() {
                         delay={{ show: 250, hide: 400 }}
                         overlay={(props) => (
                           <Tooltip id="button-tooltip" {...props}>
-                            {!isEmailVerified ? 'Make sure the email is correct and belongs to user' : `Click to invite as user to ${currentTenantUser.name}`}
+                            {!isEmailVerified ? 'Make sure the email is correct and belongs to user' : `Click to grant user access to ${currentTenantUser.name}`}
                           </Tooltip>)}
                         >
                         <LoadingButton
@@ -477,11 +510,34 @@ function EndUserInfo() {
                         </LoadingButton>
                       </OverlayTrigger>
                     ) : (
-                      <Form.Control
-                        plaintext
-                        readOnly
-                        value={`User at ${currentTenantUser.name}`}
-                      />
+                      <div style={{
+                        display: 'flex',
+                      }}>
+                        <Form.Control
+                          plaintext
+                          readOnly
+                          value={`Has user access to ${currentTenantUser.name}`}
+                        />
+                        <LoadingButton
+                          style={{
+                            margin: 4
+                          }}
+                          className='LoadingButton'
+                          size='sm'
+                          variant='outline-danger'
+                          disabled={isDeleting}
+                          type='submit'
+                          isLoading={isDeleting}
+                          onClick={async () => {
+                            const tenantUsers = await loadTenantUsers({ client: client, queryGql: QUERY_listTenantUsers});
+                            const userInvited = getUserInvited({ tenantUsers, emailVerified: endUser.emailVerified }).user;
+                            await handleDeleteTenantUser(userInvited);
+                            setIsEditing(false);
+                          }}
+                        >
+                          {'Revoke'}
+                        </LoadingButton>
+                      </div>
                     )}
                   </>
                 )}

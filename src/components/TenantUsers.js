@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAuthContext } from "../libs/contextLib";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_listTenantUsers } from "../api/queries";
@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
-import { BsThreeDots } from 'react-icons/bs';
 import { ImSpinner2 } from 'react-icons/im';
 import { ImUser } from 'react-icons/im';
 import LoadingButton from './LoadingButton';
@@ -43,7 +42,8 @@ function TenantUsers() {
   const { currentUserName } = useUserContext();
   // console.log('currentUserName', currentUserName);
   const userEmail = currentUserName && sliceStringAfter(currentUserName, ':');
-  const [tenantUsersLimit] = useState(7);
+  let ref = useRef(null);
+  // const [tenantUsersLimit] = useState(7);
   
   useEffect(() => {
     if (!isAuthenticated) {
@@ -154,7 +154,7 @@ function TenantUsers() {
       name,
       nameTwo
     } = tenantUser;
-    const confirmed = window.confirm(`Do you want to exclude end user ${nameTwo} from ${name}?`);
+    const confirmed = window.confirm(`Do you want to delete user ${nameTwo} from ${name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
@@ -216,7 +216,7 @@ function TenantUsers() {
                       variant="warning"
                       className='font-weight-light'
                     >
-                      Not accepted
+                      Pending
                     </Badge>
                   )}
                 </Card.Title>
@@ -234,7 +234,7 @@ function TenantUsers() {
                 </Form.Group>
                 {currentUserName && currentUserName.startsWith('owner:') &&
                   <Row className='justify-content-end'>
-                    {!isEditing ?
+                    {!isEditing || (isEditing && ref.current !== index) ?
                       (
                         <LoadingButton
                           style={{
@@ -244,10 +244,13 @@ function TenantUsers() {
                           size='sm'
                           color='orange'
                           variant='outline-warning'
-                          disabled={false}
+                          disabled={isEditing && ref.current !== index}
                           type='submit'
                           isLoading={false}
-                          onClick={() => setIsEditing(true)}
+                          onClick={() => {
+                            setIsEditing(true);
+                            ref.current = index;
+                          }}
                         >
                           Edit
                         </LoadingButton>
@@ -260,15 +263,17 @@ function TenantUsers() {
                             className='LoadingButton'
                             size='sm'
                             variant='outline-danger'
-                            disabled={isDeleting}
+                            disabled={isDeleting && ref.current === index}
                             type='submit'
-                            isLoading={isDeleting}
+                            isLoading={isDeleting && ref.current === index}
+                            hidden={ref.current !== index}
                             onClick={async () => {
                               await handleDelete({ id, name, nameTwo });
                               setIsEditing(false);
+                              ref.current = null;
                             }}
                           >
-                            Delete
+                            Revoke
                           </LoadingButton>
                           <LoadingButton
                             style={{
@@ -280,7 +285,11 @@ function TenantUsers() {
                             disabled={false}
                             type='submit'
                             isLoading={false}
-                            onClick={() => setIsEditing(false)}
+                            hidden={ref.current !== index}
+                            onClick={() => {
+                              setIsEditing(false);
+                              ref.current = null;
+                            }}
                           >
                             Cancel
                           </LoadingButton>
@@ -291,20 +300,6 @@ function TenantUsers() {
                 }
               </Card.Body>
             </Card>
-          <div
-            style={{ display: 'flex', justifyContent: 'center' }}
-          >
-            {!(index < (tenantUsersLimit - 1) && index < (tenantUsers.length - 1)) &&
-              <>
-                {tenantUsersLimit < tenantUsers.length &&
-                  <BsThreeDots
-                    color='lightgrey'
-                    style={{ justifySelf: 'center', margin: 10 }}
-                  />
-                }
-              </>
-            }
-          </div>
         </div>
       ))}
       <hr/>

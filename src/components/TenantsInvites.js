@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   useLazyQuery,
   useMutation
@@ -46,6 +46,7 @@ function TenantsInvites() {
   const [inviteTenantUserAccept] = useMutation(MUTATION_inviteTenantUserAccept, {
     refetchQueries: [{ query: QUERY_listTenantsNotOwn }]
   });
+  let ref = useRef(null);
   // const [tenantsNotOwnLimit] = useState(3);
   
   useEffect(() => {
@@ -209,8 +210,9 @@ function TenantsInvites() {
                           variant='outline-success'
                           // disabled={true}
                           type='submit'
-                          isLoading={isUpdating}
+                          isLoading={isUpdating && ref.current === index}
                           onClick={async () => {
+                            ref.current = index;
                             await handleSubmitAccept(tenant);
                           }}
                         >
