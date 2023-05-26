@@ -191,6 +191,14 @@ export const FRAGMENT_ActionFields = gql`
       isVisibleLatest
       isVisibleNext
     }
+    valueUnitsA
+    valueEstimA
+    valueActualA
+    valueUnitsB
+    valueEstimB
+    valueActualB
+    dateEstimStart
+    dateEstimEnd
     dateActionStart
     dateActionEnd
     attachments
@@ -204,6 +212,46 @@ export const FRAGMENT_ActionTypeFields = gql`
     name
     isVisibleLatest
     isVisibleNext
+  }
+`
+
+export const FRAGMENT_ActionGangFields = gql`
+  fragment ActionGangFields on ActionGang {
+    id
+    name
+    description
+    dateCreatedAt
+    valueUnitsA
+    valueEstimA
+    valueUnitsB
+    valueEstimB
+    dateEstimStart
+    dateEstimEnd
+    dateActionStart
+    dateActionEnd
+    index
+    actions
+    attachments
+  }
+`
+
+export const FRAGMENT_ProjectFields = gql`
+  fragment ProjectFields on Project {
+    id
+    name
+    serialNumber
+    description
+    dateCreatedAt
+    valueUnitsA
+    valueEstimA
+    valueUnitsB
+    valueEstimB
+    dateEstimStart
+    dateEstimEnd
+    dateActionStart
+    dateActionEnd
+    index
+    attachments
   }
 `
 

@@ -202,6 +202,13 @@ function App() {
                     </Nav.Link>
                   </LinkContainer>
                 }
+                {isAuthenticated &&
+                  <LinkContainer to='/projects'>
+                    <Nav.Link>
+                      Projects
+                    </Nav.Link>
+                  </LinkContainer>
+                }
               </>
             }
           </Nav>

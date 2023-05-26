@@ -7,6 +7,8 @@ import Signup from './components/Signup';
 import Items from './components/Items';
 import Tenants from './components/Tenants';
 import TenantUsers from './components/TenantUsers';
+// import DnDCanvas from './components/DnDCanvas';
+// import Project from './components/Project';
 import Orgs from './components/Orgs';
 import OrgForm from './components/OrgForm';
 import OrgInfo from './components/OrgInfo';
@@ -29,6 +31,9 @@ import LocationInfo from './components/LocationInfo';
 import ActionTypes from './components/ActionTypes';
 import ActionTypeForm from './components/ActionTypeForm';
 import ActionTypeInfo from './components/ActionTypeInfo';
+import Projects from './components/Projects';
+import ProjectForm from './components/ProjectForm';
+import ProjectInfo from './components/ProjectInfo';
 import EndUserAccount from './components/EndUserAccount';
 import VerifyEndUserEmail from './components/VerifyEndUserEmail';
 import InviteEndUserConfirm from './components/InviteEndUserConfirm';
@@ -53,6 +58,33 @@ export default function Routes() {
           path='/tenantUsers'
           render={(props) => <TenantUsers
             {...props}
+          />}
+        />
+
+        <Route
+          exact
+          path='/projects'
+          render={(props) => <Projects
+            {...props}
+            prefix={'org::project:'}
+            prefixType={'projects'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/projects/new'
+          render={(props) => <ProjectForm
+            {...props}
+            prefix={'org::project:'}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/projects/:id'
+          render={(props) => <ProjectInfo
+            {...props}
+            prefix={'org::project:'}
+            prefixType={'projects'}
           />}
         />
 

@@ -1,0 +1,20 @@
+.ItemForm {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ItemForm Form {
+  width: 360px;
+}
+
+.ItemForm .filepond--file {
+  height: 250px;
+}
+
+/* .filepond--media-preview > object:first-child {
+  height: 300px;
+  width: 320px;
+} */

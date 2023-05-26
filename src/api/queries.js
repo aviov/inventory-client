@@ -9,6 +9,8 @@ import {
   FRAGMENT_GroupFields,
   FRAGMENT_ActionFields,
   FRAGMENT_ActionTypeFields,
+  FRAGMENT_ActionGangFields,
+  FRAGMENT_ProjectFields,
   FRAGMENT_LocationFields
 } from './fragments'
 
@@ -264,6 +266,52 @@ export const QUERY_getActionTypeById = gql`
     }
   }
   ${FRAGMENT_ActionTypeFields}
+`
+
+
+export const QUERY_listActionGangs = gql`
+  query listActionGangs {
+    listActionGangs {
+      ...ActionGangFields
+    }
+  }
+  ${FRAGMENT_ActionGangFields}
+`
+
+export const QUERY_getActionGangById = gql`
+  query getActionGangById(
+    $actionGangId: String!
+  ) {
+    getActionGangById(
+      actionGangId: $actionGangId
+    ) {
+      ...ActionGangFields
+    }
+  }
+  ${FRAGMENT_ActionGangFields}
+`
+
+
+export const QUERY_listProjects = gql`
+  query listProjects {
+    listProjects {
+      ...ProjectFields
+    }
+  }
+  ${FRAGMENT_ProjectFields}
+`
+
+export const QUERY_getProjectById = gql`
+  query getProjectById(
+    $projectId: String!
+  ) {
+    getProjectById(
+      projectId: $projectId
+    ) {
+      ...ProjectFields
+    }
+  }
+  ${FRAGMENT_ProjectFields}
 `
 
 
