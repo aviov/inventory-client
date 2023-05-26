@@ -10,6 +10,8 @@ import {
   FRAGMENT_GroupFields,
   FRAGMENT_ActionFields,
   FRAGMENT_ActionTypeFields,
+  FRAGMENT_ActionGangFields,
+  FRAGMENT_ProjectFields,
   FRAGMENT_LocationFields
 } from './fragments'
 
@@ -442,6 +444,80 @@ export const MUTATION_deleteActionType = gql`
   ) {
     deleteActionType(
       actionTypeId: $actionTypeId
+    )
+  }
+`
+
+
+export const MUTATION_createActionGang = gql`
+  mutation createActionGang(
+    $actionGang: ActionGangInput!
+  ) {
+    createActionGang(
+      actionGang: $actionGang
+    ) {
+      ...ActionGangFields
+    }
+  }
+  ${FRAGMENT_ActionGangFields}
+`
+
+export const MUTATION_updateActionGang = gql`
+  mutation updateActionGang(
+    $actionGang: ActionGangInputUpdate!
+  ) {
+    updateActionGang(
+      actionGang: $actionGang
+    ) {
+      ...ActionGangFields
+    }
+  }
+  ${FRAGMENT_ActionGangFields}
+`
+
+export const MUTATION_deleteActionGang = gql`
+  mutation deleteActionGang(
+    $actionGangId: String!
+  ) {
+    deleteActionGang(
+      actionGangId: $actionGangId
+    )
+  }
+`
+
+
+export const MUTATION_createProject = gql`
+  mutation createProject(
+    $project: ProjectInput!
+  ) {
+    createProject(
+      project: $project
+    ) {
+      ...ProjectFields
+    }
+  }
+  ${FRAGMENT_ProjectFields}
+`
+
+export const MUTATION_updateProject = gql`
+  mutation updateProject(
+    $project: ProjectInputUpdate!
+  ) {
+    updateProject(
+      project: $project
+    ) {
+      ...ProjectFields
+    }
+  }
+  ${FRAGMENT_ProjectFields}
+`
+
+export const MUTATION_deleteProject = gql`
+  mutation deleteProject(
+    $projectId: String!
+  ) {
+    deleteProject(
+      projectId: $projectId
     )
   }
 `

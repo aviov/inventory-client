@@ -1,0 +1,38 @@
+.Projects {
+  overflow: auto;
+}
+
+.Projects .lander {
+  padding: 80px 0;
+  text-align: center;
+}
+
+.Projects .lander h1 {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 600;
+}
+
+.Projects .lander p {
+  color: #999;
+}
+
+.Projects .AddProjectButton {
+  margin: 5px;
+}
+
+.Projects .List {
+  margin-top: 15px;
+}
+
+.Projects .ListProject {
+  cursor: pointer;
+}
+
+.Projects .CloseSearchIcon {
+  margin-bottom: 10px;
+}
+
+.Projects .SearchInput {
+  margin-top: 5px;
+  width: 70%;
+}

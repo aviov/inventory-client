@@ -1,0 +1,11 @@
+.ProjectInfo {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ProjectInfo .LoadingButton {
+  margin: 5px;
+}
