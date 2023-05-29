@@ -34,6 +34,7 @@ import ActionTypeInfo from './components/ActionTypeInfo';
 import Projects from './components/Projects';
 import ProjectForm from './components/ProjectForm';
 import ProjectInfo from './components/ProjectInfo';
+import ActionGangForm from './components/ActionGangForm';
 import EndUserAccount from './components/EndUserAccount';
 import VerifyEndUserEmail from './components/VerifyEndUserEmail';
 import InviteEndUserConfirm from './components/InviteEndUserConfirm';
@@ -85,6 +86,16 @@ export default function Routes() {
             {...props}
             prefix={'org::project:'}
             prefixType={'projects'}
+          />}
+        />
+
+        <AuthenticatedRoute
+          exact
+          path='/projects/:id/actionGangs/new'
+          render={(props) => <ActionGangForm
+            {...props}
+            prefix={'org::actiongang:'}
+            prefixType={'actiongangs'}
           />}
         />
 
