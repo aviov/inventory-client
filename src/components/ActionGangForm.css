@@ -1,0 +1,20 @@
+.ActionGangForm {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ActionGangForm Form {
+  width: 360px;
+}
+
+.ActionGangForm .filepond--file {
+  height: 250px;
+}
+
+/* .filepond--media-preview > object:first-child {
+  height: 300px;
+  width: 320px;
+} */

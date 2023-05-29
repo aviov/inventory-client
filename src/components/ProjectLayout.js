@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from "react";
+import { useHistory } from 'react-router-dom';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import Button from 'react-bootstrap/Button';
 import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
@@ -28,8 +30,9 @@ import {
 import { v1 as uuidv1 } from 'uuid';
 import "./ProjectStyles.css";
 
-const Container = () => {
+const Container = ({ project }) => {
   // useEffect onLoad ActionGang ACTION
+  const history = useHistory();
   const initialLayout = initialData.layout;
   const initialComponents = initialData.components;
   const [layout, setLayout] = useState(initialLayout);
@@ -242,6 +245,20 @@ const Container = () => {
               {Object.values(SIDEBAR_ITEMS_ACTIONGANG).map((sideBarItem, index) => (
                 <SideBarItemActionGang key={sideBarItem.id} data={sideBarItem} />
               ))}
+              <div
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
+              >
+                <Button
+                  // disabled={loading}
+                  className='AddProjectButton'
+                  size='sm'
+                  variant='outline-primary'
+                  title='Add stage'
+                  onClick={() => history.push(`/projects/${project.id}/actionGangs/new`)}
+                >
+                  Add stage template
+                </Button>
+              </div>
             </div>
           </Tab>
           <Tab eventKey="3" className="headings" title="Works">
