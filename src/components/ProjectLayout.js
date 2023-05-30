@@ -294,7 +294,10 @@ const Container = ({ prefix, project }) => {
             ) : (
               <div className="sideBar">
                 {Object.values(actionGangs).map((sideBarItem, index) => (
-                  <SideBarItemActionGang key={sideBarItem.id} data={sideBarItem} />
+                  <SideBarItemActionGang
+                    key={sideBarItem.id}
+                    data={sideBarItem}
+                  />
                 ))}
                 <div
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
@@ -305,7 +308,7 @@ const Container = ({ prefix, project }) => {
                     size='sm'
                     variant='outline-primary'
                     title='Add stage'
-                    onClick={() => history.push(`/projects/${project.id}/actionGangs/new`)}
+                    onClick={() => history.push(`/actionGangs/new`)}
                   >
                     Add stage template
                   </Button>
