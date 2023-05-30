@@ -3,7 +3,6 @@ import { useParams, useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import {
   QUERY_getActionGangById,
-  // QUERY_listActionGangTypes,
   QUERY_listActionGangs
 } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -112,7 +111,7 @@ function ActionGangInfo() {
       setIsDeleting(true);
       try {
         await deleteActionGang({ variables: { actionGangId: id } });
-        history.push('/actionGangs');
+        history.goBack();
       } catch (error) {
         onError(error);
       }
@@ -141,10 +140,11 @@ function ActionGangInfo() {
       className='ActionGangInfo'
     >
       <Container
-        fluid
+        // fluid
       >
         <Row>
-          <Col lg='2'
+          <Col
+            // lg='2'
             // breakpoints={['md', 'sm', 'xs']}
           >
             <Row className='justify-content-end'>
@@ -287,7 +287,6 @@ function ActionGangInfo() {
                 )}
               </Col>
             </Form.Group>
-            <hr/>
             <hr style={{ marginBottom: 30 }}/>
           </Col>
         </Row>
