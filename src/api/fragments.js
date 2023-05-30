@@ -230,8 +230,8 @@ export const FRAGMENT_ActionGangFields = gql`
     dateActionStart
     dateActionEnd
     index
-    actions
     attachments
+    children
   }
 `
 

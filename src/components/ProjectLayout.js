@@ -1,8 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useHistory } from 'react-router-dom';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
+import { ImSpinner2 } from 'react-icons/im';
+import { useLazyQuery } from "@apollo/client";
+import { useAuthContext } from "../libs/contextLib";
 import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
@@ -17,9 +20,11 @@ import {
   handleRemoveItemFromLayout
 } from "../libs/fnsDndLib";
 import {
+  QUERY_listActionGangs
+} from '../api/queries';
+import {
   SIDEBAR_ITEMS_PROJECTS,
   SIDEBAR_ITEM_PROJECT,
-  SIDEBAR_ITEMS_ACTIONGANG,
   SIDEBAR_ITEM_ACTIONGANG,
   SIDEBAR_ITEMS_ACTIONS,
   SIDEBAR_ITEM_ACTION,
@@ -28,15 +33,46 @@ import {
   PROJECT
 } from "../mock/projectConstants";
 import { v1 as uuidv1 } from 'uuid';
+import { onError } from "../libs/errorLib";
 import "./ProjectStyles.css";
 
-const Container = ({ project }) => {
+const Container = ({ prefix, project }) => {
+  const { isAuthenticated } = useAuthContext();
   // useEffect onLoad ActionGang ACTION
   const history = useHistory();
   const initialLayout = initialData.layout;
   const initialComponents = initialData.components;
+  const [listActionGangs, { data, loading }] = useLazyQuery(QUERY_listActionGangs);
+  const [actionGangs, setActionGangs] = useState([]);
   const [layout, setLayout] = useState(initialLayout);
   const [components, setComponents] = useState(initialComponents);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return null;
+    }
+    function onload() {
+      try {
+        listActionGangs();
+        if (data) {
+          const listLayout = data.listActionGangs.map(({ id, name, }, index) => ({
+            id,
+            type: SIDEBAR_ITEM_ACTIONGANG,
+            column: {
+              type: ACTIONGANG,
+              id,
+              content: name,
+              children: []
+            }
+          }));
+          setActionGangs(listLayout);
+        }
+      } catch (error) {
+        onError(error);
+      }
+    }
+    onload();
+  },[isAuthenticated, listActionGangs, data]);
 
   const handleDropToTrashBin = useCallback(
     (dropZone, item) => {
@@ -192,6 +228,18 @@ const Container = ({ project }) => {
     );
   };
 
+  function renderLoading() {
+    return(
+      <div
+        className='Loading'
+      >
+        <ImSpinner2
+          className='spinning'
+        />
+      </div>
+    )
+  }
+
   // using index for key when mapping over items
   // causes this issue - https://github.com/react-dnd/react-dnd/issues/342
   return (
@@ -241,25 +289,29 @@ const Container = ({ project }) => {
             </div>
           </Tab>
           <Tab eventKey="2" className="headings" title="Stages">
-            <div className="sideBar">
-              {Object.values(SIDEBAR_ITEMS_ACTIONGANG).map((sideBarItem, index) => (
-                <SideBarItemActionGang key={sideBarItem.id} data={sideBarItem} />
-              ))}
-              <div
-                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
-              >
-                <Button
-                  // disabled={loading}
-                  className='AddProjectButton'
-                  size='sm'
-                  variant='outline-primary'
-                  title='Add stage'
-                  onClick={() => history.push(`/projects/${project.id}/actionGangs/new`)}
+            {loading ? (
+              renderLoading()
+            ) : (
+              <div className="sideBar">
+                {Object.values(actionGangs).map((sideBarItem, index) => (
+                  <SideBarItemActionGang key={sideBarItem.id} data={sideBarItem} />
+                ))}
+                <div
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
                 >
-                  Add stage template
-                </Button>
+                  <Button
+                    // disabled={loading}
+                    className='AddProjectButton'
+                    size='sm'
+                    variant='outline-primary'
+                    title='Add stage'
+                    onClick={() => history.push(`/projects/${project.id}/actionGangs/new`)}
+                  >
+                    Add stage template
+                  </Button>
+                </div>
               </div>
-            </div>
+            )}
           </Tab>
           <Tab eventKey="3" className="headings" title="Works">
             <div className="sideBar">
