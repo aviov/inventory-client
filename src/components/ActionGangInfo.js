@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { useParams, useHistory } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import {
@@ -12,6 +14,7 @@ import Form from 'react-bootstrap/Form';
 import { ImSpinner2 } from 'react-icons/im';
 import { useAuthContext } from "../libs/contextLib";
 import LoadingButton from './LoadingButton';
+import ActionGangLayout from './ActionGangLayout';
 import './ActionGangInfo.css'
 import { MUTATION_deleteActionGang, MUTATION_updateActionGang } from "../api/mutations";
 import { onError } from "../libs/errorLib";
@@ -144,7 +147,7 @@ function ActionGangInfo() {
       >
         <Row>
           <Col
-            // lg='2'
+            lg='4'
             // breakpoints={['md', 'sm', 'xs']}
           >
             <Row className='justify-content-end'>
@@ -288,6 +291,19 @@ function ActionGangInfo() {
               </Col>
             </Form.Group>
             <hr style={{ marginBottom: 30 }}/>
+          </Col>
+          <Col lg='8'>
+            <div
+              className="App"
+            >
+              <DndProvider
+                backend={HTML5Backend}
+              >
+                <ActionGangLayout
+                  // project={project}
+                />
+              </DndProvider>
+            </div>
           </Col>
         </Row>
       </Container>
