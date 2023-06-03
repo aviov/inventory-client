@@ -224,8 +224,12 @@ export const QUERY_getGroupById = gql`
 
 
 export const QUERY_listActions = gql`
-  query listActions {
-    listActions {
+  query listActions(
+    $prefix: String
+  ) {
+    listActions(
+      prefix: $prefix
+    ) {
       ...ActionFields
     }
   }
