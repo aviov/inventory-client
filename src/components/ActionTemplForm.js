@@ -30,7 +30,7 @@ function ActionTemplForm() {
   const [valueUnitsB, setValueUnitsB] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [createAction] = useMutation(MUTATION_createAction, {
-    refetchQueries: [{ query: QUERY_listActions }]
+    refetchQueries: [{ query: QUERY_listActions, variables: { prefix: 'templ:' } }]
   });
 
   function validateForm(fields={}) {
@@ -43,7 +43,7 @@ function ActionTemplForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const id = 'actiontempl:' + uuidv1();
+    const id = 'templ:action:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
     try {
@@ -54,8 +54,13 @@ function ActionTemplForm() {
             name,
             description,
             dateCreatedAt,
+            itemId: 'not_req',
+            endUserId: 'not_req',
+            locationId: 'not_req',
             valueUnitsA,
             valueUnitsB,
+            dateActionStart: 'not_req',
+            dateActionEnd: 'not_req',
             // index,
           }
         }

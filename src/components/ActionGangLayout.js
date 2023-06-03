@@ -1,22 +1,19 @@
 import React, {
   useState,
-  // useEffect,
+  useEffect,
   useCallback
 } from "react";
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-// import Button from 'react-bootstrap/Button';
-// import { ImSpinner2 } from 'react-icons/im';
-// import { useLazyQuery } from "@apollo/client";
-// import { useAuthContext } from "../libs/contextLib";
+import Button from 'react-bootstrap/Button';
+import { ImSpinner2 } from 'react-icons/im';
+import { useLazyQuery } from "@apollo/client";
+import { useAuthContext } from "../libs/contextLib";
 import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
-// import SideBarItemActionGang from "./ProjectSideBarItemActionGang";
-// import ProjectRow from "./ProjectRow";
 import ProjectRow from "./ProjectRow";
-// import Column from "./ProjectColumn";
 import actionGangInitialData from "../mock/actionGangInitialData";
 import {
   handleMoveWithinParent,
@@ -24,57 +21,56 @@ import {
   handleMoveSidebarItemIntoParent,
   handleRemoveItemFromLayout
 } from "../libs/fnsDndLib";
-// import {
-//   QUERY_listActionGangs
-// } from '../api/queries';
 import {
-  // SIDEBAR_ITEM_ACTIONGANG,
-  SIDEBAR_ITEMS_ACTIONS,
+  QUERY_listActions
+} from '../api/queries';
+import {
   SIDEBAR_ITEM_ACTION,
   ACTION,
   ACTIONGANG
 } from "../mock/projectConstants";
 import { v1 as uuidv1 } from 'uuid';
-// import { onError } from "../libs/errorLib";
+import { onError } from "../libs/errorLib";
 import "./ProjectStyles.css";
 
 const Container = ({ prefix, project }) => {
-  // const { isAuthenticated } = useAuthContext();
-  // useEffect onLoad ActionGang ACTION
-  // const history = useHistory();
+  const { isAuthenticated } = useAuthContext();
+  const history = useHistory();
   const initialActionGangLayout = actionGangInitialData.layout;
   const initialComponents = actionGangInitialData.components;
-  // const [listActionGangs, { data, loading }] = useLazyQuery(QUERY_listActionGangs);
-  // const [actionGangs, setActionGangs] = useState([]);
+  const [listActions, { data, loading }] = useLazyQuery(QUERY_listActions, {
+    variables: { prefix: 'templ:' }
+  });
+  const [actionTempls, setActionTempls] = useState([]);
   const [layout, setLayout] = useState(initialActionGangLayout);
   const [components, setComponents] = useState(initialComponents);
 
-  // useEffect(() => {
-  //   if (!isAuthenticated) {
-  //     return null;
-  //   }
-  //   function onload() {
-  //     try {
-  //       listActionGangs();
-  //       if (data) {
-  //         const listLayout = data.listActionGangs.map(({ id, name, }, index) => ({
-  //           id,
-  //           type: SIDEBAR_ITEM_ACTIONGANG,
-  //           column: {
-  //             type: ACTIONGANG,
-  //             id,
-  //             content: name,
-  //             children: []
-  //           }
-  //         }));
-  //         setActionGangs(listLayout);
-  //       }
-  //     } catch (error) {
-  //       onError(error);
-  //     }
-  //   }
-  //   onload();
-  // },[isAuthenticated, listActionGangs, data]);
+  useEffect(() => {
+    if (!isAuthenticated) {
+      return null;
+    }
+    function onload() {
+      try {
+        listActions();
+        if (data) {
+          const listLayout = data.listActions.map(({ id, name, }, index) => ({
+            id,
+            type: SIDEBAR_ITEM_ACTION,
+            component: {
+              type: ACTION,
+              id,
+              content: name,
+              children: []
+            }
+          }));
+          setActionTempls(listLayout);
+        }
+      } catch (error) {
+        onError(error);
+      }
+    }
+    onload();
+  },[isAuthenticated, listActions, data]);
 
   const handleDropToTrashBin = useCallback(
     (dropZone, item) => {
@@ -86,8 +82,6 @@ const Container = ({ prefix, project }) => {
 
   const handleDrop = useCallback(
     (dropZone, item) => {
-      // console.log('dropZone', dropZone)
-      // console.log('item', item)
 
       const splitDropZonePath = dropZone.path.split("-");
       const pathToDropZone = splitDropZonePath.slice(0, -1).join("-");
@@ -96,33 +90,6 @@ const Container = ({ prefix, project }) => {
       if (item.type === ACTIONGANG) {
         newItem.children = item.children;
       }
-
-      // // 0. Move sidebar item column into row (ActionGang into Project)
-      // if ((item.type === SIDEBAR_ITEM_ACTIONGANG) && (splitDropZonePath.length === 2)) {
-      //   const newComponent = {
-      //     id: uuidv1(),
-      //     ...item.column
-      //   };
-      //   const newItem = {
-      //     id: newComponent.id,
-      //     ...item.column,
-      //     type: ACTIONGANG
-      //   };
-      //   // console.log('newItem', newItem);
-      //   // console.log('newComponent', newComponent);
-      //   setComponents({
-      //     ...components,
-      //     [newComponent.id]: newComponent
-      //   });
-      //   setLayout(
-      //     handleMoveSidebarItemIntoParent(
-      //       layout,
-      //       splitDropZonePath,
-      //       newItem
-      //     )
-      //   );
-      //   return;
-      // }
 
       // 1. Move sidebar item component into column (ACTION into ActionGang)
       if ((item.type === SIDEBAR_ITEM_ACTION) && (splitDropZonePath.length === 3)) {
@@ -134,7 +101,6 @@ const Container = ({ prefix, project }) => {
           ...item.component,
           type: ACTION
         };
-        // console.log('newItem', newItem);
         setComponents({
           ...components,
           [newComponent.id]: newComponent
@@ -193,20 +159,18 @@ const Container = ({ prefix, project }) => {
     );
   };
 
-  // function renderLoading() {
-  //   return(
-  //     <div
-  //       className='Loading'
-  //     >
-  //       <ImSpinner2
-  //         className='spinning'
-  //       />
-  //     </div>
-  //   )
-  // }
+  function renderLoading() {
+    return(
+      <div
+        className='Loading'
+      >
+        <ImSpinner2
+          className='spinning'
+        />
+      </div>
+    )
+  }
 
-  // using index for key when mapping over items
-  // causes this issue - https://github.com/react-dnd/react-dnd/issues/342
   return (
     <div
       className="body"
@@ -238,39 +202,34 @@ const Container = ({ prefix, project }) => {
       </div>
       <div>
         <Tabs defaultActiveKey="3" transition={false} className="horizontal-tabs">
-          {/* <Tab eventKey="2" className="headings" title="Stages">
-            {loading ? (
-              renderLoading()
-            ) : (
-              <div className="sideBar">
-                {Object.values(actionGangs).map((sideBarItem, index) => (
-                  <SideBarItemActionGang
-                    key={sideBarItem.id}
-                    data={sideBarItem}
-                  />
-                ))}
-                <div
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
-                >
-                  <Button
-                    // disabled={loading}
-                    className='AddProjectButton'
-                    size='sm'
-                    variant='outline-primary'
-                    title='Add stage'
-                    onClick={() => history.push(`/actionGangs/new`)}
-                  >
-                    Add stage template
-                  </Button>
-                </div>
-              </div>
-            )}
-          </Tab> */}
           <Tab eventKey="3" className="headings" title="Works">
             <div className="sideBar">
-              {Object.values(SIDEBAR_ITEMS_ACTIONS).map((sideBarItem, index) => (
-                <SideBarItem key={sideBarItem.id} data={sideBarItem} />
-              ))}
+              {loading ? (
+                renderLoading()
+              ) : (
+                <div className="sideBar">
+                  {Object.values(actionTempls).map((sideBarItem, index) => (
+                    <SideBarItem
+                      key={sideBarItem.id}
+                      data={sideBarItem}
+                    />
+                  ))}
+                  <div
+                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
+                  >
+                    <Button
+                      // disabled={loading}
+                      className='AddActionTemplButton'
+                      size='sm'
+                      variant='outline-primary'
+                      title='Add action template'
+                      onClick={() => history.push(`/actionTempls/new`)}
+                    >
+                      Add action template
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </Tab>
         </Tabs>

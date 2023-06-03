@@ -35,7 +35,7 @@ function ActionTemplInfo() {
   const [getActionById, { data, loading }] = useLazyQuery(QUERY_getActionById);
   const [updateAction] = useMutation(MUTATION_updateAction);
   const [deleteAction] = useMutation(MUTATION_deleteAction, {
-    refetchQueries: [{ query: QUERY_listActions }]
+    refetchQueries: [{ query: QUERY_listActions, variables: { prefix: 'templ:' } }]
   });
   
   useEffect(() => {
@@ -49,7 +49,6 @@ function ActionTemplInfo() {
           variables: { actionId: id }
         });
         const actionTemplById = data && data.getActionById;
-        // console.log(data);
         if (actionTemplById) {
           const {
             id,
@@ -95,7 +94,6 @@ function ActionTemplInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -106,7 +104,7 @@ function ActionTemplInfo() {
   }
 
   async function handleDelete(actionTempl) {
-    const confirmed = window.confirm(`Do you want to delete action template ${actionTempl.name}, SN: ${actionTempl.description}?`);
+    const confirmed = window.confirm(`Do you want to delete action template ${actionTempl.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
@@ -132,8 +130,6 @@ function ActionTemplInfo() {
       </div>
     )
   }
-  // const actionTempl = data.getActionById;
-  // console.log(actionTempl);
 
   return(
     <div
