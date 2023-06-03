@@ -36,6 +36,8 @@ import ProjectForm from './components/ProjectForm';
 import ProjectInfo from './components/ProjectInfo';
 import ActionGangForm from './components/ActionGangForm';
 import ActionGangInfo from './components/ActionGangInfo';
+import ActionTemplForm from './components/ActionTemplForm';
+import ActionTemplInfo from './components/ActionTemplInfo';
 import EndUserAccount from './components/EndUserAccount';
 import VerifyEndUserEmail from './components/VerifyEndUserEmail';
 import InviteEndUserConfirm from './components/InviteEndUserConfirm';
@@ -102,6 +104,21 @@ export default function Routes() {
           exact
           path='/actionGangs/:id'
           render={(props) => <ActionGangInfo
+            {...props}
+          />}
+        />
+
+        <AuthenticatedRoute
+          exact
+          path='/actionTempls/new'
+          render={(props) => <ActionTemplForm
+            {...props}
+          />}
+        />
+        <AuthenticatedRoute
+          exact
+          path='/actionTempls/:id'
+          render={(props) => <ActionTemplInfo
             {...props}
           />}
         />
