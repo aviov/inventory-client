@@ -5,7 +5,7 @@
     "dependencies": {
         "@apollo/client": "^3.2.5",
         "@mobiscroll/react": "file:./src/lib/mobiscroll-package/mobiscroll-react-5.10.1.tgz",
-        "@testing-library/jest-dom": "^5.11.5",
+        "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^11.1.0",
         "@testing-library/user-event": "^12.1.10",
         "apollo-link-context": "^1.0.20",
@@ -23,7 +23,7 @@
         "filepond-plugin-image-transform": "^3.7.4",
         "filepond-plugin-media-preview": "github:ernestbrandi/filepond-plugin-media-preview",
         "graphql": "^15.4.0",
-        "moment-timezone": "^0.5.33",
+        "moment-timezone": "^0.5.43",
         "react": "^17.0.1",
         "react-bootstrap": "^1.4.0",
         "react-datepicker": "^3.3.0",
@@ -38,7 +38,7 @@
         "react-scripts": "4.0.0",
         "react-select": "^3.1.1",
         "uuid": "^8.3.1",
-        "validator": "^13.5.2",
+        "validator": "^13.9.0",
         "web-vitals": "^0.2.4"
     },
     "scripts": {
