@@ -15,7 +15,9 @@ export const SIDEBAR_ITEMS_ACTIONS = [
     type: SIDEBAR_ITEM_ACTION,
     component: {
       type: ACTION,
-      content: "Floor wood"
+      content: {
+        name: "Floor wood"
+      }
     }
   },
   {
@@ -23,7 +25,9 @@ export const SIDEBAR_ITEMS_ACTIONS = [
     type: SIDEBAR_ITEM_ACTION,
     component: {
       type: ACTION,
-      content: "Floor plating"
+      content: {
+        name: "Floor plating"
+      }
     }
   },
   {
@@ -31,7 +35,9 @@ export const SIDEBAR_ITEMS_ACTIONS = [
     type: SIDEBAR_ITEM_ACTION,
     component: {
       type: ACTION,
-      content: "Ceiling"
+      content: {
+        name: "Ceiling"
+      }
     }
   },
   {
@@ -39,7 +45,9 @@ export const SIDEBAR_ITEMS_ACTIONS = [
     type: SIDEBAR_ITEM_ACTION,
     component: {
       type: ACTION,
-      content: "Lining"
+      content: {
+        name: "Lining"
+      }
     }
   },
   {
@@ -47,7 +55,9 @@ export const SIDEBAR_ITEMS_ACTIONS = [
     type: SIDEBAR_ITEM_ACTION,
     component: {
       type: ACTION,
-      content: "Stairs installation"
+      content: {
+        name: "Stairs installation"
+      }
     }
   },
   {
@@ -55,7 +65,9 @@ export const SIDEBAR_ITEMS_ACTIONS = [
     type: SIDEBAR_ITEM_ACTION,
     component: {
       type: ACTION,
-      content: "Painting"
+      content: {
+        name: "Painting"
+      }
     }
   },
   {
@@ -63,7 +75,9 @@ export const SIDEBAR_ITEMS_ACTIONS = [
     type: SIDEBAR_ITEM_ACTION,
     component: {
       type: ACTION,
-      content: "Inspection"
+      content: {
+        name: "Inspection"
+      }
     }
   }
 ];
@@ -80,17 +94,23 @@ export const SIDEBAR_ITEMS_ACTIONGANG = [
         {
           type: ACTION,
           id: "Groundwork",
-          content: "Groundwork"
+          content: {
+            name: "Groundwork"
+          }
         },
         {
           type: ACTION,
           id: "Drainage",
-          content: "Drainage"
+          content: {
+            name: "Drainage"
+          }
         },
         {
           type: ACTION,
           id: "Gardening",
-          content: "Gardening"
+          content: {
+            name: "Gardening"
+          }
         }
       ]
     },
@@ -105,22 +125,30 @@ export const SIDEBAR_ITEMS_ACTIONGANG = [
         {
           type: ACTION,
           id: "Wall framework",
-          content: "Wall framework"
+          content: {
+            name: "Wall framework"
+          }
         },
         {
           type: ACTION,
           id: "Rockwool",
-          content: "Rockwool"
+          content: {
+            name: "Rockwool"
+          }
         },
         {
           type: ACTION,
           id: "Wood lining",
-          content: "Wood lining"
+          content: {
+            name: "Wood lining"
+          }
         },
         {
           type: ACTION,
           id: "Wood painting",
-          content: "Wood painting"
+          content: {
+            name: "Wood painting"
+          }
         }
       ]
     }
@@ -135,22 +163,30 @@ export const SIDEBAR_ITEMS_ACTIONGANG = [
         {
           type: ACTION,
           id: "Heating pipes",
-          content: "Heating pipes"
+          content: {
+            name: "Heating pipes"
+          }
         },
         {
           type: ACTION,
           id: "Vent pumps",
-          content: "Vent pumps"
+          content: {
+            name: "Vent pumps"
+          }
         },
         {
           type: ACTION,
           id: "Chimney",
-          content: "Chimney"
+          content: {
+            name: "Chimney"
+          }
         },
         {
           type: ACTION,
           id: "Boiler",
-          content: "Boiler"
+          content: {
+            name: "Boiler"
+          }
         }
       ]
     }
@@ -192,27 +228,37 @@ export const SIDEBAR_ITEMS_PROJECTS = [
             {
               type: ACTION,
               id: "Groundwork",
-              content: "Groundwork"
+              content: {
+                name: "Groundwork"
+              }
             },
             {
               type: ACTION,
               id: "Sewage piping",
-              content: "Sewage piping"
+              content: {
+                name: "Sewage piping"
+              }
             },
             {
               type: ACTION,
               id: "Water piping",
-              content: "Water piping"
+              content: {
+                name: "Water piping"
+              }
             },
             {
               type: ACTION,
               id: "Electric lines",
-              content: "Electric lines"
+              content: {
+                name: "Electric lines"
+              }
             },
             {
               type: ACTION,
               id: "Telecom",
-              content: "Telecom"
+              content: {
+                name: "Telecom"
+              }
             }
           ]
         },
@@ -224,17 +270,23 @@ export const SIDEBAR_ITEMS_PROJECTS = [
             {
               type: ACTION,
               id: "Groundwork",
-              content: "Groundwork"
+              content: {
+                name: "Groundwork"
+              }
             },
             {
               type: ACTION,
               id: "Formwork",
-              content: "Formwork"
+              content: {
+                name: "Formwork"
+              }
             },
             {
               type: ACTION,
               id: "Concrete",
-              content: "Concrete"
+              content: {
+                name: "Concrete"
+              }
             }
           ]
         },

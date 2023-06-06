@@ -17,17 +17,23 @@ const initialData = {
             {
               type: ACTION,
               id: "Groundwork",
-              content: "Groundwork"
+              content: {
+                name: "Groundwork"
+              }
             },
             {
               type: ACTION,
               id: "Formwork",
-              content: "Formwork"
+              content: {
+                name: "Formwork"
+              }
             },
             {
               type: ACTION,
               id: "Concrete",
-              content: "Concrete"
+              content: {
+                name: "Concrete"
+              }
             }
           ]
         },
@@ -39,12 +45,16 @@ const initialData = {
             {
               type: ACTION,
               id: "Framework",
-              content: "Framework"
+              content: {
+                name: "Framework"
+              }
             },
             {
               type: ACTION,
               id: "Panels",
-              content: "Panels"
+              content: {
+                name: "Panels"
+              }
             }
           ]
         },
@@ -56,17 +66,23 @@ const initialData = {
             {
               type: ACTION,
               id: "Framework",
-              content: "Framework"
+              content: {
+                name: "Framework"
+              }
             },
             {
               type: ACTION,
               id: "Rockwool",
-              content: "Rockwool"
+              content: {
+                name: "Rockwool"
+              }
             },
             {
               type: ACTION,
               id: "Covering",
-              content: "Covering"
+              content: {
+                name: "Covering"
+              }
             }
           ]
         },
@@ -78,12 +94,16 @@ const initialData = {
             {
               type: ACTION,
               id: "Doors",
-              content: "Doors"
+              content: {
+                name: "Doors"
+              }
             },
             {
               type: ACTION,
               id: "Windows",
-              content: "Windows"
+              content: {
+                name: "Windows"
+              }
             }
           ]
         },
@@ -95,17 +115,23 @@ const initialData = {
             {
               type: ACTION,
               id: "Tilework",
-              content: "Tilework"
+              content: {
+                name: "Tilework"
+              }
             },
             {
               type: ACTION,
               id: "Floorwood",
-              content: "Floorwood"
+              content: {
+                name: "Floorwood"
+              }
             },
             {
               type: ACTION,
               id: "Ceiling",
-              content: "Ceiling"
+              content: {
+                name: "Ceiling"
+              }
             }
           ]
         }
@@ -142,11 +168,11 @@ const initialData = {
     // }
   ],
   components: {
-    WorkB: { id: "WorkB", type: "input", content: "WorkB" },
-    WorkA: { id: "WorkA", type: "image", content: "WorkA" },
-    WorkC: { id: "WorkC", type: "email", content: "WorkC" },
-    WorkD: { id: "WorkD", type: "name", content: "WorkD" },
-    WorkE: { id: "WorkE", type: "phone", content: "WorkE" }
+    WorkB: { id: "WorkB", type: "input", content: { name: "WorkB" } },
+    WorkA: { id: "WorkA", type: "image", content: { name: "WorkA" } },
+    WorkC: { id: "WorkC", type: "email", content: { name: "WorkC" } },
+    WorkD: { id: "WorkD", type: "name", content: { name: "WorkD" } },
+    WorkE: { id: "WorkE", type: "phone", content: { name: "WorkE" } }
   }
 };
 

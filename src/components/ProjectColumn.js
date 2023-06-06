@@ -30,12 +30,11 @@ const Column = ({ data, components, handleDrop, path }) => {
       <Component
         key={component.id}
         data={component}
-        components={components}
+        // components={components}
         path={currentPath}
       />
     );
   };
-  // console.log('data at Column', data);
 
   return (
     <div
