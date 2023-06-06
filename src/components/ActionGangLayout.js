@@ -14,7 +14,6 @@ import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
 import ProjectRow from "./ProjectRow";
-import actionGangInitialData from "../mock/actionGangInitialData";
 import {
   handleMoveWithinParent,
   handleMoveToDifferentParent,
@@ -33,17 +32,20 @@ import { v1 as uuidv1 } from 'uuid';
 import { onError } from "../libs/errorLib";
 import "./ProjectStyles.css";
 
-const Container = ({ prefix, project }) => {
+const Container = ({
+  prefix,
+  project,
+  layout,
+  setLayout,
+  components,
+  setComponents
+}) => {
   const { isAuthenticated } = useAuthContext();
   const history = useHistory();
-  const initialActionGangLayout = actionGangInitialData.layout;
-  const initialComponents = actionGangInitialData.components;
   const [listActions, { data, loading }] = useLazyQuery(QUERY_listActions, {
     variables: { prefix: 'templ:' }
   });
   const [actionTempls, setActionTempls] = useState([]);
-  const [layout, setLayout] = useState(initialActionGangLayout);
-  const [components, setComponents] = useState(initialComponents);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -53,13 +55,13 @@ const Container = ({ prefix, project }) => {
       try {
         listActions();
         if (data) {
-          const listLayout = data.listActions.map(({ id, name, }, index) => ({
-            id,
+          const listLayout = data.listActions.map((item, index) => ({
+            id: item.id,
             type: SIDEBAR_ITEM_ACTION,
             component: {
               type: ACTION,
-              id,
-              content: name,
+              id: item.id,
+              content: item,
               children: []
             }
           }));
@@ -77,7 +79,7 @@ const Container = ({ prefix, project }) => {
       const splitItemPath = item.path.split("-");
       setLayout(handleRemoveItemFromLayout(layout, splitItemPath));
     },
-    [layout]
+    [layout, setLayout]
   );
 
   const handleDrop = useCallback(
@@ -144,7 +146,7 @@ const Container = ({ prefix, project }) => {
         }
       }
     },
-    [layout, components]
+    [layout, setLayout, components, setComponents]
   );
 
   const renderProjectRow = (row, currentPath) => {

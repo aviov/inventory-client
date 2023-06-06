@@ -274,8 +274,12 @@ export const QUERY_getActionTypeById = gql`
 
 
 export const QUERY_listActionGangs = gql`
-  query listActionGangs {
-    listActionGangs {
+  query listActionGangs(
+    $prefix: String
+  ) {
+    listActionGangs(
+      prefix: $prefix
+    ) {
       ...ActionGangFields
     }
   }

@@ -24,6 +24,7 @@ import { MdError } from 'react-icons/md';
 import './ProjectInfo.css'
 import { s3Delete } from '../libs/awsLib';
 import { MUTATION_deleteProject, MUTATION_updateProject } from "../api/mutations";
+import initialData from "../mock/projectInitialData";
 import { onError } from "../libs/errorLib";
 import enGb from 'date-fns/locale/en-GB';
 // import ProjectActions from "./ProjectActions";
@@ -53,6 +54,10 @@ function ProjectInfo() {
   const [deleteProject] = useMutation(MUTATION_deleteProject, {
     refetchQueries: [{ query: QUERY_listProjects }]
   });
+  const initialLayout = initialData.layout;
+  const initialComponents = initialData.components;
+  const [layout, setLayout] = useState(initialLayout);
+  const [components, setComponents] = useState(initialComponents);
   // const [projectTypeOption, setProjectTypeOption] = useState(null);
   // const [projectTypeOptions, setProjectTypeOptions] = useState([]);
   // const [listProjectTypes, {
@@ -447,7 +452,11 @@ function ProjectInfo() {
                 backend={HTML5Backend}
               >
                 <ProjectLayout
-                  project={project}
+                  // project={project}
+                  layout={layout}
+                  setLayout={setLayout}
+                  components={components}
+                  setComponents={setComponents}
                 />
               </DndProvider>
             </div>

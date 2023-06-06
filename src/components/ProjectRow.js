@@ -30,7 +30,7 @@ const ProjectRow = ({ data, components, handleDrop, path }) => {
       <Column
         key={column.id}
         data={column}
-        components={components}
+        // components={components}
         handleDrop={handleDrop}
         path={currentPath}
       />

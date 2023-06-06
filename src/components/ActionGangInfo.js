@@ -13,6 +13,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { ImSpinner2 } from 'react-icons/im';
 import { useAuthContext } from "../libs/contextLib";
+import { PROJECT, ACTIONGANG, ACTION } from "../mock/projectConstants";
 import LoadingButton from './LoadingButton';
 import ActionGangLayout from './ActionGangLayout';
 import './ActionGangInfo.css'
@@ -32,6 +33,22 @@ function ActionGangInfo() {
     valueUnitsB: ''
   });
   const [actionGangUpdate, setActionGangUpdate] = useState({});
+  const [layout, setLayout] = useState([
+    {
+      type: PROJECT,
+      id: "InitialProject",
+      content: "",
+      children: [
+        {
+          type: ACTIONGANG,
+          id: "InitialStage",
+          content: "",
+          children: []
+        }
+      ]
+    }
+  ]);
+  const [components, setComponents] = useState({});
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -52,14 +69,14 @@ function ActionGangInfo() {
           variables: { actionGangId: id }
         });
         const actionGangById = data && data.getActionGangById;
-        // console.log(data);
         if (actionGangById) {
           const {
             id,
             name,
             description,
             valueUnitsA,
-            valueUnitsB
+            valueUnitsB,
+            children
           } = actionGangById;
           setActionGang(actionGangById);
           setActionGangUpdate({
@@ -67,8 +84,27 @@ function ActionGangInfo() {
             name,
             description,
             valueUnitsA,
-            valueUnitsB
+            valueUnitsB,
           });
+          setLayout([
+            {
+              type: PROJECT,
+              id: "InitialProject",
+              content: "",
+              children: [
+                {
+                  type: ACTIONGANG,
+                  id: "InitialStage",
+                  content: "",
+                  children: children ? JSON.parse(children).map(item => ({
+                    type: ACTION,
+                    id: item.id,
+                    content: item
+                  })) : []
+                }
+              ]
+            }
+          ])
         }
       } catch (error) {
         onError(error);
@@ -86,6 +122,7 @@ function ActionGangInfo() {
     valueUnitsB
   }) {
     setIsUpdating(true);
+    const children = JSON.stringify(layout[0].children[0].children.map(({ content }) => content ));
     try {
       const data = await updateActionGang({
         variables: {
@@ -94,11 +131,11 @@ function ActionGangInfo() {
             name,
             description,
             valueUnitsA,
-            valueUnitsB
+            valueUnitsB,
+            children
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -135,8 +172,6 @@ function ActionGangInfo() {
       </div>
     )
   }
-  // const actionGang = data.getActionGangById;
-  // console.log(actionGang);
 
   return(
     <div
@@ -300,7 +335,10 @@ function ActionGangInfo() {
                 backend={HTML5Backend}
               >
                 <ActionGangLayout
-                  // project={project}
+                  layout={layout}
+                  setLayout={setLayout}
+                  components={components}
+                  setComponents={setComponents}
                 />
               </DndProvider>
             </div>

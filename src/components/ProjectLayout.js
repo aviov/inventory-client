@@ -12,7 +12,6 @@ import SideBarItem from "./ProjectSideBarItem";
 import SideBarItemActionGang from "./ProjectSideBarItemActionGang";
 import SideBarItemProject from "./ProjectSideBarItemProject";
 import ProjectRow from "./ProjectRow";
-import initialData from "../mock/projectInitialData";
 import {
   handleMoveWithinParent,
   handleMoveToDifferentParent,
@@ -36,16 +35,12 @@ import { v1 as uuidv1 } from 'uuid';
 import { onError } from "../libs/errorLib";
 import "./ProjectStyles.css";
 
-const Container = ({ prefix, project }) => {
+const Container = ({ prefix, project, layout, setLayout, components, setComponents }) => {
   const { isAuthenticated } = useAuthContext();
   // useEffect onLoad ActionGang ACTION
   const history = useHistory();
-  const initialLayout = initialData.layout;
-  const initialComponents = initialData.components;
   const [listActionGangs, { data, loading }] = useLazyQuery(QUERY_listActionGangs);
   const [actionGangs, setActionGangs] = useState([]);
-  const [layout, setLayout] = useState(initialLayout);
-  const [components, setComponents] = useState(initialComponents);
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -79,7 +74,7 @@ const Container = ({ prefix, project }) => {
       const splitItemPath = item.path.split("-");
       setLayout(handleRemoveItemFromLayout(layout, splitItemPath));
     },
-    [layout]
+    [layout, setLayout]
   );
 
   const handleDrop = useCallback(
@@ -213,7 +208,7 @@ const Container = ({ prefix, project }) => {
       //   )
       // );
     },
-    [layout, components]
+    [layout, setLayout, components, setComponents]
   );
 
   const renderProjectRow = (row, currentPath) => {
@@ -269,14 +264,14 @@ const Container = ({ prefix, project }) => {
               </React.Fragment>
             );
           })}
-          <DropZone
+          {/* <DropZone
             data={{
               path: `${layout.length}`,
               childrenCount: layout.length
             }}
             onDrop={handleDrop}
             isLast
-          />
+          /> */}
         </div>
       </div>
       <div>

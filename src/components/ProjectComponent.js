@@ -27,18 +27,13 @@ const Component = ({ data, components, path }) => {
   const opacity = isDragging ? 0 : 1;
   drag(ref);
 
-  // console.log(
-  //   'data', data,
-  //   '\n components', components,
-  // );
-
   return (
     <div
       ref={ref}
       style={{ ...style, opacity }}
       className="component draggable"
     >
-      <div>{data.content}</div>
+      <div>{data.content.name}</div>
     </div>
   );
 };

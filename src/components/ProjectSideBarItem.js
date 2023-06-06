@@ -19,7 +19,7 @@ const SideBarItem = ({ data }) => {
   
   return (
     <div className="sideBarItem" ref={drag} style={{ opacity }}>
-      {data.component.content}
+      {data.component.content.name}
       <ImPencil
         onClick={() => history.push(`/actionTempls/${data.id}`)}
       />
