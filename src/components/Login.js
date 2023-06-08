@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import './Login.css';
 import { Auth } from 'aws-amplify';
@@ -13,7 +13,7 @@ import { useFormFields } from '../libs/hooksLib';
 import { onError } from '../libs/errorLib';
 
 export default function Login() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { setIsAuthenticated } = useAuthContext();
   const { setCurrentUserName } = useUserContext();
   const { setCurrentTenantId } = useTenantContext();
@@ -38,9 +38,9 @@ export default function Login() {
       const currentTenantId = ((await Auth.currentSession()).getAccessToken().payload['cognito:groups'] || [])[0]
       if (currentTenantId !== null) {
         setCurrentTenantId(currentTenantId);
-        history.push('/');
+        navigate('/');
       } else {
-        history.push('/tenants');
+        navigate('/tenants');
       }
     } catch (error) {
       onError(error);
@@ -53,7 +53,7 @@ export default function Login() {
       <Form
         onSubmit={handleSubmit}
       >
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Email
           </Form.Label>
@@ -65,7 +65,7 @@ export default function Login() {
             onChange={handleFieldChange}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Password
           </Form.Label>
@@ -77,14 +77,16 @@ export default function Login() {
             onChange={handleFieldChange}
           />
         </Form.Group>
-        <LoadingButton
-          block
-          disabled={!validateForm()}
-          type='submit'
-          isLoading={isLoading}
-        >
-          Login
-        </LoadingButton>
+        <div className='d-grid gap-2'>
+          <LoadingButton
+            // block
+            disabled={!validateForm()}
+            type='submit'
+            isLoading={isLoading}
+          >
+            Login
+          </LoadingButton>
+        </div>
       </Form>
     </div>
   )

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_getActionTypeById, QUERY_listActionTypes } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -21,7 +21,7 @@ import { onError } from "../libs/errorLib";
 function ActionTypeInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [actionType, setActionType] = useState({
     id,
@@ -43,17 +43,16 @@ function ActionTypeInfo() {
   const [isDisabledVisibleNext, setIsDisabledVisibleNext] = useState(false);
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getActionTypeById({
           variables: { actionTypeId: id }
         });
         const actionTypeById = data && data.getActionTypeById;
-        // console.log(data);
         if (actionTypeById) {
           const {
             id,
@@ -103,7 +102,6 @@ function ActionTypeInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -113,18 +111,13 @@ function ActionTypeInfo() {
     }
   }
 
-  // console.log(typeof actionType.dateWarrantyBegins);
-  // console.log(actionType.dateWarrantyBegins)
-  // console.log(actionType.dateWarrantyExpires)
-
-
   async function handleDelete(actionType) {
     const confirmed = window.confirm(`Do you want to delete item type ${actionType.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
         await deleteActionType({ variables: { actionTypeId: id } });
-        history.push('/actionTypes');
+        navigate('/actionTypes');
       } catch (error) {
         onError(error);
       }
@@ -145,8 +138,7 @@ function ActionTypeInfo() {
       </div>
     )
   }
-  // const actionType = data.getActionTypeById;
-  // console.log(actionTypeUpdate);
+  
   return(
     <div
       className='ActionTypeInfo'

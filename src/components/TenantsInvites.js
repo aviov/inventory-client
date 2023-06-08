@@ -50,14 +50,13 @@ function TenantsInvites() {
   // const [tenantsNotOwnLimit] = useState(3);
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         listTenantsNotOwn();
-        // console.log('data', data);
         setTenantsNotOwn(data ? data.listTenantsNotOwn : []);
       } catch (error) {
         onError(error);
@@ -75,7 +74,6 @@ function TenantsInvites() {
     emailVerified,
     inviteInfo: inviteInfoJSON,
   }) {
-    // console.log('id', id)
     setIsUpdating(true);
     const inviteInfo = JSON.parse(inviteInfoJSON);
     const dateAccept = new Date().toISOString();

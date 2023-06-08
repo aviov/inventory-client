@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -19,7 +19,7 @@ import { getSortedByDateCreatedAt } from "../libs/fnsLib";
 registerLocale('en-gb', enGb);
 
 export default function Projects() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -35,10 +35,10 @@ export default function Projects() {
   const [listProjects, { loading, data }] = useLazyQuery(QUERY_listProjects);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listProjects();
         setProjects(data ? data.listProjects : []);
@@ -67,7 +67,7 @@ export default function Projects() {
         <tr
           className='ListProject'
           key={project.id}
-          onClick={() => history.push(`/projects/${project.id}`)}
+          onClick={() => navigate(`/projects/${project.id}`)}
         >
           {/* <td>
             {project.projectType ? project.projectType.name : ''}
@@ -277,7 +277,7 @@ export default function Projects() {
               size='sm'
               variant='outline-primary'
               title='Add Project'
-              onClick={() => history.push('/projects/new')}
+              onClick={() => navigate('/projects/new')}
             >
               Add Project
             </Button>

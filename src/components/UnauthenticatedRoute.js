@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Route, Navigate } from 'react-router-dom';
 import { useAuthContext } from '../libs/contextLib';
 
 function querystring(name, url = window.location.href) {
@@ -21,15 +21,11 @@ function querystring(name, url = window.location.href) {
 export default function UnauthenticatedRoute({ children, ...rest }) {
   const { isAuthenticated } = useAuthContext();
   const redirect = querystring('redirect');
-  return(
-    <Route {...rest}>
-      {!isAuthenticated ? (
-        children
-      ) : (
-        <Redirect
-          to={redirect === '' || redirect === null ? '/' : redirect}
-        />
-      )}
-    </Route>
-  );
+  return(!isAuthenticated ? (
+    children
+  ) : (
+    <Navigate
+      to={redirect === '' || redirect === null ? '/' : redirect}
+    />
+  ));
 }

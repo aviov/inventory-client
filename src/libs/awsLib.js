@@ -13,7 +13,6 @@ export async function s3Delete(filename) {
   await Storage.remove(filename);
   return filename;
   // const removed = await Storage.vault.remove(filename);
-  // console.log('removed', removed);
   // return removed.key;
 };
 

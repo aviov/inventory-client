@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
@@ -38,15 +38,15 @@ import "./ProjectStyles.css";
 const Container = ({ prefix, project, layout, setLayout, components, setComponents }) => {
   const { isAuthenticated } = useAuthContext();
   // useEffect onLoad ActionGang ACTION
-  const history = useHistory();
+  const navigate = useNavigate();
   const [listActionGangs, { data, loading }] = useLazyQuery(QUERY_listActionGangs);
   const [actionGangs, setActionGangs] = useState([]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
-    function onload() {
+    function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listActionGangs();
         if (data) {
@@ -66,7 +66,7 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
         onError(error);
       }
     }
-    onload();
+    onLoad();
   },[isAuthenticated, listActionGangs, data]);
 
   const handleDropToTrashBin = useCallback(
@@ -79,9 +79,6 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
 
   const handleDrop = useCallback(
     (dropZone, item) => {
-      // console.log('dropZone', dropZone)
-      // console.log('item', item)
-
       const splitDropZonePath = dropZone.path.split("-");
       const pathToDropZone = splitDropZonePath.slice(0, -1).join("-");
 
@@ -101,8 +98,6 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
           ...item.row,
           type: PROJECT
         };
-        // console.log('newItem', newItem);
-        // console.log('newComponent', newComponent);
         setComponents({
           ...components,
           [newComponent.id]: newComponent
@@ -128,8 +123,6 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
           ...item.column,
           type: ACTIONGANG
         };
-        // console.log('newItem', newItem);
-        // console.log('newComponent', newComponent);
         setComponents({
           ...components,
           [newComponent.id]: newComponent
@@ -154,7 +147,6 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
           ...item.component,
           type: ACTION
         };
-        // console.log('newItem', newItem);
         setComponents({
           ...components,
           [newComponent.id]: newComponent
@@ -303,7 +295,7 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
                     size='sm'
                     variant='outline-primary'
                     title='Add stage'
-                    onClick={() => history.push(`/actionGangs/new`)}
+                    onClick={() => navigate(`/actionGangs/new`)}
                   >
                     Add stage template
                   </Button>

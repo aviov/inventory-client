@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useHistory } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_getEndUserAccount, QUERY_listEndUsers } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -25,7 +25,7 @@ import { onError } from "../libs/errorLib";
 
 function EndUserAccount() {
   const { isAuthenticated } = useAuthContext();
-  // const history = useHistory();
+  // const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const { currentUserName } = useUserContext();
   const email = currentUserName && sliceStringAfter(currentUserName, ':');
@@ -69,15 +69,14 @@ function EndUserAccount() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getEndUserAccount();
         const endUserAccount = data && data.getEndUserAccount;
-        // console.log(data);
         if (endUserAccount) {
           const {
             id,
@@ -128,7 +127,6 @@ function EndUserAccount() {
             }
           }
         });
-        // console.log('data', data);
         if (data) {
           setIsUpdating(false);
           setIsEditing(false);
@@ -191,7 +189,6 @@ function EndUserAccount() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsVerifyingEmail(false);
         setIsEditing(false);
@@ -202,18 +199,13 @@ function EndUserAccount() {
     }
   }
 
-  // console.log(typeof endUser.dateWarrantyBegins);
-  // console.log(endUser.dateWarrantyBegins)
-  // console.log(endUser.dateWarrantyExpires)
-
-
   async function handleDelete(endUser) {
     const confirmed = window.confirm(`Do you want to delete end user ${endUser.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
         await deleteEndUser({ variables: { endUserId: endUser.id } });
-        // history.push('/endUsers');
+        // navigate('/endUsers');
       } catch (error) {
         onError(error);
       }
@@ -243,8 +235,7 @@ function EndUserAccount() {
       </div>
     )
   }
-  // const endUser = data.getEndUserAccount;
-  // console.log(data);
+  
   return(
     <div
       className='EndUserAccount'

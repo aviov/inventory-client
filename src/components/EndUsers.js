@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -14,7 +14,7 @@ import "./EndUsers.css";
 import { onError } from "../libs/errorLib";
 
 export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [endUsers, setEndUsers] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -30,10 +30,10 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
   });
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listEndUsers();
         setEndUsers(data ? data.listEndUsers : []);
@@ -63,8 +63,8 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
           className='ListEndUsers'
           key={endUser.id}
           onClick={() => parentId ?
-            history.push(`/${prefixType}/${parentId}/endUsers/${endUser.id}`) :
-            history.push(`/endUsers/${endUser.id}`)
+            navigate(`/${prefixType}/${parentId}/endUsers/${endUser.id}`) :
+            navigate(`/endUsers/${endUser.id}`)
           }
         >
           <td>
@@ -217,7 +217,7 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
               size='sm'
               variant='outline-primary'
               title='Add EndUser'
-              onClick={() => history.push('/endUsers/new')}
+              onClick={() => navigate('/endUsers/new')}
             >
               Add person
               {/* Add end user */}

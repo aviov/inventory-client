@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import {
   QUERY_getEndUserById,
@@ -34,7 +34,7 @@ function EndUserInfo() {
   const userEmail = currentUserName && sliceStringAfter(currentUserName, ':');
   const { currentTenantUser } = useTenantUserContext();
   const { parentId, id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [endUser, setEndUser] = useState({
     id,
@@ -80,17 +80,16 @@ function EndUserInfo() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getEndUserById({
           variables: { endUserId: id }
         });
         const endUserById = data && data.getEndUserById;
-        // console.log(data);
         if (endUserById) {
           const {
             id,
@@ -140,7 +139,6 @@ function EndUserInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -176,7 +174,6 @@ function EndUserInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsVerifyingEmail(false);
         setIsEditing(false);
@@ -186,10 +183,6 @@ function EndUserInfo() {
       onError(error);
     }
   }
-
-  // console.log(typeof endUser.dateWarrantyBegins);
-  // console.log(endUser.dateWarrantyBegins)
-  // console.log(endUser.dateWarrantyExpires)
 
   async function loadTenantUsers({
     client,
@@ -286,7 +279,7 @@ function EndUserInfo() {
       setIsDeleting(true);
       try {
         await deleteEndUser({ variables: { endUserId: id } });
-        history.goBack();
+        navigate.goBack();
       } catch (error) {
         onError(error);
       }
@@ -326,8 +319,7 @@ function EndUserInfo() {
       </div>
     )
   }
-  // const endUser = data.getEndUserById;
-  // console.log(data);
+  
   return(
     <div
       className='EndUserInfo'

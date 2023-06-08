@@ -2,7 +2,7 @@ import React, {
   // useEffect,
   useState
 } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import { ImSpinner2 } from 'react-icons/im';
 import Form from 'react-bootstrap/Form';
 // import Select from 'react-select';
@@ -48,7 +48,7 @@ registerPlugin(
 );
 
 function ProjectForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   // const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   // const [inventoryNumber, setInventoryNumber] = useState('');
@@ -120,7 +120,6 @@ function ProjectForm() {
           return { key, type: file.type };
         }
       })) : []
-      // console.log(attachments);
       const projectCreated = await createProject({
         variables: {
           project: {
@@ -151,7 +150,7 @@ function ProjectForm() {
         setSerialNumber('');
         // setDateEstimStart('');
         // setDateEstimEnd('');
-        history.push('/projects');
+        navigate('/projects');
       }
     } catch (error) {
       onError(error);
@@ -170,7 +169,7 @@ function ProjectForm() {
   //     </div>
   //   )
   // }
-  // console.log(projectTypeOption)
+
   return(
     <div
       className='ProjectForm'
@@ -292,7 +291,6 @@ function ProjectForm() {
               const filename = fileItem.filename;
               const type = fileItem.fileType;
               const transformedFile = new File([output], filename, { type });
-              // console.log('transformedFile', transformedFile);
               setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
             }}
             allowReorder={false}
@@ -304,7 +302,7 @@ function ProjectForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             // modelNumber,
             serialNumber,

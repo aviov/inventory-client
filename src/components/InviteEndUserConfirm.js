@@ -29,7 +29,6 @@ function InviteEndUserConfirm() {
         })
       }
       const confirmedBy = data && data.inviteEndUserConfirm;
-      console.log(confirmedBy);
       if (confirmedBy) {
         setIsEmailConfirmed(true);
       }
@@ -49,7 +48,6 @@ function InviteEndUserConfirm() {
       </div>
     )
   }
-  console.log('isEmailConfirmed', isEmailConfirmed);
   return (
     <>
       {/* {error &&

@@ -3,7 +3,7 @@ import React, {
   useState
 } from 'react'
 import {
-  useHistory,
+  useNavigate,
   // useParams
 } from 'react-router-dom';
 // import { ImSpinner2 } from 'react-icons/im';
@@ -22,7 +22,7 @@ import { onError } from '../libs/errorLib';
 import './ActionTemplForm.css';
 
 function ActionTemplForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   // const { id: projectId } = useParams();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -71,7 +71,7 @@ function ActionTemplForm() {
         setDescription('');
         setValueUnitsA('');
         setValueUnitsB('');
-        history.goBack();
+        navigate.goBack();
       }
     } catch (error) {
       onError(error);

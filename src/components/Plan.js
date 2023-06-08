@@ -102,7 +102,7 @@ const responsivePopup = {
 
 export default function Plan() {
   const { isAuthenticated } = useAuthContext();
-  // const history = useHistory();
+  // const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -213,16 +213,15 @@ export default function Plan() {
   });
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         listActions();
         const data = dataActions && dataActions.listActions;
         if (data) {
-          console.log('data', data);
           const dataList = data.map((action) => ({
             id: action.id,
             title: action.name,
@@ -233,7 +232,6 @@ export default function Plan() {
             color: '#03c9d2',
             actionObj: action
           }));
-          console.log('dataList', dataList);
           setActions(dataList ? dataList : []);
           setIsLoading(false);
         }
@@ -280,7 +278,6 @@ export default function Plan() {
         const data = dataItemOptions && dataItemOptions.listItems;
         if (data && !resources.some(({ id }) => (id === 'machines'))) {
           const list = data.map(({ id, itemType, modelNumber }) => ({ id, name: itemType ? itemType.name + modelNumber : modelNumber }));
-          console.log('data', data)
           setResources([
             ...resources,
             {
@@ -321,7 +318,6 @@ export default function Plan() {
             }
           ]);
           // const listStartPoints = list.map(child => ({ ...child, id: child.id }));
-          // console.log(listStartPoints)
           // setResourcesLocationsStartPoints({
           //   id: 'startpoints',
           //   name: 'Start Points',
@@ -394,7 +390,6 @@ export default function Plan() {
       dateActionEnd,
       actionTypeId: actionTypeId && ('action:' + actionTypeId)
     }
-    console.log('actionInput', actionInput)
     try {
       const data = createAction({
         variables: {
@@ -479,8 +474,6 @@ export default function Plan() {
 
   const radioChange = (ev) => {
     const value = ev.target.value;
-    console.log('ev.target', ev.target);
-
     if (ev.target.checked) {
       // const { resource } = event;
       if (value.startsWith('location')) {
@@ -511,8 +504,6 @@ export default function Plan() {
     
   // const checkboxChange = (ev) => {
   //     const value = ev.target.value;
-  //     console.log('ev.target', ev.target);
-
   //     if (ev.target.checked) {
   //         // const { resource } = event;
   //         if (value.startsWith('location')) {
@@ -603,7 +594,6 @@ export default function Plan() {
   }, [actionCreate, handleDelete]);
 
   const loadPopupForm = useCallback((event) => {
-    console.log('event', event);
     // setTitle(event.title);
     // setLocation(event.location);
     // setNotes(event.notes);
@@ -638,7 +628,6 @@ export default function Plan() {
   }, [actionCreate]);
 
   const dateChange = useCallback((args) => {
-    // console.log('args.value', args.value);
     setActionCreate({
       ...actionCreate,
       dateActionStart: args.value[0],
@@ -657,7 +646,6 @@ export default function Plan() {
 
   const onSelectedDateChange = useCallback((event) => {
     setSelectedDate(event.date);
-    console.log('event.date', event.date)
     setActionCreate({
       ...actionCreate,
       dateActionStart: event.date[0],
@@ -667,7 +655,6 @@ export default function Plan() {
 
   const onEventClick = useCallback((args) => {
     setIsEditing(true);
-    console.log('args.event', args.event);
     const { actionObj } = args.event;
     const {
       id,
@@ -699,7 +686,6 @@ export default function Plan() {
   }, [loadPopupForm]);
 
   const onEventCreated = useCallback(({ event, target }) => {
-    console.log('event', event, event.resource.startsWith('enduser'));
     // setIsEditing(false);
     setIsCreating(true);
     // setActionUpdate(event);
@@ -854,13 +840,6 @@ export default function Plan() {
       </div>
     )
   }
-  // console.log('isEditing', isEditing);
-  // console.log('isCreating', isCreating);
-  // console.log('actions', actions);
-  // // console.log('actionUpdate', actionUpdate);
-  // console.log('checkedResources', checkedResources);
-  // console.log('resources', resources);
-  // console.log('actionCreate', actionCreate);
 
   return <div className='Plan'>
       <Eventcalendar

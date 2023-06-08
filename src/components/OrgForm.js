@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { v1 as uuidv1 } from 'uuid';
 import { useMutation } from '@apollo/client'
@@ -10,7 +10,7 @@ import { onError } from '../libs/errorLib';
 import './OrgForm.css';
 
 function OrgForm({ prefix }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -63,15 +63,14 @@ function OrgForm({ prefix }) {
         setWebPage('');
         setCity('');
         setCountry('');
-        history.goBack();
-        // history.push('/orgs');
+        navigate.goBack();
+        // navigate('/orgs');
       }
     } catch (error) {
       onError(error);
       setIsLoading(false);
     }
   };
-  // console.log(files);
   return(
     <div
       className='OrgForm'
@@ -144,7 +143,7 @@ function OrgForm({ prefix }) {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             name,
             // email,

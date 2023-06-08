@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -13,7 +13,7 @@ import "./Orgs.css";
 import { onError } from "../libs/errorLib";
 
 export default function Orgs({ prefix, prefixType }) {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [orgs, setOrgs] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -27,10 +27,10 @@ export default function Orgs({ prefix, prefixType }) {
   });
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
-    function onload() {
+    function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listOrgs();
         setOrgs(data ? data.listOrgs : []);
@@ -38,7 +38,7 @@ export default function Orgs({ prefix, prefixType }) {
         onError(error);
       }
     }
-    onload();
+    onLoad();
   },[isAuthenticated, listOrgs, data]);
 
   function renderLoading() {
@@ -59,7 +59,7 @@ export default function Orgs({ prefix, prefixType }) {
         <tr
           className='ListOrg'
           key={org.id}
-          onClick={() => history.push(`/${prefixType}/${org.id}`)}
+          onClick={() => navigate(`/${prefixType}/${org.id}`)}
         >
           <td>
             {org.name}
@@ -207,7 +207,7 @@ export default function Orgs({ prefix, prefixType }) {
               size='sm'
               variant='outline-primary'
               title='Add Organization'
-              onClick={() => history.push(`/${prefixType}/new`)}
+              onClick={() => navigate(`/${prefixType}/new`)}
             >
               Add Organization
             </Button>
