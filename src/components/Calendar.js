@@ -38,7 +38,6 @@ export default function Calendar() {
         listActions();
         const data = dataActions && dataActions.listActions;
         if (data) {
-          console.log('data', data);
           const events = data.map((action) => ({
             id: action.id,
             title: action.name,

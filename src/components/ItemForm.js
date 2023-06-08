@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ImSpinner2 } from 'react-icons/im';
 import Form from 'react-bootstrap/Form';
 import Select from 'react-select';
@@ -39,7 +39,7 @@ registerPlugin(
 );
 
 function ItemForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [modelNumber, setModelNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   const [inventoryNumber, setInventoryNumber] = useState('');
@@ -111,7 +111,6 @@ function ItemForm() {
           return { key, type: file.type };
         }
       })) : []
-      // console.log(attachments);
       const itemCreated = await createItem({
         variables: {
           item: {
@@ -132,7 +131,7 @@ function ItemForm() {
         setSerialNumber('');
         setDateWarrantyBegins('');
         setDateWarrantyExpires('');
-        history.push('/items');
+        navigate('/items');
       }
     } catch (error) {
       onError(error);
@@ -151,7 +150,6 @@ function ItemForm() {
       </div>
     )
   }
-  // console.log(itemTypeOption)
   return(
     <div
       className='ItemForm'
@@ -275,7 +273,6 @@ function ItemForm() {
               const filename = fileItem.filename;
               const type = fileItem.fileType;
               const transformedFile = new File([output], filename, { type });
-              // console.log('transformedFile', transformedFile);
               setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
             }}
             allowReorder={false}
@@ -287,7 +284,7 @@ function ItemForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             modelNumber,
             serialNumber,

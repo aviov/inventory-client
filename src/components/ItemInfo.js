@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_getItemById, QUERY_listItemTypes, QUERY_listItems } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -25,7 +25,7 @@ registerLocale('en-gb', enGb);
 function ItemInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [item, setItem] = useState({
     id,
@@ -55,17 +55,16 @@ function ItemInfo() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getItemById({
           variables: { itemId: id }
         });
         const itemById = data && data.getItemById;
-        // console.log(data);
         if (itemById) {
           const {
             id,
@@ -134,7 +133,6 @@ function ItemInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -156,7 +154,7 @@ function ItemInfo() {
           }));
         }
         await deleteItem({ variables: { itemId: id } });
-        history.push('/items');
+        navigate('/items');
       } catch (error) {
         onError(error);
       }
@@ -182,7 +180,6 @@ function ItemInfo() {
   // function formatFilename(str) {
   //   return str.replace(/^\w+-/, '');
   // };
-  // console.log(item);
   const isWarrantyValid = item.dateWarrantyExpires ? new Date().valueOf() <= new Date(item.dateWarrantyExpires).valueOf() : true;
   return(
     <div

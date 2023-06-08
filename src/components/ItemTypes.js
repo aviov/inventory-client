@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -13,7 +13,7 @@ import "./ItemTypes.css";
 import { onError } from "../libs/errorLib";
 
 export default function ItemTypes() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [itemTypes, setItemTypes] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -21,10 +21,10 @@ export default function ItemTypes() {
   const [listItemTypes, { loading, data }] = useLazyQuery(QUERY_listItemTypes);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listItemTypes();
         setItemTypes(data ? data.listItemTypes : []);
@@ -53,7 +53,7 @@ export default function ItemTypes() {
         <tr
           className='ListItemType'
           key={itemType.id}
-          onClick={() => history.push(`/itemTypes/${itemType.id}`)}
+          onClick={() => navigate(`/itemTypes/${itemType.id}`)}
         >
           <td>
             {itemType.name}
@@ -141,7 +141,7 @@ export default function ItemTypes() {
               size='sm'
               variant='outline-primary'
               title='Add ItemType'
-              onClick={() => history.push('/itemTypes/new')}
+              onClick={() => navigate('/itemTypes/new')}
             >
               Add Machine type
               {/* Add Item type */}

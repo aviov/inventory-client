@@ -3,7 +3,7 @@ import React, {
   useState
 } from 'react'
 import {
-  useHistory,
+  useNavigate,
   // useParams
 } from 'react-router-dom';
 // import { ImSpinner2 } from 'react-icons/im';
@@ -22,7 +22,7 @@ import { onError } from '../libs/errorLib';
 import './ActionGangForm.css';
 
 function ActionGangForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   // const { id: projectId } = useParams();
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -66,7 +66,7 @@ function ActionGangForm() {
         setDescription('');
         setValueUnitsA('');
         setValueUnitsB('');
-        history.goBack();
+        navigate.goBack();
       }
     } catch (error) {
       onError(error);
@@ -128,7 +128,7 @@ function ActionGangForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             // modelNumber,
             name,

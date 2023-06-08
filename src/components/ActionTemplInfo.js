@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import {
   QUERY_getActionById,
@@ -19,7 +19,7 @@ import { onError } from "../libs/errorLib";
 function ActionTemplInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [actionTempl, setActionTempl] = useState({
     id,
@@ -39,10 +39,10 @@ function ActionTemplInfo() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getActionById({
@@ -109,7 +109,7 @@ function ActionTemplInfo() {
       setIsDeleting(true);
       try {
         await deleteAction({ variables: { actionId: id } });
-        history.goBack();
+        navigate.goBack();
       } catch (error) {
         onError(error);
       }

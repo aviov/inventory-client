@@ -1,11 +1,11 @@
 import React from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDrag } from "react-dnd";
 import { ImPencil } from 'react-icons/im';
 import { SIDEBAR_ITEM_ACTION } from "../mock/projectConstants";
 
 const SideBarItem = ({ data }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [{ opacity }, drag] = useDrag({
     type: SIDEBAR_ITEM_ACTION,
     item: {
@@ -21,7 +21,7 @@ const SideBarItem = ({ data }) => {
     <div className="sideBarItem" ref={drag} style={{ opacity }}>
       {data.component.content.name}
       <ImPencil
-        onClick={() => history.push(`/actionTempls/${data.id}`)}
+        onClick={() => navigate(`/actionTempls/${data.id}`)}
       />
     </div>
   );

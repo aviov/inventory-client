@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import { Auth } from 'aws-amplify';
 import { useAuthContext, useUserContext } from '../libs/contextLib';
@@ -9,7 +9,7 @@ import { onError } from '../libs/errorLib';
 import './Signup.css';
 
 export default function Signup() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [fields, handleFieldChange] = useFormFields({
     email: '',
@@ -63,7 +63,7 @@ export default function Signup() {
       await Auth.signIn(email, password);
       setCurrentUserName(email);
       setIsAuthenticated(true);
-      history.push('/');
+      navigate('/');
     } catch (error) {
       onError(error);
       setIsLoading(false);
@@ -75,7 +75,7 @@ export default function Signup() {
       <Form
         onSubmit={handleSubmitSignup}
       >
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Email
           </Form.Label>
@@ -87,7 +87,7 @@ export default function Signup() {
             onChange={handleFieldChange}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Password
           </Form.Label>
@@ -99,7 +99,7 @@ export default function Signup() {
             onChange={handleFieldChange}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Confirm password
           </Form.Label>
@@ -111,14 +111,16 @@ export default function Signup() {
             onChange={handleFieldChange}
           />
         </Form.Group>
-        <LoadingButton
-          block
-          type='submit'
-          disabled={!validateSignupForm()}
-          isLoading={isLoading}
-        >
-          Signup
-        </LoadingButton>
+        <div className='d-grid gap-2'>
+          <LoadingButton
+            // block
+            type='submit'
+            disabled={!validateSignupForm()}
+            isLoading={isLoading}
+          >
+            Signup
+          </LoadingButton>
+        </div>
       </Form>
     )
   };
@@ -145,7 +147,7 @@ export default function Signup() {
           </Form.Text>
         </Form.Group>
         <LoadingButton
-          block
+          // block
           type='submit'
           disabled={!validateConfirmationForm()}
           isLoading={isLoading}

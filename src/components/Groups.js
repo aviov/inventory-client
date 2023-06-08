@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -13,7 +13,7 @@ import "./Groups.css";
 import { onError } from "../libs/errorLib";
 
 export default function Groups() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [groups, setGroups] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -25,10 +25,10 @@ export default function Groups() {
   const [listGroups, { loading, data }] = useLazyQuery(QUERY_listGroups);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listGroups();
         setGroups(data ? data.listGroups : []);
@@ -57,7 +57,7 @@ export default function Groups() {
         <tr
           className='ListGroups'
           key={group.id}
-          onClick={() => history.push(`/groups/${group.id}`)}
+          onClick={() => navigate(`/groups/${group.id}`)}
         >
           <td>
             {group.name}
@@ -205,7 +205,7 @@ export default function Groups() {
               size='sm'
               variant='outline-primary'
               title='Add Group'
-              onClick={() => history.push('/groups/new')}
+              onClick={() => navigate('/groups/new')}
             >
               Add group
             </Button>

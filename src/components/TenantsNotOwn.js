@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   useLazyQuery,
   useMutation
@@ -27,10 +27,9 @@ import enGb from 'date-fns/locale/en-GB';
 registerLocale('en-gb', enGb);
 
 function TenantsNotOwn() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [tenantsNotOwn, setTenantsNotOwn] = useState([]);
-  // console.log('tenantsNotOwn', tenantsNotOwn);
   const { isAuthenticated } = useAuthContext();
   const { setIsAuthenticated } = useAuthContext();
   const { currentUserName } = useUserContext();
@@ -45,10 +44,10 @@ function TenantsNotOwn() {
   // const [tenantsNotOwnLimit] = useState(3);
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         listTenantsNotOwn();
@@ -70,15 +69,11 @@ function TenantsNotOwn() {
       const currentSession = cognitoUser.signInUserSession;
       cognitoUser.refreshSession(currentSession.refreshToken, (err, session) => {
         const tenantIds = session.idToken.payload['cognito:groups'] || [];
-        // console.log(
-        //   'tenantIds', tenantIds,
-        //   '\n cognitoUser', cognitoUser,
-        // );
         setCurrentTenantId(tenantIds[0]);
         client.cache.reset();
         setIsAuthenticated(true);
         setIsUpdating(false);
-        history.push('/');
+        navigate('/');
       });
     } catch (error) {
       if (error !== 'No current user') {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_getItemTypeById, QUERY_listItemTypes } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -16,7 +16,7 @@ import { onError } from "../libs/errorLib";
 function ItemTypeInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [itemType, setItemType] = useState({
     id,
@@ -33,17 +33,16 @@ function ItemTypeInfo() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getItemTypeById({
           variables: { itemTypeId: id }
         });
         const itemTypeById = data && data.getItemTypeById;
-        // console.log(data);
         if (itemTypeById) {
           const {
             id,
@@ -77,7 +76,6 @@ function ItemTypeInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -87,18 +85,13 @@ function ItemTypeInfo() {
     }
   }
 
-  // console.log(typeof itemType.dateWarrantyBegins);
-  // console.log(itemType.dateWarrantyBegins)
-  // console.log(itemType.dateWarrantyExpires)
-
-
   async function handleDelete(itemType) {
     const confirmed = window.confirm(`Do you want to delete item type ${itemType.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
         await deleteItemType({ variables: { itemTypeId: id } });
-        history.push('/itemTypes');
+        navigate('/itemTypes');
       } catch (error) {
         onError(error);
       }
@@ -119,8 +112,7 @@ function ItemTypeInfo() {
       </div>
     )
   }
-  // const itemType = data.getItemTypeById;
-  // console.log(data);
+  
   return(
     <div
       className='ItemTypeInfo'

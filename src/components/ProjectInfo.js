@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import {
   QUERY_getProjectById,
@@ -33,7 +33,7 @@ registerLocale('en-gb', enGb);
 function ProjectInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [project, setProject] = useState({
     id,
@@ -67,17 +67,16 @@ function ProjectInfo() {
   // });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getProjectById({
           variables: { projectId: id }
         });
         const projectById = data && data.getProjectById;
-        // console.log(data);
         if (projectById) {
           const {
             id,
@@ -146,7 +145,6 @@ function ProjectInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -168,7 +166,7 @@ function ProjectInfo() {
           }));
         }
         await deleteProject({ variables: { projectId: id } });
-        history.push('/projects');
+        navigate('/projects');
       } catch (error) {
         onError(error);
       }
@@ -194,7 +192,6 @@ function ProjectInfo() {
   // function formatFilename(str) {
   //   return str.replace(/^\w+-/, '');
   // };
-  // console.log(project);
   const isWarrantyValid = project.dateEstimEnd ? new Date().valueOf() <= new Date(project.dateEstimEnd).valueOf() : true;
   return(
     <div

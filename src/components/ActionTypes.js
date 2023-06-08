@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -14,7 +14,7 @@ import "./ActionTypes.css";
 import { onError } from "../libs/errorLib";
 
 export default function ActionTypes() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [actionTypes, setActionTypes] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -24,10 +24,10 @@ export default function ActionTypes() {
   const [listActionTypes, { loading, data }] = useLazyQuery(QUERY_listActionTypes);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listActionTypes();
         setActionTypes(data ? data.listActionTypes : []);
@@ -56,7 +56,7 @@ export default function ActionTypes() {
         <tr
           className='ListActionType'
           key={actionType.id}
-          onClick={() => history.push(`/actionTypes/${actionType.id}`)}
+          onClick={() => navigate(`/actionTypes/${actionType.id}`)}
         >
           <td>
             {actionType.name}
@@ -176,7 +176,7 @@ export default function ActionTypes() {
               size='sm'
               variant='outline-primary'
               title='Add ActionType'
-              onClick={() => history.push('/actionTypes/new')}
+              onClick={() => navigate('/actionTypes/new')}
             >
               Add action type
             </Button>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import validator from 'validator';
 import { v1 as uuidv1 } from 'uuid';
@@ -11,7 +11,7 @@ import { onError } from '../libs/errorLib';
 import './GroupForm.css';
 
 function GroupForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [regNr, setRegNr] = useState('');
   const [email, setEmail] = useState('');
@@ -72,7 +72,7 @@ function GroupForm() {
         setName('');
         setEmail('');
         setPhone('');
-        history.push('/groups');
+        navigate('/groups');
       }
     } catch (error) {
       onError(error);
@@ -141,7 +141,7 @@ function GroupForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             name,
             email,

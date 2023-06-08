@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import {
   QUERY_getActionGangById,
@@ -23,7 +23,7 @@ import { onError } from "../libs/errorLib";
 function ActionGangInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [actionGang, setActionGang] = useState({
     id,
@@ -59,10 +59,10 @@ function ActionGangInfo() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getActionGangById({
@@ -151,7 +151,7 @@ function ActionGangInfo() {
       setIsDeleting(true);
       try {
         await deleteActionGang({ variables: { actionGangId: id } });
-        history.goBack();
+        navigate.goBack();
       } catch (error) {
         onError(error);
       }

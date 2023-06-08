@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { v1 as uuidv1 } from 'uuid';
 import { useMutation } from '@apollo/client'
@@ -10,7 +10,7 @@ import { onError } from '../libs/errorLib';
 import './LocationForm.css';
 
 function LocationForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -35,10 +35,6 @@ function LocationForm() {
     const id = 'location:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
-    // console.log(
-    //   'id', id,
-    //   'dateCreatedAt', dateCreatedAt
-    // )
     try {
       const locationCreated = await createLocation({
         variables: {
@@ -62,14 +58,13 @@ function LocationForm() {
         setWebPage('');
         setCity('');
         setCountry('');
-        history.push('/locations');
+        navigate('/locations');
       }
     } catch (error) {
       onError(error);
       setIsLoading(false);
     }
   };
-  // console.log(files);
   return(
     <div
       className='LocationForm'
@@ -142,7 +137,7 @@ function LocationForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             name,
             // email,

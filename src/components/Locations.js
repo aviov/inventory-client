@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -13,7 +13,7 @@ import "./Locations.css";
 import { onError } from "../libs/errorLib";
 
 export default function Locations() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [locations, setLocations] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -25,10 +25,10 @@ export default function Locations() {
   const [listLocations, { loading, data }] = useLazyQuery(QUERY_listLocations);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
-    function onload() {
+    function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listLocations();
         setLocations(data ? data.listLocations : []);
@@ -36,7 +36,7 @@ export default function Locations() {
         onError(error);
       }
     }
-    onload();
+    onLoad();
   },[isAuthenticated, listLocations, data]);
 
   function renderLoading() {
@@ -57,7 +57,7 @@ export default function Locations() {
         <tr
           className='ListLocation'
           key={location.id}
-          onClick={() => history.push(`/locations/${location.id}`)}
+          onClick={() => navigate(`/locations/${location.id}`)}
         >
           <td>
             {location.name}
@@ -205,7 +205,7 @@ export default function Locations() {
               size='sm'
               variant='outline-primary'
               title='Add Location'
-              onClick={() => history.push('/locations/new')}
+              onClick={() => navigate('/locations/new')}
             >
               Add Location
             </Button>

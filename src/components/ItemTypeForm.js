@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import { v1 as uuidv1 } from 'uuid';
 import { useMutation } from '@apollo/client'
@@ -10,7 +10,7 @@ import { onError } from '../libs/errorLib';
 import './ItemTypeForm.css';
 
 function ItemTypeForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [createItemType] = useMutation(MUTATION_createItemType, {
@@ -30,10 +30,6 @@ function ItemTypeForm() {
     const id = 'itemtype:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
-    // console.log(
-    //   'id', id,
-    //   'dateCreatedAt', dateCreatedAt
-    // )
     try {
       const itemTypeCreated = await createItemType({
         variables: {
@@ -47,14 +43,13 @@ function ItemTypeForm() {
       if (itemTypeCreated) {
         setIsLoading(false);
         setName('');
-        history.push('/itemTypes');
+        navigate('/itemTypes');
       }
     } catch (error) {
       onError(error);
       setIsLoading(false);
     }
   };
-  // console.log(files);
   return(
     <div
       className='ItemTypeForm'
@@ -72,7 +67,7 @@ function ItemTypeForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             name
           })}

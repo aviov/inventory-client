@@ -40,21 +40,19 @@ function TenantUsers() {
   const [endUserOption, setEndUserOption] = useState(null);
   const [endUserOptions, setEndUserOptions] = useState([]);
   const { currentUserName } = useUserContext();
-  // console.log('currentUserName', currentUserName);
   const userEmail = currentUserName && sliceStringAfter(currentUserName, ':');
   let ref = useRef(null);
   // const [tenantUsersLimit] = useState(7);
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         listTenantUsers();
         setTenantUsers(data ? data.listTenantUsers : []);
-        // data && console.log('data.listTenantUsers', data.listTenantUsers);
       } catch (error) {
         onError(error);
       }
@@ -85,12 +83,6 @@ function TenantUsers() {
           ).filter(({ email }) => 
             !((data ? data.listTenantUsers : []).find((tenantUser) => tenantUser.emailVerified === email))
         );
-        // console.log(
-        //   '\n tenantUsers', tenantUsers,
-        //   '\n userEmail', userEmail,
-        //   '\n options', options,
-        //   '\n endUsers', endUsers
-        // );
         setEndUserOptions(options);
       }
     } catch (error) {
@@ -104,7 +96,6 @@ function TenantUsers() {
     userEmail,
     currentTenantName
   }) {
-    // console.log('emailVerified', emailVerified);
     setIsUpdating(true);
     const tenantUserId = 'tenantuser:';
     const dateCreatedAt = new Date();
@@ -364,8 +355,6 @@ function TenantUsers() {
                   options={endUserOptions}
                   onChange={(option) => {
                     setEndUserOption(option);
-                    // console.log('option', option);
-                    // console.log('endUserInvite', endUserInvite);
                     setEndUserInvite({
                       ...endUserInvite,
                       // tenantId,

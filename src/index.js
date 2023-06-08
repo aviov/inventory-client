@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Amplify, Auth } from 'aws-amplify';
 import { createAuthLink } from 'aws-appsync-auth-link';
@@ -51,7 +51,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-ReactDOM.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <Router>
     <ApolloProvider client={client}>
       {/* <React.StrictMode> */}
@@ -59,7 +59,6 @@ ReactDOM.render(
       {/* </React.StrictMode> */}
     </ApolloProvider>
   </Router>,
-  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

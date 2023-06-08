@@ -16,7 +16,6 @@ import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.min.css";
 import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.min.css';
 import './ImageGrid.css';
-// import Gallery from 'react-photo-gallery';
 import { s3FileURL } from '../libs/awsLib';
 import { s3Upload, s3Delete } from '../libs/awsLib';
 import { useMutation } from '@apollo/client'
@@ -51,7 +50,6 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
   useEffect(() => {
     async function onLoad() {
       setIsLoading(true);
-      // console.log(attachments);
       try {
         const filepondData = await Promise.all(JSON.parse(attachments).map(async ({ key, type, width, height }) => {
           const source = await s3FileURL(key);
@@ -73,7 +71,6 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
             }
           }
         }));
-        // console.log(filepondData);
         setUrlsFromServer(filepondData);
         setIsLoading(false);
       } catch (error) {
@@ -134,26 +131,17 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
 
   async function handleUpdateFiles(files, urlsFromServer, filesResized, attachments) {
     setIsUpdatingFiles(true);
-    // console.log('files', files);
-    // console.log('urlsFromServer', urlsFromServer);
     const filesToUpload = files.filter(({ file }) => 
       !(urlsFromServer.some(({ key }) => (key === decodeURI(file.name)))));
     const filesResizedToUpload = filesToUpload.map(({ file }) =>
       (filesResized.find(({ filename }) => (filename === file.name))));
-    // console.log('filesResizedToUpload', filesResizedToUpload);
-    // console.log('filesToUpload', filesToUpload);
     const urlsToDelete = urlsFromServer.filter(({ key }) =>
       !(files.some(({ file }) => (decodeURI(file.name) === key))));
-    // console.log('urlsToDelete', urlsToDelete);
     const attachmentsUploaded = await uploadFiles(filesResizedToUpload);
     const attachmentsDeleted = await deleteFiles(urlsToDelete);
     const attachmentsCurrent = JSON.parse(attachments);
-    // console.log('attachmentsUploaded', attachmentsUploaded);
-    // console.log('attachmentsDeleted', attachmentsDeleted);
-    // console.log('attachmentsCurrent', attachmentsCurrent);
     const attachmentsUpdate = [ ...attachmentsCurrent, ...attachmentsUploaded ].filter(({ key }) =>
       !(attachmentsDeleted.some((attachment) => (decodeURI(attachment.key) === key))));
-    // console.log('attachmentsUpdate', attachmentsUpdate);
     if (entityType === 'Item') {
       try {
         const data = await updateItem({
@@ -165,7 +153,6 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
           }
         });
         if (data) {
-          // console.log('data', data);
           setIsUpdatingFiles(false);
           setIsEditingFiles(false);
         }
@@ -184,7 +171,6 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
           }
         });
         if (data) {
-          // console.log('data', data);
           setIsUpdatingFiles(false);
           setIsEditingFiles(false);
         }
@@ -193,9 +179,6 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
       }
     }
   }
-  // console.log(imageData[0])
-  // console.log('files', files);
-  // console.log('filesResized',filesResized)
   return(
     isLoading ? (
       <div
@@ -293,7 +276,6 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
           const filename = fileItem.filename;
           const type = fileItem.fileType;
           const transformedFile = new File([output], filename, { type });
-          // console.log('transformedFile', transformedFile);
           setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
         }}
         allowReorder={false}

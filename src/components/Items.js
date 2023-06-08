@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
@@ -23,7 +23,7 @@ import {
 registerLocale('en-gb', enGb);
 
 export default function Items() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const { isAuthenticated } = useAuthContext();
   const [isSearching, setIsSearching] = useState(false);
@@ -48,10 +48,10 @@ export default function Items() {
   const [isVisibleNext, setIsVisibleNext] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listItems();
         setItems(data ? data.listItems : []);
@@ -99,7 +99,7 @@ export default function Items() {
         <tr
           className='ListItem'
           key={item.id}
-          onClick={() => history.push(`/items/${item.id}`)}
+          onClick={() => navigate(`/items/${item.id}`)}
         >
           <td>
             {item.itemType ? item.itemType.name : ''}
@@ -341,7 +341,7 @@ export default function Items() {
               size='sm'
               variant='outline-primary'
               title='Add Item'
-              onClick={() => history.push('/items/new')}
+              onClick={() => navigate('/items/new')}
             >
               Add Machine
               {/* Add Item */}

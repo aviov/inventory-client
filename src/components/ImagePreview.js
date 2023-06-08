@@ -24,8 +24,6 @@ function ImagePreview({ filename }) {
     };
     onLoad();
   }, [filename]);
-
-  console.log(imageURL)
   
   if (isLoading) {
     return(

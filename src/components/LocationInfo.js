@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_getLocationById, QUERY_listLocations } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -16,7 +16,7 @@ import { onError } from "../libs/errorLib";
 function LocationInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [location, setLocation] = useState({
     id,
@@ -38,17 +38,16 @@ function LocationInfo() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getLocationById({
           variables: { locationId: id }
         });
         const locationById = data && data.getLocationById;
-        // console.log(data);
         if (locationById) {
           const {
             id,
@@ -102,7 +101,6 @@ function LocationInfo() {
           }
         }
       });
-      // console.log('data', data);
       if (data) {
         setIsUpdating(false);
         setIsEditing(false);
@@ -118,7 +116,7 @@ function LocationInfo() {
       setIsDeleting(true);
       try {
         await deleteLocation({ variables: { locationId: id } });
-        history.push('/locations');
+        navigate('/locations');
       } catch (error) {
         onError(error);
       }

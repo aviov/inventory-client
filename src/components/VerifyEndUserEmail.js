@@ -29,7 +29,6 @@ function VerifyEndUserEmail() {
         })
       }
       const emailVerified = data && data.verifyEndUserEmailConfirm;
-      console.log(emailVerified);
       if (emailVerified && validator.isEmail(emailVerified)) {
         setIsEmailVerified(true);
       }
@@ -49,7 +48,7 @@ function VerifyEndUserEmail() {
       </div>
     )
   }
-  console.log('isEmailVerified', isEmailVerified);
+  
   return (
     <>
       {/* {error &&

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import validator from 'validator';
 import { v1 as uuidv1 } from 'uuid';
@@ -14,7 +14,7 @@ import './EndUserForm.css';
 
 function EndUserForm({ prefix }) {
   const { id: parentId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -58,10 +58,7 @@ function EndUserForm({ prefix }) {
       return null;
     }
     setIsLoading(true);
-    // console.log(
-    //   'id', id,
-    //   'dateCreatedAt', dateCreatedAt
-    // )
+    
     try {
       const endUserCreated = await createEndUser({
         variables: {
@@ -79,15 +76,15 @@ function EndUserForm({ prefix }) {
         setName('');
         setEmail('');
         setPhone('');
-        history.goBack();
-        // history.push('/endUsers');
+        navigate.goBack();
+        // navigate('/endUsers');
       }
     } catch (error) {
       onError(error);
       setIsLoading(false);
     }
   };
-  // console.log(files);
+  
   return(
     <div
       className='EndUserForm'
@@ -127,7 +124,7 @@ function EndUserForm({ prefix }) {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             name,
             email,

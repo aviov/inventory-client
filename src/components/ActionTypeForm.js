@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ImSpinner2 } from 'react-icons/im';
 import Form from 'react-bootstrap/Form';
 import { v1 as uuidv1 } from 'uuid';
@@ -15,7 +15,7 @@ import { onError } from '../libs/errorLib';
 import './ActionTypeForm.css';
 
 function ActionTypeForm() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [isVisibleLatest, setIsVisibleLatest] = useState(false);
   const [isVisibleNext, setIsVisibleNext] = useState(false);
@@ -54,13 +54,6 @@ function ActionTypeForm() {
     const id = 'actiontype:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
-    console.log(
-      'id', id,
-      'dateCreatedAt', dateCreatedAt,
-      'name', name,
-      'isVisibleLatest', isVisibleLatest,
-      'isVisibleLatest', isVisibleNext
-    )
     try {
       const actionTypeCreated = await createActionType({
         variables: {
@@ -76,7 +69,7 @@ function ActionTypeForm() {
       if (actionTypeCreated) {
         setIsLoading(false);
         setName('');
-        history.push('/actionTypes');
+        navigate('/actionTypes');
       }
     } catch (error) {
       onError(error);
@@ -136,7 +129,7 @@ function ActionTypeForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             name
           })}

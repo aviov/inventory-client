@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-// import { useParams, useHistory } from "react-router-dom";
+// import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { v1 as uuidv1 } from 'uuid';
 import { QUERY_getItemById, QUERY_listItems, QUERY_listEndUsers, QUERY_listLocations, QUERY_listActionTypes } from '../api/queries';
@@ -240,8 +240,6 @@ function ItemActions({ actions=[], itemId }) {
   }
 
   // function AttachmentsModal({ attachments='[]', entityId, show, setShow }) {
-  //   console.log('entityId', entityId);
-  //   console.log('attachments', attachments);
   //   return (
   //     <Modal
   //       size="lg"

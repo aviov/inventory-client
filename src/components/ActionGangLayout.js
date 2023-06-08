@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useCallback
 } from "react";
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import Button from 'react-bootstrap/Button';
@@ -41,17 +41,17 @@ const Container = ({
   setComponents
 }) => {
   const { isAuthenticated } = useAuthContext();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [listActions, { data, loading }] = useLazyQuery(QUERY_listActions, {
     variables: { prefix: 'templ:' }
   });
   const [actionTempls, setActionTempls] = useState([]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
-    function onload() {
+    function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       try {
         listActions();
         if (data) {
@@ -71,7 +71,7 @@ const Container = ({
         onError(error);
       }
     }
-    onload();
+    onLoad();
   },[isAuthenticated, listActions, data]);
 
   const handleDropToTrashBin = useCallback(
@@ -225,7 +225,7 @@ const Container = ({
                       size='sm'
                       variant='outline-primary'
                       title='Add action template'
-                      onClick={() => history.push(`/actionTempls/new`)}
+                      onClick={() => navigate(`/actionTempls/new`)}
                     >
                       Add action template
                     </Button>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_getOrgById, QUERY_listOrgs } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -18,7 +18,7 @@ import { onError } from "../libs/errorLib";
 function OrgInfo({ prefix, prefixType }) {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [org, setOrg] = useState({
     id,
@@ -46,10 +46,10 @@ function OrgInfo({ prefix, prefixType }) {
   const [isDetailsVisible, setIsDetailsVisible] = useState(false);
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getOrgById({
@@ -124,7 +124,7 @@ function OrgInfo({ prefix, prefixType }) {
       setIsDeleting(true);
       try {
         await deleteOrg({ variables: { orgId: id } });
-        history.goBack();
+        navigate.goBack();
       } catch (error) {
         onError(error);
       }
@@ -388,7 +388,7 @@ function OrgInfo({ prefix, prefixType }) {
             size='sm'
             variant='outline-primary'
             title='Add EndUser'
-            onClick={() => history.push(`/${prefixType}/${org.id}/endUsers/new`)}
+            onClick={() => navigate(`/${prefixType}/${org.id}/endUsers/new`)}
           >
             Add person
             {/* Add end user */}

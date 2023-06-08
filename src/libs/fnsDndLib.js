@@ -232,12 +232,6 @@ export const handleMoveSidebarItemIntoParent = (
       splitDropZonePath,
       newLayoutStructure
     );
-    // console.log(
-    //   '\n handleMoveSidebar item', item,
-    //   '\n splitDropZonePath.length', splitDropZonePath.length,
-    //   '\n layout', layout,
-    //   '\n updatedLayout', updatedLayout
-    // );
     return updatedLayout;
   }
 
@@ -265,10 +259,6 @@ export const handleMoveSidebarItemIntoParent = (
     }
     return addChildToChildren(layout, splitDropZonePath, newLayoutStructure);
   }
-  // console.log(
-  //   '\n layout', layout,
-  //   '\n newLayoutStructure', newLayoutStructure
-  // );
 };
 
 export const handleRemoveItemFromLayout = (layout, splitItemPath) => {

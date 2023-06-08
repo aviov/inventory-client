@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { QUERY_getGroupById, QUERY_listGroups } from '../api/queries';
 import Container from 'react-bootstrap/Container';
@@ -21,7 +21,7 @@ import { onError } from "../libs/errorLib";
 function GroupInfo() {
   const { isAuthenticated } = useAuthContext();
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [group, setGroup] = useState({
     id,
@@ -43,10 +43,10 @@ function GroupInfo() {
   });
   
   useEffect(() => {
-    if (!isAuthenticated) {
-      return null;
-    }
     function onLoad() {
+      if (!isAuthenticated) {
+        return null;
+      }
       setIsLoading(true);
       try {
         getGroupById({
@@ -119,7 +119,7 @@ function GroupInfo() {
       setIsDeleting(true);
       try {
         await deleteGroup({ variables: { groupId: id } });
-        history.push('/groups');
+        navigate('/groups');
       } catch (error) {
         onError(error);
       }
