@@ -133,7 +133,7 @@ function ActionTemplForm() {
           />
         </Form.Group>
         <LoadingButton
-          block
+          // block
           disabled={!validateForm({
             // modelNumber,
             name,

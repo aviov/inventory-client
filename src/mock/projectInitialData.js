@@ -88,27 +88,6 @@ const initialData = {
         },
         {
           type: ACTIONGANG,
-          id: "Doors&Windows",
-          content: "Doors&Windows",
-          children: [
-            {
-              type: ACTION,
-              id: "Doors",
-              content: {
-                name: "Doors"
-              }
-            },
-            {
-              type: ACTION,
-              id: "Windows",
-              content: {
-                name: "Windows"
-              }
-            }
-          ]
-        },
-        {
-          type: ACTIONGANG,
           id: "Interior",
           content: "Interior",
           children: [
@@ -136,36 +115,7 @@ const initialData = {
           ]
         }
       ]
-    },
-    // {
-    //   type: PROJECT,
-    //   id: "ProjectYZ",
-    //   content: "ProjectYZ",
-    //   children: [
-    //     {
-    //       type: ACTIONGANG,
-    //       id: "ActionGang1",
-    //       content: "ActionGang1",
-    //       children: [
-    //         {
-    //           type: ACTION,
-    //           id: "WorkD",
-    //           content: "WorkD"
-    //         },
-    //         {
-    //           type: ACTION,
-    //           id: "WorkB",
-    //           content: "WorkB"
-    //         },
-    //         {
-    //           type: ACTION,
-    //           id: "WorkC",
-    //           content: "WorkC"
-    //         }
-    //       ]
-    //     }
-    //   ]
-    // }
+    }
   ],
   components: {
     WorkB: { id: "WorkB", type: "input", content: { name: "WorkB" } },

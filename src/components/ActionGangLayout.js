@@ -205,34 +205,32 @@ const Container = ({
       <div>
         <Tabs defaultActiveKey="3" transition={false} className="horizontal-tabs">
           <Tab eventKey="3" className="headings" title="Works">
-            <div className="sideBar">
-              {loading ? (
-                renderLoading()
-              ) : (
-                <div className="sideBar">
-                  {Object.values(actionTempls).map((sideBarItem, index) => (
-                    <SideBarItem
-                      key={sideBarItem.id}
-                      data={sideBarItem}
-                    />
-                  ))}
-                  <div
-                    style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
+            {loading ? (
+              renderLoading()
+            ) : (
+              <div className="sideBar">
+                {Object.values(actionTempls).map((sideBarItem, index) => (
+                  <SideBarItem
+                    key={sideBarItem.id}
+                    data={sideBarItem}
+                  />
+                ))}
+                <div
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
+                >
+                  <Button
+                    // disabled={loading}
+                    className='AddActionTemplButton'
+                    size='sm'
+                    variant='outline-primary'
+                    title='Add action template'
+                    onClick={() => navigate(`/actionTempls/new`)}
                   >
-                    <Button
-                      // disabled={loading}
-                      className='AddActionTemplButton'
-                      size='sm'
-                      variant='outline-primary'
-                      title='Add action template'
-                      onClick={() => navigate(`/actionTempls/new`)}
-                    >
-                      Add action template
-                    </Button>
-                  </div>
+                    Add action template
+                  </Button>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </Tab>
         </Tabs>
         <TrashDropZone
