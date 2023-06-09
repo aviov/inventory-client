@@ -1,6 +1,6 @@
 {
-  "short_name": "Inventory",
-  "name": "Inventory",
+  "short_name": "Keepserv",
+  "name": "Keepserv",
   "icons": [
     {
       "src": "favicon.ico",

@@ -95,8 +95,6 @@ export default function EndUsers({ prefix, prefixType, parentId, hideButtons }) 
   function renderLander() {
     return(
       <div className="lander">
-        <h1>{'Inventory management service'}</h1>
-        <p>{'Keep your inventory up to date'}</p>
       </div>
     );
   };

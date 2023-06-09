@@ -121,7 +121,7 @@ function App() {
         <Container>
           <LinkContainer to='/'>
             <Navbar.Brand>
-              Inventory
+              Keepserv
             </Navbar.Brand>
           </LinkContainer>
         </Container>
