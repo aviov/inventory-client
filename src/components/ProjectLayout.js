@@ -10,7 +10,6 @@ import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
 import SideBarItemActionGang from "./ProjectSideBarItemActionGang";
-import SideBarItemProject from "./ProjectSideBarItemProject";
 import ProjectRow from "./ProjectRow";
 import {
   handleMoveWithinParent,
@@ -19,13 +18,12 @@ import {
   handleRemoveItemFromLayout
 } from "../libs/fnsDndLib";
 import {
-  QUERY_listActionGangs
+  QUERY_listActionGangs,
+  QUERY_listActions
 } from '../api/queries';
 import {
-  SIDEBAR_ITEMS_PROJECTS,
   SIDEBAR_ITEM_PROJECT,
   SIDEBAR_ITEM_ACTIONGANG,
-  SIDEBAR_ITEMS_ACTIONS,
   SIDEBAR_ITEM_ACTION,
   ACTION,
   ACTIONGANG, 
@@ -39,8 +37,12 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
   const { isAuthenticated } = useAuthContext();
   // useEffect onLoad ActionGang ACTION
   const navigate = useNavigate();
-  const [listActionGangs, { data, loading }] = useLazyQuery(QUERY_listActionGangs);
+  const [listActionGangs, { data: dataActionGangs, loading: loadingActionGangs }] = useLazyQuery(QUERY_listActionGangs);
+  const [listActions, { data: dataActionTempls, loading: loadingActionTempls }] = useLazyQuery(QUERY_listActions, {
+    variables: { prefix: 'templ:' }
+  });
   const [actionGangs, setActionGangs] = useState([]);
+  const [actionTempls, setActionTempls] = useState([]);
 
   useEffect(() => {
     function onLoad() {
@@ -49,15 +51,19 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       }
       try {
         listActionGangs();
-        if (data) {
-          const listLayout = data.listActionGangs.map(({ id, name, }, index) => ({
+        if (dataActionGangs) {
+          const listLayout = dataActionGangs.listActionGangs.map(({ id, name, children }, index) => ({
             id,
             type: SIDEBAR_ITEM_ACTIONGANG,
             column: {
               type: ACTIONGANG,
               id,
               content: name,
-              children: []
+              children: children ? JSON.parse(children).map(item => ({
+                type: ACTION,
+                id: item.id,
+                content: item
+              })) : []
             }
           }));
           setActionGangs(listLayout);
@@ -65,9 +71,27 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       } catch (error) {
         onError(error);
       }
+      try {
+        listActions();
+        if (dataActionTempls) {
+          const listLayout = dataActionTempls.listActions.map((item, index) => ({
+            id: item.id,
+            type: SIDEBAR_ITEM_ACTION,
+            component: {
+              type: ACTION,
+              id: item.id,
+              content: item,
+              children: []
+            }
+          }));
+          setActionTempls(listLayout);
+        }
+      } catch (error) {
+        onError(error);
+      }
     }
     onLoad();
-  },[isAuthenticated, listActionGangs, data]);
+  },[isAuthenticated, listActionGangs, listActions, dataActionGangs, dataActionTempls]);
 
   const handleDropToTrashBin = useCallback(
     (dropZone, item) => {
@@ -227,8 +251,6 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
     )
   }
 
-  // using index for key when mapping over items
-  // causes this issue - https://github.com/react-dnd/react-dnd/issues/342
   return (
     <div
       className="body"
@@ -268,15 +290,8 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       </div>
       <div>
         <Tabs defaultActiveKey="1" transition={false} className="horizontal-tabs">
-          <Tab eventKey="1" className="headings" title="Projects">
-            <div className="sideBar">
-              {Object.values(SIDEBAR_ITEMS_PROJECTS).map((sideBarItem, index) => (
-                <SideBarItemProject key={sideBarItem.id} data={sideBarItem} />
-              ))}
-            </div>
-          </Tab>
           <Tab eventKey="2" className="headings" title="Stages">
-            {loading ? (
+            {loadingActionGangs ? (
               renderLoading()
             ) : (
               <div className="sideBar">
@@ -290,7 +305,7 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
                   style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
                 >
                   <Button
-                    // disabled={loading}
+                    // disabled={loadingActionGangs}
                     className='AddProjectButton'
                     size='sm'
                     variant='outline-primary'
@@ -304,11 +319,32 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
             )}
           </Tab>
           <Tab eventKey="3" className="headings" title="Works">
-            <div className="sideBar">
-              {Object.values(SIDEBAR_ITEMS_ACTIONS).map((sideBarItem, index) => (
-                <SideBarItem key={sideBarItem.id} data={sideBarItem} />
-              ))}
-            </div>
+            {loadingActionTempls ? (
+              renderLoading()
+            ) : (
+              <div className="sideBar">
+                {Object.values(actionTempls).map((sideBarItem, index) => (
+                  <SideBarItem
+                    key={sideBarItem.id}
+                    data={sideBarItem}
+                  />
+                ))}
+                <div
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
+                >
+                  <Button
+                    // disabled={loading}
+                    className='AddActionTemplButton'
+                    size='sm'
+                    variant='outline-primary'
+                    title='Add action template'
+                    onClick={() => navigate(`/actionTempls/new`)}
+                  >
+                    Add action template
+                  </Button>
+                </div>
+              </div>
+            )}
           </Tab>
         </Tabs>
         <TrashDropZone
