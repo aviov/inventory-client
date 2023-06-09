@@ -141,8 +141,12 @@ export default function Items() {
   function renderLander() {
     return(
       <div className="lander">
-        <h1>{'Inventory management service'}</h1>
-        <p>{'Keep your inventory up to date'}</p>
+        <h1>{'Enterprise networking service'}</h1>
+        <p>{'Manage one or many of your companies'}</p>
+        <p>{'Collaborate with partners'}</p>
+        <p>{'Plan project activities'}</p>
+        <p>{'Organize teamwork'}</p>
+        <p>{'Manage inventory'}</p>
       </div>
     );
   };

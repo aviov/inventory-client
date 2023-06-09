@@ -214,8 +214,15 @@ export default function Pages() {
             </AuthenticatedRoute>
           }
         />
-
-        <Route exact path='/items' element={<Items />} />
+        
+        <Route
+          exact path='/items'
+          element={
+            <AuthenticatedRoute>
+              <Items />
+            </AuthenticatedRoute>
+          }
+        />
         <Route
           exact path='/items/new'
           element={
@@ -232,8 +239,15 @@ export default function Pages() {
             </AuthenticatedRoute>
           }
         />
-
-        <Route exact path='/itemTypes' element={<ItemTypes />} />
+        
+        <Route
+          exact path='/itemTypes'
+          element={
+            <AuthenticatedRoute>
+              <ItemTypes />
+            </AuthenticatedRoute>
+          }
+        />
         <Route
           exact path='/itemTypes/new'
           element={
@@ -250,8 +264,15 @@ export default function Pages() {
             </AuthenticatedRoute>
           }
         />
-
-        <Route exact path='/endUsers' element={<EndUsers />} />
+        
+        <Route
+          exact path='/endUsers'
+          element={
+            <AuthenticatedRoute>
+              <EndUsers />
+            </AuthenticatedRoute>
+          }
+        />
         <Route
           exact path='/endUsers/new'
           element={
@@ -270,8 +291,15 @@ export default function Pages() {
             </AuthenticatedRoute>
           }
         />
-
-        <Route exact path='/groups' element={<Groups />} />
+        
+        <Route
+          exact path='/groups'
+          element={
+            <AuthenticatedRoute>
+              <Groups />
+            </AuthenticatedRoute>
+          }
+        />
         <Route
           exact path='/groups/new'
           element={
@@ -288,8 +316,15 @@ export default function Pages() {
             </AuthenticatedRoute>
           }
         />
-
-        <Route exact path='/locations' element={<Locations />} />
+        
+        <Route
+          exact path='/locations'
+          element={
+            <AuthenticatedRoute>
+              <Locations />
+            </AuthenticatedRoute>
+          }
+        />
         <Route
           exact path='/locations/new'
           element={
@@ -307,7 +342,15 @@ export default function Pages() {
           }
         />
 
-        <Route exact path='/actionTypes' element={<ActionTypes />} />
+        <Route
+          exact
+          path='/actionTypes'
+          element={
+            <AuthenticatedRoute>
+              <ActionTypes />
+            </AuthenticatedRoute>
+          }
+        />
         <Route
           exact path='/actionTypes/new'
           element={
@@ -361,7 +404,15 @@ export default function Pages() {
           }
         />
         
-        <Route exact path='/tenants' element={<Tenants />} />
+        <Route
+          exact
+          path='/tenants'
+          element={
+            <AuthenticatedRoute>
+              <Tenants />
+            </AuthenticatedRoute>
+          }
+        />
 
         <Route
           exact

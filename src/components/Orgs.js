@@ -85,8 +85,6 @@ export default function Orgs({ prefix, prefixType }) {
   function renderLander() {
     return(
       <div className="lander">
-        <h1>{'Inventory management service'}</h1>
-        <p>{'Keep your inventory up to date'}</p>
       </div>
     );
   };
