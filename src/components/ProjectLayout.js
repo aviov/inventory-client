@@ -10,6 +10,7 @@ import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
 import SideBarItemActionGang from "./ProjectSideBarItemActionGang";
+// import SideBarItemProject from "./ProjectSideBarItemProject";
 import ProjectRow from "./ProjectRow";
 import {
   handleMoveWithinParent,
@@ -23,6 +24,7 @@ import {
 } from '../api/queries';
 import {
   SIDEBAR_ITEM_PROJECT,
+  // SIDEBAR_ITEMS_PROJECTS,
   SIDEBAR_ITEM_ACTIONGANG,
   SIDEBAR_ITEM_ACTION,
   ACTION,
@@ -106,12 +108,16 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       const splitDropZonePath = dropZone.path.split("-");
       const pathToDropZone = splitDropZonePath.slice(0, -1).join("-");
 
-      const newItem = { id: item.id, type: item.type, content: item.content };
+      const newItem = {
+        id: item.id,
+        type: item.type,
+        content: item.content
+      };
       if (item.type === ACTIONGANG) {
         newItem.children = item.children;
       }
 
-      // _. Move sidebar item row into page (Project copy into Project)
+      // _. Move sidebar item row into page (copy Project into Project dropZone)
       if ((item.type === SIDEBAR_ITEM_PROJECT) && (splitDropZonePath.length === 1)) {
         const newComponent = {
           id: uuidv1(),
@@ -278,18 +284,25 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
               </React.Fragment>
             );
           })}
-          {/* <DropZone
+          <DropZone
             data={{
               path: `${layout.length}`,
               childrenCount: layout.length
             }}
             onDrop={handleDrop}
             isLast
-          /> */}
+          />
         </div>
       </div>
       <div>
-        <Tabs defaultActiveKey="1" transition={false} className="horizontal-tabs">
+        <Tabs defaultActiveKey="2" transition={false} className="horizontal-tabs">
+          {/* <Tab eventKey="1" className="headings" title="Projects">
+            <div className="sideBar">
+              {Object.values(SIDEBAR_ITEMS_PROJECTS).map((sideBarItem, index) => (
+                <SideBarItemProject key={sideBarItem.id} data={sideBarItem} />
+              ))}
+            </div>
+          </Tab> */}
           <Tab eventKey="2" className="headings" title="Stages">
             {loadingActionGangs ? (
               renderLoading()

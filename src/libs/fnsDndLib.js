@@ -179,7 +179,7 @@ export const handleMoveToDifferentParent = (
 
   let updatedLayout = layout;
   updatedLayout = removeChildFromChildren(updatedLayout, splitItemPath);
-  updatedLayout = handleAddColumDataToProjectRow(updatedLayout);
+  // updatedLayout = handleAddColumDataToProjectRow(updatedLayout); // creates duplicate on drop into empty parent
   updatedLayout = addChildToChildren(
     updatedLayout,
     splitDropZonePath,
@@ -196,10 +196,10 @@ export const handleMoveSidebarItemIntoParent = (
 ) => {
   let newLayoutStructure;
 
-  if (item.type === 'row') {
+  if (item.type === PROJECT) {
     switch (splitDropZonePath.length) {
       case 1: {
-        newLayoutStructure = item; // if drop in page
+        newLayoutStructure = item; // if drop PROJECT into page
         break;
       }
       case 2: {
@@ -212,13 +212,13 @@ export const handleMoveSidebarItemIntoParent = (
     return addChildToChildren(layout, splitDropZonePath, newLayoutStructure);
   }
 
-  if (item.type === 'column') {
+  if (item.type === ACTIONGANG) {
     switch (splitDropZonePath.length) {
       case 1: {
-        break; // if drop in page
+        break;
       }
       case 2: {
-        newLayoutStructure = item;
+        newLayoutStructure = item; // if drop ACTIONGANG into PROJECT
         break;
       }
       default: {
@@ -226,7 +226,7 @@ export const handleMoveSidebarItemIntoParent = (
       }
     }
     let updatedLayout = layout;
-    updatedLayout = handleAddColumDataToProjectRow(updatedLayout);
+    // updatedLayout = handleAddColumDataToProjectRow(updatedLayout); // creates duplicate on drop into empty parent
     updatedLayout = addChildToChildren(
       updatedLayout,
       splitDropZonePath,
@@ -235,7 +235,7 @@ export const handleMoveSidebarItemIntoParent = (
     return updatedLayout;
   }
 
-  if (item.type === 'component') {
+  if (item.type === ACTION) {
     switch (splitDropZonePath.length) {
       case 1: {
         // newLayoutStructure = {

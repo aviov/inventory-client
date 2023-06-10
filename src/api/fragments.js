@@ -252,6 +252,7 @@ export const FRAGMENT_ProjectFields = gql`
     dateActionEnd
     index
     attachments
+    children
   }
 `
 
