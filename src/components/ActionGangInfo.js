@@ -95,7 +95,7 @@ function ActionGangInfo() {
                 {
                   type: ACTIONGANG,
                   id: "InitialStage",
-                  content: "",
+                  content: name,
                   children: children ? JSON.parse(children).map(item => ({
                     type: ACTION,
                     id: item.id,

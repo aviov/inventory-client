@@ -24,7 +24,7 @@ import { MdError } from 'react-icons/md';
 import './ProjectInfo.css'
 import { s3Delete } from '../libs/awsLib';
 import { MUTATION_deleteProject, MUTATION_updateProject } from "../api/mutations";
-import initialData from "../mock/projectInitialData";
+import { PROJECT, ACTIONGANG, ACTION } from "../mock/projectConstants";
 import { onError } from "../libs/errorLib";
 import enGb from 'date-fns/locale/en-GB';
 // import ProjectActions from "./ProjectActions";
@@ -37,9 +37,7 @@ function ProjectInfo() {
   const [isEditing, setIsEditing] = useState(false);
   const [project, setProject] = useState({
     id,
-    // modelNumber: '',
     serialNumber: '',
-    // inventoryNumber: '',
     dateEstimStart: new Date(),
     dateEstimEnd: new Date(),
     attachments: '[]',
@@ -54,10 +52,8 @@ function ProjectInfo() {
   const [deleteProject] = useMutation(MUTATION_deleteProject, {
     refetchQueries: [{ query: QUERY_listProjects }]
   });
-  const initialLayout = initialData.layout;
-  const initialComponents = initialData.components;
-  const [layout, setLayout] = useState(initialLayout);
-  const [components, setComponents] = useState(initialComponents);
+  const [layout, setLayout] = useState([]);
+  const [components, setComponents] = useState({});
   // const [projectTypeOption, setProjectTypeOption] = useState(null);
   // const [projectTypeOptions, setProjectTypeOptions] = useState([]);
   // const [listProjectTypes, {
@@ -80,12 +76,11 @@ function ProjectInfo() {
         if (projectById) {
           const {
             id,
-            // modelNumber,
             serialNumber,
-            // inventoryNumber,
             dateEstimStart,
             dateEstimEnd,
             attachments,
+            children
             // projectType
           } = projectById;
           // const projectTypeId = projectById.projectType && projectById.projectType.id;
@@ -93,14 +88,29 @@ function ProjectInfo() {
           setProject(projectById);
           setProjectUpdate({
             id,
-            // modelNumber,
             serialNumber,
-            // inventoryNumber,
             dateEstimStart,
             dateEstimEnd,
             attachments,
             // projectTypeId: projectTypeIdWithoutPrefix
           });
+          setLayout([
+            {
+              type: PROJECT,
+              id,
+              content: serialNumber,
+              children: children ? JSON.parse(children).map(actionGang => ({
+                type: ACTIONGANG,
+                id: actionGang.id,
+                content: actionGang.name,
+                children: actionGang.children ? actionGang.children.map(action => ({
+                  type: ACTION,
+                  id: action.id,
+                  content: action
+                })) : []
+              })) : [],
+            }
+          ]);
           // projectType && setProjectTypeOption({ value: projectTypeIdWithoutPrefix, label: projectType.name });
         }
       } catch (error) {
@@ -123,24 +133,36 @@ function ProjectInfo() {
 
   async function handleSubmit({
     id,
-    // modelNumber,
     serialNumber,
-    // inventoryNumber,
     dateEstimStart,
     dateEstimEnd,
     // projectTypeId
   }) {
     setIsUpdating(true);
+    const children = JSON.stringify(layout[0].children.map((actionGang) => {
+      if (actionGang.children) {
+        return {
+          id: actionGang.id,
+          name: actionGang.content,
+          children: actionGang.children.map(action => (action.content))
+        };
+      } else {
+        return {
+          id: actionGang.id,
+          name: actionGang.content,
+          children: []
+        };
+      }
+    }));
     try {
       const data = await updateProject({
         variables: {
           project: {
             id,
-            // modelNumber,
             serialNumber,
-            // inventoryNumber,
             dateEstimStart,
             dateEstimEnd,
+            children
             // projectTypeId: projectTypeId && ('project:' + projectTypeId)
           }
         }
@@ -284,27 +306,6 @@ function ProjectInfo() {
                 )}
               </Col>
             </Form.Group> */}
-            {/* <Form.Group as={Row}>
-              <Form.Label column='sm=4' className='font-weight-bold'>
-                Model
-              </Form.Label>
-              <Col sm='8'>
-                {!isEditing ? (
-                  <Form.Control
-                    plaintext
-                    readOnly
-                    value={project.modelNumber}
-                  />
-                ) : (
-                  <Form.Control
-                    type='text'
-                    placeholder='Model'
-                    value={projectUpdate.modelNumber}
-                    onChange={(event) => setProjectUpdate({ ...projectUpdate, modelNumber: event.target.value })}
-                  />
-                )}
-              </Col>
-            </Form.Group> */}
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Project nr.
@@ -326,27 +327,6 @@ function ProjectInfo() {
                 )}
               </Col>
             </Form.Group>
-            {/* <Form.Group as={Row}>
-              <Form.Label column='sm=4' className='font-weight-bold'>
-                Inventory nr
-              </Form.Label>
-              <Col sm='8'>
-                {!isEditing ? (
-                  <Form.Control
-                    plaintext
-                    readOnly
-                    value={project.inventoryNumber || ''}
-                  />
-                ) : (
-                  <Form.Control
-                    type='text'
-                    placeholder='Inventory nr'
-                    value={projectUpdate.inventoryNumber || ''}
-                    onChange={(event) => setProjectUpdate({ ...projectUpdate, inventoryNumber: event.target.value})}
-                  />
-                )}
-              </Col>
-            </Form.Group> */}
             <hr/>
             <Form.Group as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
