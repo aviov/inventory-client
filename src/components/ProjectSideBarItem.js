@@ -21,6 +21,7 @@ const SideBarItem = ({ data }) => {
     <div className="sideBarItem" ref={drag} style={{ opacity }}>
       {data.component.content.name}
       <ImPencil
+        className="IconButton"
         onClick={() => navigate(`/actionTempls/${data.id}`)}
       />
     </div>

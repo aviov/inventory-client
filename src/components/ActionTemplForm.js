@@ -132,20 +132,20 @@ function ActionTemplForm() {
             onChange={(event) => setValueUnitsB(event.target.value)}
           />
         </Form.Group>
-        <LoadingButton
-          // block
-          disabled={!validateForm({
-            // modelNumber,
-            name,
-            valueUnitsA,
-            valueUnitsB
-          })}
-          type='submit'
-          isLoading={isLoading}
-          onClick={handleSubmit}
-        >
-          Submit
-        </LoadingButton>
+        <div className='d-grid gap-2'>
+          <LoadingButton
+            disabled={!validateForm({
+              name,
+              valueUnitsA,
+              valueUnitsB
+            })}
+            type='submit'
+            isLoading={isLoading}
+            onClick={handleSubmit}
+          >
+            Submit
+          </LoadingButton>
+        </div>
       </Form>
     </div>
   )

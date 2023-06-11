@@ -190,11 +190,10 @@ function ItemInfo() {
       >
         <Row>
           <Col>
-            <Row className='justify-content-end'>
+            <div className="d-flex justify-content-end">
               {!isEditing ?
                 (
                   <LoadingButton
-                    className='LoadingButton'
                     size='sm'
                     color='orange'
                     variant='outline-warning'
@@ -209,7 +208,6 @@ function ItemInfo() {
                 ) : (
                   <>
                     <LoadingButton
-                      className='LoadingButton'
                       size='sm'
                       color='red'
                       variant='outline-danger'
@@ -222,7 +220,7 @@ function ItemInfo() {
                       {/* Delete item */}
                     </LoadingButton>
                     <LoadingButton
-                      className='LoadingButton'
+                      // className='LoadingButton'
                       size='sm'
                       variant='outline-primary'
                       disabled={isUpdating}
@@ -233,7 +231,6 @@ function ItemInfo() {
                       Save
                     </LoadingButton>
                     <LoadingButton
-                      className='LoadingButton'
                       size='sm'
                       variant='outline-secondary'
                       disabled={false}
@@ -246,7 +243,7 @@ function ItemInfo() {
                   </>
                 )
               }
-            </Row>
+            </div>
             <hr/>
             <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>

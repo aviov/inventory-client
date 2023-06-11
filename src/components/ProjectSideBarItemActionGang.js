@@ -21,6 +21,7 @@ const SideBarItemActionGang = ({ data }) => {
     <div className="sideBarItem" ref={drag} style={{ opacity }}>
       {data.column.content}
       <ImPencil
+        className="IconButton"
         onClick={() => navigate(`/actionGangs/${data.id}`)}
       />
     </div>

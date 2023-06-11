@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from 'react-router-dom';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import Button from 'react-bootstrap/Button';
 import { ImSpinner2 } from 'react-icons/im';
 import { useLazyQuery } from "@apollo/client";
 import { useAuthContext } from "../libs/contextLib";
+import LoadingButton from "./LoadingButton";
 import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
@@ -314,19 +314,17 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
                     data={sideBarItem}
                   />
                 ))}
-                <div
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
-                >
-                  <Button
-                    // disabled={loadingActionGangs}
-                    className='AddProjectButton'
+                <div className='d-grid gap-2 AddItemButton'>
+                  <LoadingButton
                     size='sm'
-                    variant='outline-primary'
-                    title='Add stage'
+                    variant='primary'
+                    disabled={false}
+                    type='submit'
+                    isLoading={false}
                     onClick={() => navigate(`/actionGangs/new`)}
                   >
-                    Add stage template
-                  </Button>
+                    Add action template
+                  </LoadingButton>
                 </div>
               </div>
             )}
@@ -342,19 +340,17 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
                     data={sideBarItem}
                   />
                 ))}
-                <div
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
-                >
-                  <Button
-                    // disabled={loading}
-                    className='AddActionTemplButton'
+                <div className='d-grid gap-2 AddItemButton'>
+                  <LoadingButton
                     size='sm'
-                    variant='outline-primary'
-                    title='Add action template'
+                    variant='primary'
+                    disabled={false}
+                    type='submit'
+                    isLoading={false}
                     onClick={() => navigate(`/actionTempls/new`)}
                   >
                     Add action template
-                  </Button>
+                  </LoadingButton>
                 </div>
               </div>
             )}

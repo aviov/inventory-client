@@ -226,7 +226,7 @@ function ProjectInfo() {
           <Col lg='2'
             // breakpoints={['md', 'sm', 'xs']}
           >
-            <Row className='justify-content-end'>
+            <div className="d-flex justify-content-end">
               {!isEditing ?
                 (
                   <LoadingButton
@@ -280,7 +280,7 @@ function ProjectInfo() {
                   </>
                 )
               }
-            </Row>
+            </div>
             <hr/>
             {/* <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
