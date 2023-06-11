@@ -320,7 +320,7 @@ function ItemActions({ actions=[], itemId }) {
                 </div>
               </div>
             </Card.Title>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 <ImUser/>
               </Form.Label>
@@ -347,7 +347,7 @@ function ItemActions({ actions=[], itemId }) {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 <ImLocation/>
               </Form.Label>
@@ -374,7 +374,7 @@ function ItemActions({ actions=[], itemId }) {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Work type
                 {/* Action type */}
@@ -402,7 +402,7 @@ function ItemActions({ actions=[], itemId }) {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Work start
                 {/* Action start */}
@@ -430,7 +430,7 @@ function ItemActions({ actions=[], itemId }) {
                 />
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Work files
                 {/* Action files */}
@@ -539,7 +539,7 @@ function ItemActions({ actions=[], itemId }) {
                       </div>
                     </div>
                   </Card.Title>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImUser/>
                     </Form.Label>
@@ -559,7 +559,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImLocation/>
                     </Form.Label>
@@ -579,7 +579,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       Work type
                       {/* Action type */}
@@ -600,7 +600,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       Work start
                       {/* Action start */}
@@ -628,7 +628,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       Work files
                       {/* Action files */}
@@ -757,7 +757,7 @@ function ItemActions({ actions=[], itemId }) {
                       </LoadingButton>
                     </div>
                   </Card.Title>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImUser/>
                     </Form.Label>
@@ -769,7 +769,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       <ImLocation/>
                     </Form.Label>
@@ -781,7 +781,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       Work type
                       {/* Action type */}
@@ -794,7 +794,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       Work start
                       {/* Action start */}
@@ -807,7 +807,7 @@ function ItemActions({ actions=[], itemId }) {
                       />
                     </Col>
                   </Form.Group>
-                  <Form.Group as={Row}>
+                  <Form.Group className='mb-3' as={Row}>
                     <Form.Label column='sm=4' className='font-weight-bold'>
                       Work files
                       {/* Action files */}

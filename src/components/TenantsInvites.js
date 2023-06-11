@@ -224,7 +224,7 @@ function TenantsInvites() {
                     }
                   </div>
                 </Card.Title>
-                <Form.Group as={Row}>
+                <Form.Group className='mb-3' as={Row}>
                   <Form.Label column='sm=4' className='font-weight-bold'>
                     <VscOrganization/>
                   </Form.Label>

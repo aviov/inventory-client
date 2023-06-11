@@ -238,7 +238,7 @@ function OrgInfo({ prefix, prefixType }) {
               }
             </Row>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Name
               </Form.Label>
@@ -261,7 +261,7 @@ function OrgInfo({ prefix, prefixType }) {
             </Form.Group>
             {isDetailsVisible &&
               <>
-                <Form.Group as={Row}>
+                <Form.Group className='mb-3' as={Row}>
                   <Form.Label column='sm=4' className='font-weight-bold'>
                     Email
                   </Form.Label>
@@ -282,7 +282,7 @@ function OrgInfo({ prefix, prefixType }) {
                     )}
                   </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group className='mb-3' as={Row}>
                   <Form.Label column='sm=4' className='font-weight-bold'>
                     Phone
                   </Form.Label>
@@ -303,7 +303,7 @@ function OrgInfo({ prefix, prefixType }) {
                     )}
                   </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group className='mb-3' as={Row}>
                   <Form.Label column='sm=4' className='font-weight-bold'>
                     Web page
                   </Form.Label>
@@ -325,7 +325,7 @@ function OrgInfo({ prefix, prefixType }) {
                   </Col>
                 </Form.Group>
                 <hr/>
-                <Form.Group as={Row}>
+                <Form.Group className='mb-3' as={Row}>
                   <Form.Label column='sm=4' className='font-weight-bold'>
                     City
                   </Form.Label>
@@ -346,7 +346,7 @@ function OrgInfo({ prefix, prefixType }) {
                     )}
                   </Col>
                 </Form.Group>
-                <Form.Group as={Row}>
+                <Form.Group className='mb-3' as={Row}>
                   <Form.Label column='sm=4' className='font-weight-bold'>
                     Country
                   </Form.Label>

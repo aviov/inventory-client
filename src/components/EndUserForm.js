@@ -90,7 +90,7 @@ function EndUserForm({ prefix }) {
       className='EndUserForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Name
           </Form.Label>
@@ -101,7 +101,7 @@ function EndUserForm({ prefix }) {
             onChange={(event) => setName(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Email
           </Form.Label>
@@ -112,7 +112,7 @@ function EndUserForm({ prefix }) {
             onChange={(event) => setEmail(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Phone
           </Form.Label>

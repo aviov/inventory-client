@@ -282,7 +282,7 @@ function ProjectInfo() {
               }
             </Row>
             <hr/>
-            {/* <Form.Group as={Row}>
+            {/* <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Project type
               </Form.Label>
@@ -306,7 +306,7 @@ function ProjectInfo() {
                 )}
               </Col>
             </Form.Group> */}
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Project nr.
               </Form.Label>
@@ -328,7 +328,7 @@ function ProjectInfo() {
               </Col>
             </Form.Group>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Start
               </Form.Label>
@@ -363,7 +363,7 @@ function ProjectInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               {isWarrantyValid ? (
                 <Form.Label column='sm=4' className='font-weight-bold'>
                   <FcApproval />

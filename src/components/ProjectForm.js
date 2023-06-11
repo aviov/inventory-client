@@ -175,7 +175,7 @@ function ProjectForm() {
       className='ProjectForm'
     >
       <Form>
-        {/* <Form.Group>
+        {/* <Form.Group className='mb-3'>
           <Form.Label>
             Project type
           </Form.Label>
@@ -188,7 +188,7 @@ function ProjectForm() {
             }}
           />
         </Form.Group> */}
-        {/* <Form.Group>
+        {/* <Form.Group className='mb-3'>
           <Form.Label>
             Model nr
           </Form.Label>
@@ -199,7 +199,7 @@ function ProjectForm() {
             onChange={(event) => setModelNumber(event.target.value)}
           />
         </Form.Group> */}
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Project nr
           </Form.Label>
@@ -211,7 +211,7 @@ function ProjectForm() {
             onChange={(event) => setSerialNumber(event.target.value)}
           />
         </Form.Group>
-        {/* <Form.Group>
+        {/* <Form.Group className='mb-3'>
           <Form.Label>
             Inventory number
           </Form.Label>
@@ -223,7 +223,7 @@ function ProjectForm() {
             onChange={(event) => setInventoryNumber(event.target.value)}
           />
         </Form.Group> */}
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Start
           </Form.Label>
@@ -249,7 +249,7 @@ function ProjectForm() {
             dropdownMode="scroll"
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             End
           </Form.Label>
@@ -274,7 +274,7 @@ function ProjectForm() {
             dropdownMode="scroll"
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>Images</Form.Label>
           <FilePond
             files={files}

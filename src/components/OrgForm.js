@@ -76,7 +76,7 @@ function OrgForm({ prefix }) {
       className='OrgForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Name
           </Form.Label>
@@ -87,7 +87,7 @@ function OrgForm({ prefix }) {
             onChange={(event) => setName(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Email
           </Form.Label>
@@ -98,7 +98,7 @@ function OrgForm({ prefix }) {
             onChange={(event) => setEmail(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Phone
           </Form.Label>
@@ -109,7 +109,7 @@ function OrgForm({ prefix }) {
             onChange={(event) => setPhone(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Web page
           </Form.Label>
@@ -120,7 +120,7 @@ function OrgForm({ prefix }) {
             onChange={(event) => setWebPage(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             City
           </Form.Label>
@@ -131,7 +131,7 @@ function OrgForm({ prefix }) {
             onChange={(event) => setCity(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Country
           </Form.Label>

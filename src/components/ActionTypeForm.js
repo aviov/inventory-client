@@ -93,7 +93,7 @@ function ActionTypeForm() {
       className='ActionTypeForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Name
           </Form.Label>
@@ -104,7 +104,7 @@ function ActionTypeForm() {
             onChange={(event) => setName(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Show latest action in table
           </Form.Label>

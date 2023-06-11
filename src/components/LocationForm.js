@@ -70,7 +70,7 @@ function LocationForm() {
       className='LocationForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Name
           </Form.Label>
@@ -81,7 +81,7 @@ function LocationForm() {
             onChange={(event) => setName(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Email
           </Form.Label>
@@ -92,7 +92,7 @@ function LocationForm() {
             onChange={(event) => setEmail(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Phone
           </Form.Label>
@@ -103,7 +103,7 @@ function LocationForm() {
             onChange={(event) => setPhone(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Web page
           </Form.Label>
@@ -114,7 +114,7 @@ function LocationForm() {
             onChange={(event) => setWebPage(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             City
           </Form.Label>
@@ -125,7 +125,7 @@ function LocationForm() {
             onChange={(event) => setCity(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Country
           </Form.Label>
