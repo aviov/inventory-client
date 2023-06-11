@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import { ImSpinner2 } from 'react-icons/im';
 import { FilePond, registerPlugin } from "react-filepond";
 import "filepond/dist/filepond.min.css";
@@ -15,15 +13,16 @@ import FilePondPluginGetFile from 'filepond-plugin-get-file';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.min.css";
 import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.min.css';
-import './ImageGrid.css';
-import { s3FileURL } from '../libs/awsLib';
-import { s3Upload, s3Delete } from '../libs/awsLib';
+import LoadingButton from './LoadingButton';
 import { useMutation } from '@apollo/client'
 import { MUTATION_updateItem } from '../api/mutations'
 import { MUTATION_updateAction } from '../api/mutations';
+import { s3FileURL } from '../libs/awsLib';
+import { s3Upload, s3Delete } from '../libs/awsLib';
 import { isImage, getImageSize } from '../libs/imageLib';
 import { onError } from '../libs/errorLib';
-import LoadingButton from './LoadingButton';
+import './ImageGrid.css';
+
 registerPlugin(
   FilePondPluginImageExifOrientation,
   FilePondPluginImageResize,
@@ -187,107 +186,100 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
         <ImSpinner2
           className='spinning'
         />
-        {/* <Gallery
-          photos={imageData}
-        /> */}
       </div>
     ) : (
       // ((urlsFromServer && urlsFromServer.length > 0) || (files && files.length > 0)) &&
       <div className='ImageGrid'>
-      <Row className='justify-content-end'>
-        {!isEditingFiles ?
-          (
-            <LoadingButton
-              className='LoadingButton'
-              size='sm'
-              color='orange'
-              variant='outline-warning'
-              disabled={false}
-              type='submit'
-              isLoading={false}
-              onClick={() => setIsEditingFiles(true)}
-            >
-              {(files && files.length) ? 'Edit files' : 'Add files'}
-            </LoadingButton>
-          ) : (
-            <>
+        <div className="d-flex justify-content-end">
+          {!isEditingFiles ?
+            (
               <LoadingButton
-                className='LoadingButton'
                 size='sm'
-                variant='outline-primary'
-                disabled={isUpdatingFiles}
-                type='submit'
-                isLoading={isUpdatingFiles}
-                onClick={() => handleUpdateFiles(files, urlsFromServer, filesResized, attachments)}
-              >
-                Save
-              </LoadingButton>
-              <LoadingButton
-                className='LoadingButton'
-                size='sm'
-                variant='outline-secondary'
+                color='orange'
+                variant='outline-warning'
                 disabled={false}
                 type='submit'
                 isLoading={false}
-                onClick={() => setIsEditingFiles(false)}
+                onClick={() => setIsEditingFiles(true)}
               >
-                Cancel
+                {(files && files.length) ? 'Edit files' : 'Add files'}
               </LoadingButton>
-              {/* <LoadingButton
-                className='LoadingButton'
-                size='sm'
-                color='red'
-                variant='outline-danger'
-                disabled={isDeletingFiles}
-                type='submit'
-                isLoading={isDeletingFiles}
-                onClick={() => handleDeleteFiles()}
-              >
-                Delete all images
-              </LoadingButton> */}
-            </>
-          )
-        }
-      </Row>
-      <hr style={{ marginBottom: 0 }}/>
-      <FilePond
-        className='FilepondInactive'
-        files={!isEditingFiles ? urlsFromServer : files}
-        server={!isEditingFiles ? {
-          load: (source, load, error, progress, abort, headers) => {
-            var myRequest = new Request(source);
-            fetch(myRequest).then(function(response) {
-              response.blob().then(function(myBlob) {
-                load(myBlob);
-              });
-            });
+            ) : (
+              <>
+                <LoadingButton
+                  size='sm'
+                  variant='outline-primary'
+                  disabled={isUpdatingFiles}
+                  type='submit'
+                  isLoading={isUpdatingFiles}
+                  onClick={() => handleUpdateFiles(files, urlsFromServer, filesResized, attachments)}
+                >
+                  Save
+                </LoadingButton>
+                <LoadingButton
+                  size='sm'
+                  variant='outline-secondary'
+                  disabled={false}
+                  type='submit'
+                  isLoading={false}
+                  onClick={() => setIsEditingFiles(false)}
+                >
+                  Cancel
+                </LoadingButton>
+                {/* <LoadingButton
+                  size='sm'
+                  color='red'
+                  variant='outline-danger'
+                  disabled={isDeletingFiles}
+                  type='submit'
+                  isLoading={isDeletingFiles}
+                  onClick={() => handleDeleteFiles()}
+                >
+                  Delete all images
+                </LoadingButton> */}
+              </>
+            )
           }
-        } : null}
-        allowFileTypeValidation={true}
-        acceptedFileTypes={['image/*', 'application/pdf']}
-        labelFileTypeNotAllowed={'Only image or pdf can be uploaded'}
-        allowFileSizeValidation={true}
-        maxFileSize={'3MB'}
-        allowImageResize={true}
-        imageResizeTargetWidth={'500'}
-        imageResizeMode={'contain'}
-        imageResizeUpscale={false}
-        onpreparefile={(fileItem, output) => {
-          const filename = fileItem.filename;
-          const type = fileItem.fileType;
-          const transformedFile = new File([output], filename, { type });
-          setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
-        }}
-        allowReorder={false}
-        allowMultiple={true}
-        maxFiles={3}
-        onupdatefiles={setFiles}
-        disabled={!isEditingFiles}
-        labelIdle={isEditingFiles ? 'Drop files here or <span class="filepond--label-action">Browse</span>' : (entityType + ' files')}
-        labelButtonDownloadItem={'Download file'} // by default 'Download file'
-        allowDownloadByUrl={true} // by default downloading by URL disabled
-        credits={false}
-      />
+        </div>
+        <hr style={{ marginBottom: 0 }}/>
+        <FilePond
+          className='FilepondInactive'
+          files={!isEditingFiles ? urlsFromServer : files}
+          server={!isEditingFiles ? {
+            load: (source, load, error, progress, abort, headers) => {
+              var myRequest = new Request(source);
+              fetch(myRequest).then(function(response) {
+                response.blob().then(function(myBlob) {
+                  load(myBlob);
+                });
+              });
+            }
+          } : null}
+          allowFileTypeValidation={true}
+          acceptedFileTypes={['image/*', 'application/pdf']}
+          labelFileTypeNotAllowed={'Only image or pdf can be uploaded'}
+          allowFileSizeValidation={true}
+          maxFileSize={'3MB'}
+          allowImageResize={true}
+          imageResizeTargetWidth={'500'}
+          imageResizeMode={'contain'}
+          imageResizeUpscale={false}
+          onpreparefile={(fileItem, output) => {
+            const filename = fileItem.filename;
+            const type = fileItem.fileType;
+            const transformedFile = new File([output], filename, { type });
+            setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
+          }}
+          allowReorder={false}
+          allowMultiple={true}
+          maxFiles={3}
+          onupdatefiles={setFiles}
+          disabled={!isEditingFiles}
+          labelIdle={isEditingFiles ? 'Drop files here or <span class="filepond--label-action">Browse</span>' : (entityType + ' files')}
+          labelButtonDownloadItem={'Download file'} // by default 'Download file'
+          allowDownloadByUrl={true} // by default downloading by URL disabled
+          credits={false}
+        />
       </div>
     )
   )

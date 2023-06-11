@@ -128,17 +128,18 @@ function ActionTypeForm() {
             onChange={() => setIsVisibleNext(isVisibleNext ? false : true)}
           />
         </Form.Group>
-        <LoadingButton
-          // block
-          disabled={!validateForm({
-            name
-          })}
-          type='submit'
-          isLoading={isLoading}
-          onClick={handleSubmit}
-        >
-          Submit
-        </LoadingButton>
+        <div className='d-grid gap-2'>
+          <LoadingButton
+            disabled={!validateForm({
+              name
+            })}
+            type='submit'
+            isLoading={isLoading}
+            onClick={handleSubmit}
+          >
+            Submit
+          </LoadingButton>
+        </div>
       </Form>
     </div>
   )

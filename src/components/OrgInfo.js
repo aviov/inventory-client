@@ -155,7 +155,7 @@ function OrgInfo({ prefix, prefixType }) {
       >
         <Row>
           <Col>
-            <Row className='justify-content-end'>
+            <div className="d-flex justify-content-end">
               {!isDetailsVisible ? 
                 (
                   <LoadingButton
@@ -236,7 +236,7 @@ function OrgInfo({ prefix, prefixType }) {
                   </>
                 )
               }
-            </Row>
+            </div>
             <hr/>
             <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>

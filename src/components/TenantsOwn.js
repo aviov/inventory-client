@@ -353,7 +353,9 @@ function TenantsOwn() {
                             Select
                           </LoadingButton>
                         ) : (
-                          <Badge pill variant="success">
+                          <Badge
+                            pill
+                            bg="success">
                             {'Active'}
                           </Badge>
                         )

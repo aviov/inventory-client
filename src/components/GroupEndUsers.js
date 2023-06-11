@@ -320,7 +320,7 @@ function GroupEndUsers({ endUserInfos=[], groupId, groupName }) {
                   {endUser.name}
                   {!dateConfirmedAt ? (
                     <Badge
-                      variant="warning"
+                      bg="warning"
                       className='font-weight-light'
                     >
                       Not confirmed

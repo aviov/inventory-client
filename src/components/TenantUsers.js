@@ -197,14 +197,14 @@ function TenantUsers() {
                   {nameTwo}
                   {(inviteInfo && JSON.parse(inviteInfo).dateAccept && JSON.parse(inviteInfo).dateAccept !== null) ? (
                     <Badge
-                      variant="success"
+                      bg="success"
                       className='font-weight-light'
                     >
                       Accepted
                     </Badge>
                   ) : (
                     <Badge
-                      variant="warning"
+                      bg="warning"
                       className='font-weight-light'
                     >
                       Pending
@@ -224,14 +224,13 @@ function TenantUsers() {
                   </Col>
                 </Form.Group>
                 {currentUserName && currentUserName.startsWith('owner:') &&
-                  <Row className='justify-content-end'>
+                  <div className="d-flex justify-content-end">
                     {!isEditing || (isEditing && ref.current !== index) ?
                       (
                         <LoadingButton
                           style={{
                             margin: 4
                           }}
-                          className='LoadingButton'
                           size='sm'
                           color='orange'
                           variant='outline-warning'
@@ -251,7 +250,6 @@ function TenantUsers() {
                             style={{
                               margin: 4
                             }}
-                            className='LoadingButton'
                             size='sm'
                             variant='outline-danger'
                             disabled={isDeleting && ref.current === index}
@@ -264,13 +262,12 @@ function TenantUsers() {
                               ref.current = null;
                             }}
                           >
-                            Revoke
+                            Revoke access
                           </LoadingButton>
                           <LoadingButton
                             style={{
                               margin: 4
                             }}
-                            className='LoadingButton'
                             size='sm'
                             variant='outline-secondary'
                             disabled={false}
@@ -287,7 +284,7 @@ function TenantUsers() {
                         </>
                       )
                     }
-                  </Row>
+                  </div>
                 }
               </Card.Body>
             </Card>
@@ -385,9 +382,7 @@ function TenantUsers() {
       }
       <Row className='justify-content-center'>
         {!isInviting && currentUserName && currentUserName.startsWith('owner:') &&
-          <div
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
-          >
+          <div className='d-grid gap-2'>
             <LoadingButton
               className='LoadingButton'
               size='sm'

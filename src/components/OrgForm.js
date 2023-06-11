@@ -142,22 +142,23 @@ function OrgForm({ prefix }) {
             onChange={(event) => setCountry(event.target.value)}
           />
         </Form.Group>
-        <LoadingButton
-          // block
-          disabled={!validateForm({
-            name,
-            // email,
-            // phone,
-            // webPage,
-            // city,
-            // country
-          })}
-          type='submit'
-          isLoading={isLoading}
-          onClick={handleSubmit}
-        >
-          Submit
-        </LoadingButton>
+        <div className='d-grid gap-2'>
+          <LoadingButton
+            disabled={!validateForm({
+              name,
+              // email,
+              // phone,
+              // webPage,
+              // city,
+              // country
+            })}
+            type='submit'
+            isLoading={isLoading}
+            onClick={handleSubmit}
+          >
+            Submit
+          </LoadingButton>
+        </div>
       </Form>
     </div>
   )

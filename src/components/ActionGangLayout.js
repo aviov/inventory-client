@@ -6,7 +6,6 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import Button from 'react-bootstrap/Button';
 import { ImSpinner2 } from 'react-icons/im';
 import { useLazyQuery } from "@apollo/client";
 import { useAuthContext } from "../libs/contextLib";
@@ -14,6 +13,7 @@ import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
 import ProjectRow from "./ProjectRow";
+import LoadingButton from './LoadingButton';
 import {
   handleMoveWithinParent,
   handleMoveToDifferentParent,
@@ -215,19 +215,17 @@ const Container = ({
                     data={sideBarItem}
                   />
                 ))}
-                <div
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: 10 }}
-                >
-                  <Button
-                    // disabled={loading}
-                    className='AddActionTemplButton'
+                <div className='d-grid gap-2 AddItemButton'>
+                  <LoadingButton
                     size='sm'
-                    variant='outline-primary'
-                    title='Add action template'
+                    variant='primary'
+                    disabled={false}
+                    type='submit'
+                    isLoading={false}
                     onClick={() => navigate(`/actionTempls/new`)}
                   >
                     Add action template
-                  </Button>
+                  </LoadingButton>
                 </div>
               </div>
             )}

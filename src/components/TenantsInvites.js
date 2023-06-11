@@ -217,7 +217,9 @@ function TenantsInvites() {
                           Accept
                         </LoadingButton>
                       ) : (
-                        <Badge pill variant="success">
+                        <Badge
+                          pill
+                          bg="success">
                           {'Active'}
                         </Badge>
                       )

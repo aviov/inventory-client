@@ -143,7 +143,7 @@ function ActionTemplInfo() {
             // lg='4'
             // breakpoints={['md', 'sm', 'xs']}
           >
-            <Row className='justify-content-end'>
+            <div className="d-flex justify-content-end">
               {!isEditing ?
                 (
                   <LoadingButton
@@ -197,7 +197,7 @@ function ActionTemplInfo() {
                   </>
                 )
               }
-            </Row>
+            </div>
             <hr/>
             <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>

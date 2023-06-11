@@ -301,20 +301,21 @@ function ProjectForm() {
             credits={false}
           />
         </Form.Group>
-        <LoadingButton
-          // block
-          disabled={!validateForm({
-            // modelNumber,
-            serialNumber,
-            dateEstimStart,
-            dateEstimEnd
-          })}
-          type='submit'
-          isLoading={isLoading}
-          onClick={handleSubmit}
-        >
-          Submit
-        </LoadingButton>
+        <div className='d-grid gap-2'>
+          <LoadingButton
+            disabled={!validateForm({
+              // modelNumber,
+              serialNumber,
+              dateEstimStart,
+              dateEstimEnd
+            })}
+            type='submit'
+            isLoading={isLoading}
+            onClick={handleSubmit}
+          >
+            Submit
+          </LoadingButton>
+        </div>
       </Form>
     </div>
   )

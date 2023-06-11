@@ -146,14 +146,15 @@ export default function Signup() {
             {`Check your email. The code is sent to your email ${email}`}
           </Form.Text>
         </Form.Group>
-        <LoadingButton
-          // block
-          type='submit'
-          disabled={!validateConfirmationForm()}
-          isLoading={isLoading}
-        >
-          Verify
-        </LoadingButton>
+        <div className='d-grid gap-2'>
+          <LoadingButton
+            type='submit'
+            disabled={!validateConfirmationForm()}
+            isLoading={isLoading}
+          >
+            Verify
+          </LoadingButton>
+        </div>
       </Form>
     )
   };
