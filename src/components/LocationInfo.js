@@ -203,7 +203,7 @@ function LocationInfo() {
               }
             </Row>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Name
               </Form.Label>
@@ -224,7 +224,7 @@ function LocationInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Email
               </Form.Label>
@@ -245,7 +245,7 @@ function LocationInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Phone
               </Form.Label>
@@ -266,7 +266,7 @@ function LocationInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Web page
               </Form.Label>
@@ -288,7 +288,7 @@ function LocationInfo() {
               </Col>
             </Form.Group>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 City
               </Form.Label>
@@ -309,7 +309,7 @@ function LocationInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Country
               </Form.Label>

@@ -248,7 +248,7 @@ function ItemInfo() {
               }
             </Row>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Machine type
                 {/* Item type */}
@@ -273,7 +273,7 @@ function ItemInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Model
               </Form.Label>
@@ -294,7 +294,7 @@ function ItemInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Reg nr
                 {/* Serial nr */}
@@ -316,7 +316,7 @@ function ItemInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Inventory nr
               </Form.Label>
@@ -338,7 +338,7 @@ function ItemInfo() {
               </Col>
             </Form.Group>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Warranty begins
               </Form.Label>
@@ -373,7 +373,7 @@ function ItemInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               {isWarrantyValid ? (
                 <Form.Label column='sm=4' className='font-weight-bold'>
                   <FcApproval />

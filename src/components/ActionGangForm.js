@@ -79,7 +79,7 @@ function ActionGangForm() {
       className='ActionGangForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Name
           </Form.Label>
@@ -91,7 +91,7 @@ function ActionGangForm() {
             onChange={(event) => setName(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Description
           </Form.Label>
@@ -103,7 +103,7 @@ function ActionGangForm() {
             onChange={(event) => setDescription(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Measure units A
           </Form.Label>
@@ -115,7 +115,7 @@ function ActionGangForm() {
             onChange={(event) => setValueUnitsA(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Measure units B
           </Form.Label>

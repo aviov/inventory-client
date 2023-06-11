@@ -206,7 +206,7 @@ function GroupInfo() {
               }
             </Row>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Name
               </Form.Label>
@@ -227,7 +227,7 @@ function GroupInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Reg nr
               </Form.Label>
@@ -248,7 +248,7 @@ function GroupInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Email
               </Form.Label>
@@ -269,7 +269,7 @@ function GroupInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Phone
               </Form.Label>
@@ -290,7 +290,7 @@ function GroupInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Web page
               </Form.Label>

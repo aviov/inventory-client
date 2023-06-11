@@ -389,7 +389,7 @@ function EndUserInfo() {
               }
             </Row>
             <hr/>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Name
               </Form.Label>
@@ -410,7 +410,7 @@ function EndUserInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Email
               </Form.Label>
@@ -431,7 +431,7 @@ function EndUserInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 {isEmailVerified ? 'Email verified' : 'Email not verified'}
               </Form.Label>
@@ -463,7 +463,7 @@ function EndUserInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 {'User status'}
               </Form.Label>
@@ -535,7 +535,7 @@ function EndUserInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Phone
               </Form.Label>
@@ -556,7 +556,7 @@ function EndUserInfo() {
                 )}
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Send email with future actions
               </Form.Label>

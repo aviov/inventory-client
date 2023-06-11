@@ -130,7 +130,7 @@ export default function Signup() {
       <Form
         onSubmit={handleSubmitConfirmation}
       >
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Confirmation code
           </Form.Label>

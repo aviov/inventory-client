@@ -55,7 +55,7 @@ function ItemTypeForm() {
       className='ItemTypeForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Name
           </Form.Label>

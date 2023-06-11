@@ -211,7 +211,7 @@ function TenantUsers() {
                     </Badge>
                   )}
                 </Card.Title>
-                <Form.Group as={Row}>
+                <Form.Group className='mb-3' as={Row}>
                   <Form.Label column='sm=4' className='font-weight-bold'>
                     Email
                   </Form.Label>
@@ -344,7 +344,7 @@ function TenantUsers() {
                 </div>
               </div>
             </Card.Title>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 <ImUser/>
               </Form.Label>
@@ -368,7 +368,7 @@ function TenantUsers() {
                 />
               </Col>
             </Form.Group>
-            <Form.Group as={Row}>
+            <Form.Group className='mb-3' as={Row}>
               <Form.Label column='sm=4' className='font-weight-bold'>
                 Email
               </Form.Label>

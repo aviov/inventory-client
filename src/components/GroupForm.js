@@ -85,7 +85,7 @@ function GroupForm() {
       className='GroupForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Name
           </Form.Label>
@@ -96,7 +96,7 @@ function GroupForm() {
             onChange={(event) => setName(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Reg nr
           </Form.Label>
@@ -107,7 +107,7 @@ function GroupForm() {
             onChange={(event) => setRegNr(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Email
           </Form.Label>
@@ -118,7 +118,7 @@ function GroupForm() {
             onChange={(event) => setEmail(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Phone
           </Form.Label>
@@ -129,7 +129,7 @@ function GroupForm() {
             onChange={(event) => setPhone(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Web page
           </Form.Label>

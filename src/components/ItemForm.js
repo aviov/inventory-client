@@ -155,7 +155,7 @@ function ItemForm() {
       className='ItemForm'
     >
       <Form>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Machine type
             {/* Item type */}
@@ -169,7 +169,7 @@ function ItemForm() {
             }}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Model
           </Form.Label>
@@ -180,7 +180,7 @@ function ItemForm() {
             onChange={(event) => setModelNumber(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Reg nr
             {/* Serial number */}
@@ -193,7 +193,7 @@ function ItemForm() {
             onChange={(event) => setSerialNumber(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Inventory number
           </Form.Label>
@@ -205,7 +205,7 @@ function ItemForm() {
             onChange={(event) => setInventoryNumber(event.target.value)}
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Warranty starts
           </Form.Label>
@@ -231,7 +231,7 @@ function ItemForm() {
             dropdownMode="scroll"
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>
             Warranty expires
           </Form.Label>
@@ -256,7 +256,7 @@ function ItemForm() {
             dropdownMode="scroll"
           />
         </Form.Group>
-        <Form.Group>
+        <Form.Group className='mb-3'>
           <Form.Label>Images</Form.Label>
           <FilePond
             files={files}
