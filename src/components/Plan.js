@@ -818,7 +818,16 @@ export default function Plan() {
         setIsCreating(false);
       }
       setActions([...actions]);
-      setActionCreate({});
+      setActionCreate({
+        name: '',
+        description: '',
+        itemId: '',
+        endUserId: '',
+        locationId: '',
+        dateActionStart: '',
+        dateActionEnd: '',
+        actionTypeId: ''
+      });
       setIsModalVisible(false);
   }, [isEditing, isCreating, actions, setActionCreate]);
   
@@ -840,6 +849,7 @@ export default function Plan() {
       </div>
     )
   }
+  console.log('actionCreate: ', actionCreate);
 
   return <div className='Plan'>
       <Eventcalendar
