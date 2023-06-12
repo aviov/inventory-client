@@ -30,7 +30,7 @@ function ActionGangForm() {
   const [valueUnitsB, setValueUnitsB] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [createActionGang] = useMutation(MUTATION_createActionGang, {
-    refetchQueries: [{ query: QUERY_listActionGangs }]
+    refetchQueries: [{ query: QUERY_listActionGangs, variables: { prefix: 'templ:' } }]
   });
 
   function validateForm(fields={}) {
@@ -43,7 +43,7 @@ function ActionGangForm() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    const id = 'actiongang:' + uuidv1();
+    const id = 'templ:actiongang:' + uuidv1();
     const dateCreatedAt = new Date();
     setIsLoading(true);
     try {

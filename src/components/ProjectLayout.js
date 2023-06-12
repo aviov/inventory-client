@@ -39,7 +39,9 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
   const { isAuthenticated } = useAuthContext();
   // useEffect onLoad ActionGang ACTION
   const navigate = useNavigate();
-  const [listActionGangs, { data: dataActionGangs, loading: loadingActionGangs }] = useLazyQuery(QUERY_listActionGangs);
+  const [listActionGangs, { data: dataActionGangs, loading: loadingActionGangs }] = useLazyQuery(QUERY_listActionGangs, {
+    variables: { prefix: 'templ:' }
+  });
   const [listActions, { data: dataActionTempls, loading: loadingActionTempls }] = useLazyQuery(QUERY_listActions, {
     variables: { prefix: 'templ:' }
   });

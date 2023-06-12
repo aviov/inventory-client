@@ -55,7 +55,7 @@ function ActionGangInfo() {
   const [getActionGangById, { data, loading }] = useLazyQuery(QUERY_getActionGangById);
   const [updateActionGang] = useMutation(MUTATION_updateActionGang);
   const [deleteActionGang] = useMutation(MUTATION_deleteActionGang, {
-    refetchQueries: [{ query: QUERY_listActionGangs }]
+    refetchQueries: [{ query: QUERY_listActionGangs, variables: { prefix: 'templ:' } }]
   });
   
   useEffect(() => {

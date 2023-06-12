@@ -849,7 +849,6 @@ export default function Plan() {
       </div>
     )
   }
-  console.log('actionCreate: ', actionCreate);
 
   return <div className='Plan'>
       <Eventcalendar
