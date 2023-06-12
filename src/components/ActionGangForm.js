@@ -66,7 +66,7 @@ function ActionGangForm() {
         setDescription('');
         setValueUnitsA('');
         setValueUnitsB('');
-        navigate.goBack();
+        navigate(-1);
       }
     } catch (error) {
       onError(error);

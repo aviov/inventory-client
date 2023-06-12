@@ -76,7 +76,7 @@ function EndUserForm({ prefix }) {
         setName('');
         setEmail('');
         setPhone('');
-        navigate.goBack();
+        navigate(-1);
         // navigate('/endUsers');
       }
     } catch (error) {
