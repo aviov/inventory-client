@@ -63,7 +63,7 @@ function OrgForm({ prefix }) {
         setWebPage('');
         setCity('');
         setCountry('');
-        navigate.goBack();
+        navigate(-1);
         // navigate('/orgs');
       }
     } catch (error) {

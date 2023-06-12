@@ -124,7 +124,7 @@ function OrgInfo({ prefix, prefixType }) {
       setIsDeleting(true);
       try {
         await deleteOrg({ variables: { orgId: id } });
-        navigate.goBack();
+        navigate(-1);
       } catch (error) {
         onError(error);
       }

@@ -151,7 +151,7 @@ function ActionGangInfo() {
       setIsDeleting(true);
       try {
         await deleteActionGang({ variables: { actionGangId: id } });
-        navigate.goBack();
+        navigate(-1);
       } catch (error) {
         onError(error);
       }

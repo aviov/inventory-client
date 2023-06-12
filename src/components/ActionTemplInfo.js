@@ -109,7 +109,7 @@ function ActionTemplInfo() {
       setIsDeleting(true);
       try {
         await deleteAction({ variables: { actionId: id } });
-        navigate.goBack();
+        navigate(-1);
       } catch (error) {
         onError(error);
       }

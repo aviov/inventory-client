@@ -279,7 +279,7 @@ function EndUserInfo() {
       setIsDeleting(true);
       try {
         await deleteEndUser({ variables: { endUserId: id } });
-        navigate.goBack();
+        navigate(-1);
       } catch (error) {
         onError(error);
       }
