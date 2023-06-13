@@ -146,7 +146,7 @@ function ActionGangInfo() {
   }
 
   async function handleDelete(actionGang) {
-    const confirmed = window.confirm(`Do you want to delete actionGang ${actionGang.name}, SN: ${actionGang.description}?`);
+    const confirmed = window.confirm(`Do you want to delete actionGang ${actionGang.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {

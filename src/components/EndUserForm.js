@@ -52,8 +52,8 @@ function EndUserForm({ prefix }) {
     if (!validator.isMobilePhone(phone, 'et-EE')) {
       alert(
         phone +
-        ' is not mobile number. ' +
-        '\nEnter mobile number that exist.'
+        ' is not a mobile number. ' +
+        '\nEnter the mobile number that exist.'
       );
       return null;
     }

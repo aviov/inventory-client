@@ -119,7 +119,7 @@ function OrgInfo({ prefix, prefixType }) {
   }
 
   async function handleDelete(org) {
-    const confirmed = window.confirm(`Do you want to delete item type ${org.name}?`);
+    const confirmed = window.confirm(`Do you want to delete organisation ${org.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
