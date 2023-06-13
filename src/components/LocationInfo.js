@@ -111,7 +111,7 @@ function LocationInfo() {
   }
 
   async function handleDelete(location) {
-    const confirmed = window.confirm(`Do you want to delete item type ${location.name}?`);
+    const confirmed = window.confirm(`Do you want to delete location ${location.name}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {

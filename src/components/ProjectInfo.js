@@ -177,7 +177,7 @@ function ProjectInfo() {
   }
 
   async function handleDelete(project) {
-    const confirmed = window.confirm(`Do you want to delete project ${project.modelNumber}, SN: ${project.serialNumber}?`);
+    const confirmed = window.confirm(`Do you want to delete project ${project.modelNumber}?`);
     if (confirmed) {
       setIsDeleting(true);
       try {
