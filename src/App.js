@@ -124,8 +124,6 @@ function App() {
               Keepserv
             </Navbar.Brand>
           </LinkContainer>
-        </Container>
-        <Container>
           <Navbar.Toggle />
         </Container>
         <Container>
