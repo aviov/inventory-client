@@ -1,6 +1,10 @@
 // import shortid from "shortid";
 import { v1 as uuidv1 } from 'uuid';
 
+export const SIDEBAR_ITEM_RESOURCE = "sidebarItemResource";
+export const PROJECT_RESOURCE = "rowResource"
+export const RESOURCEGANG = "columnResource";
+export const RESOURCE = "componentResource";
 export const SIDEBAR_ITEM_PROJECT = "sidebarItemProject";
 export const SIDEBAR_ITEM_ACTIONGANG = "sidebarItemActionGang";
 export const SIDEBAR_ITEM_ACTION = "sidebarItemWork";

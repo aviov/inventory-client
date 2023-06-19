@@ -24,7 +24,14 @@ import { MdError } from 'react-icons/md';
 import './ProjectInfo.css'
 import { s3Delete } from '../libs/awsLib';
 import { MUTATION_deleteProject, MUTATION_updateProject } from "../api/mutations";
-import { PROJECT, ACTIONGANG, ACTION } from "../mock/projectConstants";
+import {
+  PROJECT,
+  ACTIONGANG,
+  ACTION,
+  PROJECT_RESOURCE,
+  RESOURCEGANG,
+  RESOURCE
+} from "../mock/projectConstants";
 import { onError } from "../libs/errorLib";
 import enGb from 'date-fns/locale/en-GB';
 // import ProjectActions from "./ProjectActions";
@@ -80,7 +87,8 @@ function ProjectInfo() {
             dateEstimStart,
             dateEstimEnd,
             attachments,
-            children
+            children,
+            children2
             // projectType
           } = projectById;
           // const projectTypeId = projectById.projectType && projectById.projectType.id;
@@ -109,6 +117,21 @@ function ProjectInfo() {
                   content: action
                 })) : []
               })) : [],
+            },
+            {
+              type: PROJECT_RESOURCE,
+              id: 'resource@project:' + id,
+              content: `${serialNumber} Resources`,
+              children: [{
+                type: RESOURCEGANG,
+                id: 'persons@project:' + id,
+                content: 'Persons',
+                children: children2 ? JSON.parse(children2).map(resource => ({
+                  type: RESOURCE,
+                  id: resource.id,
+                  content: resource
+                })) : []
+              }]
             }
           ]);
           // projectType && setProjectTypeOption({ value: projectTypeIdWithoutPrefix, label: projectType.name });
@@ -154,6 +177,13 @@ function ProjectInfo() {
         };
       }
     }));
+    const children2 = JSON.stringify(layout[1].children.map((resourceGang) => {
+      if (resourceGang.children && resourceGang.content === 'Persons') {
+        return resourceGang.children.map(action => (action.content));
+      } else {
+        return []
+      }
+    })[0]);
     try {
       const data = await updateProject({
         variables: {
@@ -162,7 +192,8 @@ function ProjectInfo() {
             serialNumber,
             dateEstimStart,
             dateEstimEnd,
-            children
+            children,
+            children2
             // projectTypeId: projectTypeId && ('project:' + projectTypeId)
           }
         }

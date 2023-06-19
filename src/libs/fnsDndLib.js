@@ -1,5 +1,5 @@
 import { v1 as uuidv1 } from 'uuid';
-import { PROJECT, ACTIONGANG, ACTION } from "../mock/projectConstants";
+import { PROJECT, ACTIONGANG, ACTION, RESOURCE } from "../mock/projectConstants";
 
 // a little function to help with reordering the result
 export const reorder = (list, startIndex, endIndex) => {
@@ -251,6 +251,21 @@ export const handleMoveSidebarItemIntoParent = (
         //   id: uuidv1(),
         //   children: [item]
         // };
+        break;
+      }
+      default: {
+        newLayoutStructure = item;
+      }
+    }
+    return addChildToChildren(layout, splitDropZonePath, newLayoutStructure);
+  }
+
+  if (item.type === RESOURCE) {
+    switch (splitDropZonePath.length) {
+      case 1: {
+        break;
+      }
+      case 2: {
         break;
       }
       default: {
