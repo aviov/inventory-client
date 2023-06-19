@@ -10,8 +10,10 @@ import DropZone from "./ProjectDropZone";
 import TrashDropZone from "./ProjectTrashDropZone";
 import SideBarItem from "./ProjectSideBarItem";
 import SideBarItemActionGang from "./ProjectSideBarItemActionGang";
+import SideBarItemPerson from "./ProjectSideBarItemPerson";
 // import SideBarItemProject from "./ProjectSideBarItemProject";
 import ProjectRow from "./ProjectRow";
+import ProjectRowResource from "./ProjectRowResource";
 import {
   handleMoveWithinParent,
   handleMoveToDifferentParent,
@@ -19,6 +21,7 @@ import {
   handleRemoveItemFromLayout
 } from "../libs/fnsDndLib";
 import {
+  QUERY_listEndUsers,
   QUERY_listActionGangs,
   QUERY_listActions
 } from '../api/queries';
@@ -29,22 +32,34 @@ import {
   SIDEBAR_ITEM_ACTION,
   ACTION,
   ACTIONGANG, 
-  PROJECT
+  PROJECT,
+  SIDEBAR_ITEM_RESOURCE,
+  PROJECT_RESOURCE,
+  RESOURCE,
 } from "../mock/projectConstants";
 import { v1 as uuidv1 } from 'uuid';
 import { onError } from "../libs/errorLib";
 import "./ProjectStyles.css";
 
-const Container = ({ prefix, project, layout, setLayout, components, setComponents }) => {
+const Container = ({
+  prefix,
+  project,
+  layout,
+  setLayout,
+  components,
+  setComponents
+}) => {
   const { isAuthenticated } = useAuthContext();
   // useEffect onLoad ActionGang ACTION
   const navigate = useNavigate();
+  const [listEndUsers, { data: dataEndUsers, loading: loadingEndUsers }] = useLazyQuery(QUERY_listEndUsers);
   const [listActionGangs, { data: dataActionGangs, loading: loadingActionGangs }] = useLazyQuery(QUERY_listActionGangs, {
     variables: { prefix: 'templ:' }
   });
   const [listActions, { data: dataActionTempls, loading: loadingActionTempls }] = useLazyQuery(QUERY_listActions, {
     variables: { prefix: 'templ:' }
   });
+  const [endUsers, setEndUsers] = useState([]);
   const [actionGangs, setActionGangs] = useState([]);
   const [actionTempls, setActionTempls] = useState([]);
 
@@ -52,6 +67,23 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
     function onLoad() {
       if (!isAuthenticated) {
         return null;
+      }
+      try {
+        listEndUsers();
+        if (dataEndUsers) {
+          const listLayout = dataEndUsers.listEndUsers.map((endUser) => ({
+            id: endUser.id,
+            type: SIDEBAR_ITEM_RESOURCE,
+            component: {
+              type: RESOURCE,
+              id: endUser.id,
+              content: endUser
+            }
+          }));
+          setEndUsers(listLayout);
+        }
+      } catch (error) {
+        onError(error);
       }
       try {
         listActionGangs();
@@ -95,7 +127,15 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       }
     }
     onLoad();
-  },[isAuthenticated, listActionGangs, listActions, dataActionGangs, dataActionTempls]);
+  },[
+    isAuthenticated,
+    listEndUsers,
+    listActionGangs,
+    listActions,
+    dataEndUsers,
+    dataActionGangs,
+    dataActionTempls
+  ]);
 
   const handleDropToTrashBin = useCallback(
     (dropZone, item) => {
@@ -145,7 +185,7 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       }
 
       // 0. Move sidebar item column into row (ActionGang into Project)
-      if ((item.type === SIDEBAR_ITEM_ACTIONGANG) && (splitDropZonePath.length === 2)) {
+      if ((item.type === SIDEBAR_ITEM_ACTIONGANG) && (splitDropZonePath.length === 2) && (splitDropZonePath[0] === '0')) {
         const newComponent = {
           id: uuidv1(),
           ...item.column
@@ -170,7 +210,7 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       }
 
       // 1. Move sidebar item component into column (ACTION into ActionGang)
-      if ((item.type === SIDEBAR_ITEM_ACTION) && (splitDropZonePath.length === 3)) {
+      if ((item.type === SIDEBAR_ITEM_ACTION) && (splitDropZonePath.length === 3) && (splitDropZonePath[0] === '0')) {
         const newComponent = {
           id: uuidv1(),
           ...item.component
@@ -178,6 +218,31 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
         const newItem = {
           ...item.component,
           type: ACTION
+        };
+        setComponents({
+          ...components,
+          [newComponent.id]: newComponent
+        });
+        setLayout(
+          handleMoveSidebarItemIntoParent(
+            layout,
+            splitDropZonePath,
+            newItem
+          )
+        );
+        return;
+      }
+
+      // 1. Move sidebar item component into column (RESOURCE into ActionGang)
+      if ((item.type === SIDEBAR_ITEM_RESOURCE) && (splitDropZonePath.length === 3) && (splitDropZonePath[0] === '1')) {
+        console.log('splitDropZonePath', splitDropZonePath);
+        const newComponent = {
+          id: uuidv1(),
+          ...item.component
+        };
+        const newItem = {
+          ...item.component,
+          type: RESOURCE
         };
         setComponents({
           ...components,
@@ -247,6 +312,18 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
     );
   };
 
+  const renderProjectRowResource = (row, currentPath) => {
+    return (
+      <ProjectRowResource
+        key={row.id}
+        data={row}
+        handleDrop={handleDrop}
+        components={components}
+        path={currentPath}
+      />
+    );
+  };
+
   function renderLoading() {
     return(
       <div
@@ -258,6 +335,8 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       </div>
     )
   }
+
+  console.log('layout', layout);
 
   return (
     <div
@@ -282,7 +361,12 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
                   onDrop={handleDrop}
                   path={currentPath}
                 />
-                {renderProjectRow(row, currentPath)}
+                {(row.type === PROJECT) &&
+                  renderProjectRow(row, currentPath)
+                }
+                {(row.type === PROJECT_RESOURCE) &&
+                  renderProjectRowResource(row, currentPath)
+                }
               </React.Fragment>
             );
           })}
@@ -298,13 +382,32 @@ const Container = ({ prefix, project, layout, setLayout, components, setComponen
       </div>
       <div>
         <Tabs defaultActiveKey="2" transition={false} className="horizontal-tabs">
-          {/* <Tab eventKey="1" className="headings" title="Projects">
-            <div className="sideBar">
-              {Object.values(SIDEBAR_ITEMS_PROJECTS).map((sideBarItem, index) => (
-                <SideBarItemProject key={sideBarItem.id} data={sideBarItem} />
-              ))}
-            </div>
-          </Tab> */}
+          <Tab eventKey="1" className="headings" title="Persons">
+            {loadingEndUsers ? (
+              renderLoading()
+            ) : (
+              <div className="sideBar">
+                {Object.values(endUsers).map((sideBarItem, index) => (
+                  <SideBarItemPerson
+                    key={sideBarItem.id}
+                    data={sideBarItem}
+                  />
+                ))}
+                <div className='d-grid gap-2 AddItemButton'>
+                  <LoadingButton
+                    size='sm'
+                    variant='primary'
+                    disabled={false}
+                    type='submit'
+                    isLoading={false}
+                    onClick={() => navigate(`/endUsers/new`)}
+                  >
+                    Add person
+                  </LoadingButton>
+                </div>
+              </div>
+            )}
+          </Tab>
           <Tab eventKey="2" className="headings" title="Stages">
             {loadingActionGangs ? (
               renderLoading()
