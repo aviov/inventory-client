@@ -1,0 +1,125 @@
+{
+  "auth": {
+    "inventoryclientabb284aa": {
+      "customAuth": false,
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "imported"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_auth_inventoryclientabb284aa_allowUnauthenticatedIdentities": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_authRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_authRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_identityPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_identityPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_nativeClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_unauthRoleArn": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_unauthRoleName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_userPoolId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_userPoolName": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_auth_inventoryclientabb284aa_webClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "inventoryclientabb284aa"
+        }
+      ]
+    },
+    "AMPLIFY_storage_inventoryclientdee6396d_bucketName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "inventoryclientdee6396d"
+        }
+      ]
+    },
+    "AMPLIFY_storage_inventoryclientdee6396d_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "inventoryclientdee6396d"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "inventoryclientdee6396d": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "S3",
+      "serviceType": "imported"
+    }
+  }
+}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import './Login.css';
-import { Auth } from 'aws-amplify';
+import { signIn, fetchAuthSession } from 'aws-amplify/auth';
 import {
   useAuthContext,
   useUserContext,
@@ -32,10 +32,12 @@ export default function Login() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      await Auth.signIn(email, password);
+      await signIn({ username: email, password });
       setCurrentUserName(email);
       setIsAuthenticated(true);
-      const currentTenantId = ((await Auth.currentSession()).getAccessToken().payload['cognito:groups'] || [])[0]
+      const currentSession = await fetchAuthSession();
+      // console.log('currentSession', currentSession);
+      const currentTenantId = (currentSession.tokens.idToken.payload['cognito:groups'] || [])[0]
       if (currentTenantId !== null) {
         setCurrentTenantId(currentTenantId);
         navigate('/');

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
-import { Auth } from 'aws-amplify';
+import { signUp, confirmSignUp, signIn } from 'aws-amplify/auth';
 import { useAuthContext, useUserContext } from '../libs/contextLib';
 import LoadingButton from './LoadingButton';
 import { useFormFields } from '../libs/hooksLib';
@@ -43,7 +43,7 @@ export default function Signup() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      const newUser = await Auth.signUp({
+      const newUser = await signUp({
         username: email,
         password: password
       });
@@ -59,8 +59,8 @@ export default function Signup() {
     event.preventDefault();
     setIsLoading(true);
     try {
-      await Auth.confirmSignUp(email, confirmationCode);
-      await Auth.signIn(email, password);
+      await confirmSignUp(email, confirmationCode);
+      await signIn(email, password);
       setCurrentUserName(email);
       setIsAuthenticated(true);
       navigate('/');

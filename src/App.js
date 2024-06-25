@@ -5,7 +5,7 @@ import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Auth } from 'aws-amplify';
+import { fetchAuthSession, signOut } from 'aws-amplify/auth';
 import { AuthContext, UserContext, TenantContext, TenantUserContext } from './libs/contextLib';
 import { useApolloClient } from '@apollo/client';
 import { sliceStringAfter } from './libs/fnsLib';
@@ -37,12 +37,15 @@ function App() {
     async function onLoad() {
       let email = '';
       try {
-        const currentSession = await Auth.currentSession();
-        email = currentSession.idToken.payload.email
-        setIsAuthenticated(true);
-        setCurrentTenantId(
-          (currentSession.getAccessToken().payload['cognito:groups'] || [])[0]
-        );
+        const currentSession = await fetchAuthSession();
+        // console.log('currentSession', currentSession);
+        if (currentSession.tokens) {
+          email = currentSession.tokens.idToken.payload.email;
+          setIsAuthenticated(true);
+          setCurrentTenantId(
+            (currentSession.tokens.idToken.payload['cognito:groups'] || [])[0]
+          );
+        }
       } catch (error) {
         if (error !== 'No current user') {
           onError(error);
@@ -99,7 +102,7 @@ function App() {
   ]);
 
   async function handleLogout () {
-    await Auth.signOut();
+    await signOut();
     setIsAuthenticated(false);
     setCurrentUserName(null);
     setCurrentTenantId(null);

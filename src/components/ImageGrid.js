@@ -10,6 +10,7 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginMediaPreview from "filepond-plugin-media-preview";
 import FilePondPluginGetFile from 'filepond-plugin-get-file';
+import FilePondPluginFileRename from 'filepond-plugin-file-rename';
 import "filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css";
 import "filepond-plugin-media-preview/dist/filepond-plugin-media-preview.min.css";
 import 'filepond-plugin-get-file/dist/filepond-plugin-get-file.min.css';
@@ -19,6 +20,7 @@ import { MUTATION_updateItem } from '../api/mutations'
 import { MUTATION_updateAction } from '../api/mutations';
 import { s3FileURL } from '../libs/awsLib';
 import { s3Upload, s3Delete } from '../libs/awsLib';
+import { isEqualLengthsAndValuesByKey } from '../libs/fnsLib';
 import { isImage, getImageSize } from '../libs/imageLib';
 import { onError } from '../libs/errorLib';
 import './ImageGrid.css';
@@ -31,7 +33,8 @@ registerPlugin(
   FilePondPluginFileValidateType,
   FilePondPluginFileValidateSize,
   FilePondPluginMediaPreview,
-  FilePondPluginGetFile
+  FilePondPluginGetFile,
+  FilePondPluginFileRename
 );
 
 function ImageGrid({ attachments='[]', entityId, entityType }) {
@@ -50,24 +53,13 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
     async function onLoad() {
       setIsLoading(true);
       try {
+        console.log(attachments);
         const filepondData = await Promise.all(JSON.parse(attachments).map(async ({ key, type, width, height }) => {
           const source = await s3FileURL(key);
           if (isImage({ type })) {
-            return {
-              source,
-              key,
-              options: {
-                type: 'local'
-              }
-            };
+            return source;
           } else {
-            return {
-              source, //: '/images/file-icon-420x420.png',
-              key,
-              options: {
-                type: 'local'
-              }
-            }
+            return source;
           }
         }));
         setUrlsFromServer(filepondData);
@@ -83,9 +75,9 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
     }
   }, [attachments, prevAttachments, isEditingFiles]);
 
-  async function uploadFile(file) {
+  async function uploadFile({ filename, file }) {
     try {
-      const key = await s3Upload(file);
+      const key = await s3Upload({ filename, file });
       const { width, height } = await getImageSize(file);
       if (isImage(file)) {
         return { key, type: file.type, width, height };
@@ -98,7 +90,7 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
   };
 
   async function uploadFiles(files=[]) {
-    const attachmentsUploaded = await Promise.all(files.map(async ({ file }) => uploadFile(file)));
+    const attachmentsUploaded = await Promise.all(files.map(async ({ filename, file }) => await uploadFile({ filename, file })));
     return attachmentsUploaded;
   };
 
@@ -115,12 +107,12 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
     const confirmed = (urls.length > 0) ?
       window.confirm(`
       Do you want to delete images?
-      ${urls.map(({ key }) => `\n${key}`)},
+      ${urls.map(({ name }) => `\n${name}`)},
       `) : false;
     if (confirmed) {
       // setIsDeletingFiles(true);
-      const filenames = urls.map(({ key }) => key);
-      const attachmentsDeleted = await Promise.all(filenames.map(async (filename) => deleteFile(filename)));
+      const filenames = urls.map(({ name }) => name);
+      const attachmentsDeleted = await Promise.all(filenames.map(async (name) => await deleteFile(name)));
       return attachmentsDeleted;
       // setIsDeletingFiles(false);
     } else {
@@ -130,54 +122,75 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
 
   async function handleUpdateFiles(files, urlsFromServer, filesResized, attachments) {
     setIsUpdatingFiles(true);
-    const filesToUpload = files.filter(({ file }) => 
-      !(urlsFromServer.some(({ key }) => (key === decodeURI(file.name)))));
-    const filesResizedToUpload = filesToUpload.map(({ file }) =>
-      (filesResized.find(({ filename }) => (filename === file.name))));
-    const urlsToDelete = urlsFromServer.filter(({ key }) =>
-      !(files.some(({ file }) => (decodeURI(file.name) === key))));
-    const attachmentsUploaded = await uploadFiles(filesResizedToUpload);
-    const attachmentsDeleted = await deleteFiles(urlsToDelete);
-    const attachmentsCurrent = JSON.parse(attachments);
-    const attachmentsUpdate = [ ...attachmentsCurrent, ...attachmentsUploaded ].filter(({ key }) =>
-      !(attachmentsDeleted.some((attachment) => (decodeURI(attachment.key) === key))));
-    if (entityType === 'Item') {
-      try {
-        const data = await updateItem({
-          variables: {
-            item: {
-              id: entityId,
-              attachments: JSON.stringify(attachmentsUpdate)
-            }
-          }
-        });
-        if (data) {
-          setIsUpdatingFiles(false);
-          setIsEditingFiles(false);
-        }
-      } catch (error) {
-        onError(error);
-      }
+    const filesToUpload = files.filter((file) => 
+      !(urlsFromServer.find((fileFromServer) => (fileFromServer.name === file.filename))));
+    const urlsToDelete = urlsFromServer.filter((fileFromServer) =>
+      !files.find((file) => {
+        console.log('file.filename', file.filename, 'fileFromServer.name', fileFromServer.name);
+        return file.filename === fileFromServer.name
+      }));
+    // console.log('filesToUpload', filesToUpload);
+    // console.log('urlsToDelete', urlsToDelete);
+    let attachmentsUpdate = JSON.parse(attachments);
+    if (filesToUpload.length > 0) {
+      const attachmentsUploaded = await uploadFiles(filesToUpload);
+      console.log('attachmentsUploaded', attachmentsUploaded);
+      attachmentsUpdate = [...attachmentsUpdate, ...attachmentsUploaded];
     }
-    if (entityType === 'Action') {
-      try {
-        const data = await updateAction({
-          variables: {
-            action: {
-              id: entityId,
-              attachments: JSON.stringify(attachmentsUpdate)
+    if (urlsToDelete.length > 0) {
+      const attachmentsDeleted = await deleteFiles(urlsToDelete);
+      console.log('attachmentsDeleted', attachmentsDeleted);
+      attachmentsUpdate = attachmentsUpdate.filter(({ key }) =>
+        !attachmentsDeleted.find(attDeleted => (key === attDeleted.key)));
+      // console.log('attArr', attArr);
+      // console.log('attachmentsUpdate', attachmentsUpdate);
+    }
+    // console.log('attachmentsUpdate', attachmentsUpdate);
+    // console.log('JSON.parse(attachments)', JSON.parse(attachments));
+    if (!isEqualLengthsAndValuesByKey(JSON.parse(attachments), attachmentsUpdate, 'key')) {
+      if (entityType === 'Item') {
+        try {
+          const data = await updateItem({
+            variables: {
+              item: {
+                id: entityId,
+                attachments: JSON.stringify(attachmentsUpdate)
+              }
             }
+          });
+          if (data) {
+            setIsUpdatingFiles(false);
+            setIsEditingFiles(false);
           }
-        });
-        if (data) {
-          setIsUpdatingFiles(false);
-          setIsEditingFiles(false);
+        } catch (error) {
+          onError(error);
         }
-      } catch (error) {
-        onError(error);
       }
+      if (entityType === 'Action') {
+        try {
+          const data = await updateAction({
+            variables: {
+              action: {
+                id: entityId,
+                attachments: JSON.stringify(attachmentsUpdate)
+              }
+            }
+          });
+          if (data) {
+            setIsUpdatingFiles(false);
+            setIsEditingFiles(false);
+          }
+        } catch (error) {
+          onError(error);
+        }
+      }
+    } else {
+      setIsUpdatingFiles(false);
+      setIsEditingFiles(false);
     }
   }
+  // console.log('files', files);
+  // console.log('urlsFromServer', urlsFromServer);
   return(
     isLoading ? (
       <div
@@ -256,10 +269,10 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
             }
           } : null}
           allowFileTypeValidation={true}
-          acceptedFileTypes={['image/*', 'application/pdf']}
-          labelFileTypeNotAllowed={'Only image or pdf can be uploaded'}
+          acceptedFileTypes={['image/*']}
+          labelFileTypeNotAllowed={'Only image can be uploaded'}
           allowFileSizeValidation={true}
-          maxFileSize={'3MB'}
+          maxFileSize={'7MB'}
           allowImageResize={true}
           imageResizeTargetWidth={'500'}
           imageResizeMode={'contain'}
@@ -270,6 +283,7 @@ function ImageGrid({ attachments='[]', entityId, entityType }) {
             const transformedFile = new File([output], filename, { type });
             setFilesResized([ ...filesResized, { file: transformedFile, filename, fileType: type } ]);
           }}
+          allowFileRename={false}
           allowReorder={false}
           allowMultiple={true}
           maxFiles={3}

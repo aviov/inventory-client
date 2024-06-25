@@ -88,3 +88,16 @@ export const isDatePast = (date) => {
   const today = new Date();
   return (new Date(today.toDateString()) > new Date(date.toDateString()));
 };
+
+export const isEqualLengthsAndValuesByKey = (arr1, arr2, key) => {
+  if (arr1.length !== arr2.length) {
+      return false;
+  }
+  return arr1.every(item1 => {
+      return arr2.find(item2 => item2[key] === item1[key]);
+  });
+};
+
+export const delay = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+};

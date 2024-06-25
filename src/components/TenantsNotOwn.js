@@ -4,7 +4,7 @@ import {
   useLazyQuery,
   useMutation
 } from '@apollo/client';
-import { Auth } from 'aws-amplify';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -65,16 +65,14 @@ function TenantsNotOwn() {
 
   async function refreshToken() {
     try {
-      const cognitoUser = await Auth.currentAuthenticatedUser();
-      const currentSession = cognitoUser.signInUserSession;
-      cognitoUser.refreshSession(currentSession.refreshToken, (err, session) => {
-        const tenantIds = session.idToken.payload['cognito:groups'] || [];
-        setCurrentTenantId(tenantIds[0]);
-        client.cache.reset();
-        setIsAuthenticated(true);
-        setIsUpdating(false);
-        navigate('/');
-      });
+      await fetchAuthSession({ forceRefresh: true });
+      const currentSession = await fetchAuthSession();
+      const tenantIds = currentSession.tokens.idToken.payload['cognito:groups'] || [];
+      setCurrentTenantId(tenantIds[0]);
+      client.cache.reset();
+      setIsAuthenticated(true);
+      setIsUpdating(false);
+      navigate('/');
     } catch (error) {
       if (error !== 'No current user') {
         onError(error);
